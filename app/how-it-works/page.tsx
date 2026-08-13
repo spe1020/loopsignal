@@ -83,7 +83,7 @@ export default function HowItWorksPage() {
               next constraint. Improve again.
             </p>
             <div className="mt-8">
-              <Button href="/first-loop" variant="dark">
+              <Button href="/loopscan" variant="dark">
                 Find Your First Loop
               </Button>
             </div>

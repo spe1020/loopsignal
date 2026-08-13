@@ -20,7 +20,15 @@ Open [http://localhost:3000](http://localhost:3000).
 - `/how-it-works` — See → Simplify → Build → Learn
 - `/about` — Company
 - `/insights` — Articles
-- `/first-loop` — Intake
+- `/loopscan` — LoopScan intake
+
+## LoopScan leads
+
+Copy `.env.example` to `.env.local` and set:
+
+- `LEAD_WEBHOOK_URL` — destination for submitted LoopScan leads
+- `LEAD_WEBHOOK_SECRET` — optional bearer token for the webhook
+- `CALENDAR_URL` — optional scheduling link shown after submission
 
 ## Stack
 

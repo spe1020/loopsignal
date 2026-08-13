@@ -200,7 +200,7 @@ export default function AboutPage() {
               We build better loops.
             </p>
             <div className="mt-10">
-              <Button href="/first-loop">Start a LoopScan</Button>
+              <Button href="/loopscan">Start a LoopScan</Button>
             </div>
           </Reveal>
         </Container>

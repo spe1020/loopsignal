@@ -348,3 +348,41 @@ export const founder = {
   background:
     "Seth has worked from the shop floor through manufacturing engineering, production planning, purchasing, and supply chain — with a focus on lean methods, supplier development, and practical process improvement.",
 };
+
+export const loopScanAreas = [
+  "Procurement",
+  "Supply Chain",
+  "Operations",
+  "Quality",
+  "Engineering",
+  "Planning",
+  "Knowledge / Documentation",
+  "Other",
+] as const;
+
+export const loopScanIntakeExamples = [
+  {
+    area: "Procurement",
+    text: "Buyers manually chasing overdue purchase orders.",
+  },
+  {
+    area: "Supply Chain",
+    text: "Shortages being discovered after production is already at risk.",
+  },
+  {
+    area: "Operations",
+    text: "Managers manually assembling production reports.",
+  },
+  {
+    area: "Quality",
+    text: "Teams searching through previous corrective actions every time a problem returns.",
+  },
+  {
+    area: "Engineering",
+    text: "Employees spending too much time locating specifications and historical documents.",
+  },
+  {
+    area: "Knowledge",
+    text: "Critical work depending on one experienced employee who knows where everything is.",
+  },
+] as const;

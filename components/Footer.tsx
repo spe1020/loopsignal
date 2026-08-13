@@ -42,7 +42,7 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5">
               <li>
                 <Link
-                  href="/first-loop"
+                  href="/loopscan"
                   className="text-sm text-white/70 transition-colors hover:text-cream"
                 >
                   Find Your First Loop
@@ -50,7 +50,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/first-loop"
+                  href="/loopscan"
                   className="text-sm text-white/70 transition-colors hover:text-cream"
                 >
                   LoopScan
