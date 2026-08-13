@@ -1,39 +1,188 @@
-export type AnalyticsPayload = Record<
+import { track as vercelTrack } from "@vercel/analytics";
+import {
+  getLeadAttribution,
+  getReferringPage,
+  getUtmParams,
+  type UtmParams,
+} from "@/lib/attribution";
+
+export const analyticsEvents = [
+  "loopscan_cta_click",
+  "loopscan_page_view",
+  "loopscan_form_start",
+  "loopscan_area_selected",
+  "loopscan_form_submit",
+  "loopscan_form_error",
+  "schedule_click",
+  "solution_interest",
+  "insight_view",
+  "insight_cta_click",
+] as const;
+
+export type AnalyticsEvent = (typeof analyticsEvents)[number];
+
+export type AnalyticsProps = Record<
   string,
   string | number | boolean | undefined
 >;
 
-type AnalyticsWindow = Window & {
-  va?: (action: string, name: string, data?: AnalyticsPayload) => void;
-  gtag?: (...args: unknown[]) => void;
-  dataLayer?: Record<string, unknown>[];
+export type CtaLocation =
+  | "hero"
+  | "solutions"
+  | "loopscan_section"
+  | "footer"
+  | "article"
+  | "navigation"
+  | "use_cases"
+  | "final_cta"
+  | "about"
+  | "how_it_works"
+  | "not_found";
+
+export type SolutionInterest =
+  | "supply_chain"
+  | "procurement"
+  | "manufacturing"
+  | "knowledge";
+
+export type SolutionInteraction = "card_click" | "learn_more" | "cta_click";
+
+export type OperationalArea =
+  | "procurement"
+  | "supply_chain"
+  | "operations"
+  | "quality"
+  | "engineering"
+  | "planning"
+  | "knowledge"
+  | "other";
+
+export type FormErrorCategory = "server" | "network";
+
+const areaSlugs: Record<string, OperationalArea> = {
+  Procurement: "procurement",
+  "Supply Chain": "supply_chain",
+  Operations: "operations",
+  Quality: "quality",
+  Engineering: "engineering",
+  Planning: "planning",
+  "Knowledge / Documentation": "knowledge",
+  Other: "other",
 };
 
-export function track(event: string, payload?: AnalyticsPayload) {
+export function toAreaSlug(area: string): OperationalArea {
+  return areaSlugs[area] ?? "other";
+}
+
+function compact(
+  props?: AnalyticsProps,
+): Record<string, string | number | boolean> | undefined {
+  if (!props) return undefined;
+  const next: Record<string, string | number | boolean> = {};
+  for (const [key, value] of Object.entries(props)) {
+    if (value !== undefined && value !== "") next[key] = value;
+  }
+  return Object.keys(next).length > 0 ? next : undefined;
+}
+
+export function trackEvent(event: AnalyticsEvent, props?: AnalyticsProps) {
   if (typeof window === "undefined") return;
 
-  const data = payload ?? {};
-  const w = window as AnalyticsWindow;
-
-  w.dispatchEvent(
+  const data = compact(props);
+  window.dispatchEvent(
     new CustomEvent("loopworks:analytics", { detail: { event, data } }),
   );
-  w.va?.("event", event, data);
-  w.gtag?.("event", event, data);
-  w.dataLayer?.push({ event, ...data });
+  vercelTrack(event, data);
 }
 
-export function getUtmParams() {
-  if (typeof window === "undefined") {
-    return {};
-  }
-
-  const params = new URLSearchParams(window.location.search);
-  return {
-    utm_source: params.get("utm_source") ?? undefined,
-    utm_medium: params.get("utm_medium") ?? undefined,
-    utm_campaign: params.get("utm_campaign") ?? undefined,
-    utm_content: params.get("utm_content") ?? undefined,
-    utm_term: params.get("utm_term") ?? undefined,
-  };
+export function trackLoopScanCTA(input: {
+  location: CtaLocation;
+  page?: string;
+  cta_text?: string;
+}) {
+  trackEvent("loopscan_cta_click", {
+    location: input.location,
+    page: input.page ?? window.location.pathname,
+    cta_text: input.cta_text,
+  });
 }
+
+export function trackLoopScanPageView() {
+  const utm = getUtmParams();
+  trackEvent("loopscan_page_view", {
+    referring_page: getReferringPage(),
+    ...utm,
+  });
+}
+
+export function trackLoopScanFormStart() {
+  trackEvent("loopscan_form_start");
+}
+
+export function trackLoopScanAreaSelected(area: string) {
+  trackEvent("loopscan_area_selected", { area: toAreaSlug(area) });
+}
+
+export function trackLoopScanFormSubmit(area: string) {
+  trackEvent("loopscan_form_submit", {
+    area: toAreaSlug(area),
+    ...getUtmParams(),
+  });
+}
+
+export function trackLoopScanFormError(input: {
+  category: FormErrorCategory;
+  area?: string;
+}) {
+  trackEvent("loopscan_form_error", {
+    error_category: input.category,
+    page: "/loopscan",
+    area: input.area ? toAreaSlug(input.area) : undefined,
+  });
+}
+
+export function trackScheduleClick() {
+  const utm = getUtmParams();
+  trackEvent("schedule_click", {
+    source: "loopscan_confirmation",
+    utm_source: utm.utm_source,
+    utm_campaign: utm.utm_campaign,
+  });
+}
+
+export function trackSolutionInterest(input: {
+  solution: SolutionInterest;
+  page?: string;
+  interaction_type: SolutionInteraction;
+}) {
+  trackEvent("solution_interest", {
+    solution: input.solution,
+    page: input.page ?? window.location.pathname,
+    interaction_type: input.interaction_type,
+  });
+}
+
+export function trackInsightView(input: {
+  article_slug: string;
+  article_category: string;
+}) {
+  trackEvent("insight_view", {
+    article_slug: input.article_slug,
+    article_category: input.article_category,
+    referring_source: getLeadAttribution().referringSource,
+  });
+}
+
+export function trackInsightCtaClick(input: {
+  article_slug?: string;
+  page?: string;
+  cta_text?: string;
+}) {
+  trackEvent("insight_cta_click", {
+    article_slug: input.article_slug,
+    page: input.page ?? window.location.pathname,
+    cta_text: input.cta_text,
+  });
+}
+
+export type { UtmParams };

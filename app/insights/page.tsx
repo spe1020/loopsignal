@@ -7,6 +7,13 @@ export const metadata: Metadata = {
   title: "Insights",
   description:
     "Writing on manufacturing operations, process improvement, procurement, supply chain, and practical use of AI in the plant.",
+  alternates: { canonical: "/insights" },
+  openGraph: {
+    title: "Insights",
+    description:
+      "Writing on manufacturing operations, process improvement, procurement, supply chain, and practical use of AI in the plant.",
+    url: "/insights",
+  },
 };
 
 export default function InsightsPage() {

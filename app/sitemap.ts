@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { articles } from "@/lib/articles";
+import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages = [
@@ -10,12 +11,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/insights",
     "/loopscan",
   ].map((path) => ({
-    url: `https://loopworks.com${path}`,
+    url: `${siteUrl}${path || "/"}`,
     lastModified: new Date(),
   }));
 
   const posts = articles.map((article) => ({
-    url: `https://loopworks.com/insights/${article.slug}`,
+    url: `${siteUrl}/insights/${article.slug}`,
     lastModified: new Date(article.date),
   }));
 

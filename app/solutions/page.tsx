@@ -2,12 +2,20 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
 import { LoopScanOffer } from "@/components/LoopScanOffer";
+import { SolutionInterestLink } from "@/components/SolutionInterestLink";
 import { solutions } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Solutions",
   description:
     "Supply chain intelligence, procurement automation, manufacturing intelligence, and knowledge systems — plus LoopScan, LoopBuild, and LoopOps.",
+  alternates: { canonical: "/solutions" },
+  openGraph: {
+    title: "Solutions",
+    description:
+      "Supply chain intelligence, procurement automation, manufacturing intelligence, and knowledge systems — plus LoopScan, LoopBuild, and LoopOps.",
+    url: "/solutions",
+  },
 };
 
 const solutionImages = [
@@ -91,12 +99,22 @@ export default function SolutionsPage() {
                   </li>
                 ))}
               </ul>
+              <div className="mt-8">
+                <SolutionInterestLink
+                  href="/loopscan"
+                  solution={solution.interest}
+                  interactionType="cta_click"
+                  className="text-[13px] font-medium tracking-[0.02em] text-copper hover:text-copper-dark"
+                >
+                  Find a loop in this area →
+                </SolutionInterestLink>
+              </div>
             </Reveal>
           </Container>
         </section>
       ))}
 
-      <LoopScanOffer />
+      <LoopScanOffer ctaLocation="solutions" />
     </>
   );
 }

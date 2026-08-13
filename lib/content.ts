@@ -21,6 +21,7 @@ export const informationSources = [
 export const solutions = [
   {
     slug: "supply-chain-intelligence",
+    interest: "supply_chain",
     outcome: "See supply problems earlier",
     title: "Supply Chain Intelligence",
     summary:
@@ -35,6 +36,7 @@ export const solutions = [
   },
   {
     slug: "procurement-automation",
+    interest: "procurement",
     outcome: "Give buyers their time back",
     title: "Procurement Automation",
     summary:
@@ -50,6 +52,7 @@ export const solutions = [
   },
   {
     slug: "manufacturing-intelligence",
+    interest: "manufacturing",
     outcome: "Turn plant data into action",
     title: "Manufacturing Intelligence",
     summary:
@@ -65,6 +68,7 @@ export const solutions = [
   },
   {
     slug: "knowledge-systems",
+    interest: "knowledge",
     outcome: "Make tribal knowledge searchable",
     title: "Knowledge Systems",
     summary:

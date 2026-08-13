@@ -8,6 +8,13 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "LoopWorks was built around a simple belief: manufacturing does not need more technology for technology’s sake. It needs better systems.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About",
+    description:
+      "LoopWorks was built around a simple belief: manufacturing does not need more technology for technology’s sake. It needs better systems.",
+    url: "/about",
+  },
 };
 
 const beliefs = [
@@ -200,7 +207,9 @@ export default function AboutPage() {
               We build better loops.
             </p>
             <div className="mt-10">
-              <Button href="/loopscan">Start a LoopScan</Button>
+              <Button href="/loopscan" location="about">
+                Start a LoopScan
+              </Button>
             </div>
           </Reveal>
         </Container>

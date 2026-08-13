@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { TrackedLink } from "./TrackedLink";
 import { nav } from "@/lib/content";
 
 export function Footer() {
@@ -41,20 +42,24 @@ export function Footer() {
             </p>
             <ul className="mt-4 space-y-2.5">
               <li>
-                <Link
+                <TrackedLink
                   href="/loopscan"
+                  location="footer"
+                  ctaText="Find Your First Loop"
                   className="text-sm text-white/70 transition-colors hover:text-cream"
                 >
                   Find Your First Loop
-                </Link>
+                </TrackedLink>
               </li>
               <li>
-                <Link
+                <TrackedLink
                   href="/loopscan"
+                  location="footer"
+                  ctaText="LoopScan"
                   className="text-sm text-white/70 transition-colors hover:text-cream"
                 >
                   LoopScan
-                </Link>
+                </TrackedLink>
               </li>
               <li>
                 <Link

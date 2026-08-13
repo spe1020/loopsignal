@@ -9,6 +9,13 @@ export const metadata: Metadata = {
   title: "How It Works",
   description:
     "See, simplify, build, learn, repeat. LoopWorks goes to the work first, then builds practical systems that improve operations.",
+  alternates: { canonical: "/how-it-works" },
+  openGraph: {
+    title: "How It Works",
+    description:
+      "See, simplify, build, learn, repeat. LoopWorks goes to the work first, then builds practical systems that improve operations.",
+    url: "/how-it-works",
+  },
 };
 
 export default function HowItWorksPage() {
@@ -83,7 +90,7 @@ export default function HowItWorksPage() {
               next constraint. Improve again.
             </p>
             <div className="mt-8">
-              <Button href="/loopscan" variant="dark">
+              <Button href="/loopscan" variant="dark" location="how_it_works">
                 Find Your First Loop
               </Button>
             </div>
