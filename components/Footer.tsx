@@ -8,11 +8,8 @@ export function Footer() {
     <footer className="border-t border-line bg-ink text-cream">
       <div className="mx-auto grid max-w-[1120px] gap-12 px-6 py-16 lg:grid-cols-12 lg:px-8 lg:py-20">
         <div className="lg:col-span-5">
-          <Logo inverted />
-          <p className="mt-5 max-w-sm text-[15px] leading-7 text-white/60">
-            Better systems. Better work.
-          </p>
-          <p className="mt-3 max-w-sm text-sm leading-6 text-white/45">
+          <Logo inverted showTagline />
+          <p className="mt-5 max-w-sm text-sm leading-6 text-white/45">
             LoopWorks helps manufacturers improve how work gets done using
             process improvement, AI, and automation.
           </p>
