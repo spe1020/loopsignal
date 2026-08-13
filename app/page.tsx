@@ -1,24 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/Button";
+import { LoopScanOffer } from "@/components/LoopScanOffer";
 import { MethodLoop } from "@/components/Loops";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
+import { SystemsFlow } from "@/components/SystemsFlow";
 import { articles } from "@/lib/articles";
 import {
   featuredArticleSlugs,
   informationSources,
-  loopScanReviews,
-  services,
   solutions,
+  trustPrinciples,
   useCases,
 } from "@/lib/content";
 
 const featuredArticles = featuredArticleSlugs
   .map((slug) => articles.find((article) => article.slug === slug))
   .filter((article) => article != null);
-
-const loopScan = services[0];
-const laterServices = services.slice(1);
 
 export default function HomePage() {
   return (
@@ -237,104 +235,84 @@ export default function HomePage() {
         </Container>
       </section>
 
-      <section className="py-20 md:py-24">
-        <Container>
-          <Reveal>
-            <Eyebrow>LoopScan</Eyebrow>
-            <h2 className="mt-5 max-w-2xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-              Not sure where AI fits? Start with the work.
+      <section className="border-y border-line bg-paper py-20 md:py-24">
+        <Container className="grid items-center gap-12 lg:grid-cols-12">
+          <Reveal className="lg:col-span-5">
+            <Eyebrow>How we work with you</Eyebrow>
+            <h2 className="mt-5 text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
+              Better work. Not more software.
             </h2>
-            <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-              LoopScan is a focused review of your operation designed to
-              identify where process improvement, AI, and automation can create
-              the most value.
+            <p className="mt-5 text-[16px] leading-7 text-graphite">
+              LoopWorks works with the systems you already have whenever
+              possible.
+            </p>
+            <p className="mt-4 text-[16px] leading-7 text-graphite">
+              The goal is not to add another platform, dashboard, or piece of
+              software your team has to manage. The goal is to make your
+              existing people, processes, information, and technology work
+              better together.
             </p>
           </Reveal>
-          <div className="mt-12 grid gap-12 lg:grid-cols-12">
-            <Reveal className="lg:col-span-6">
-              <p className="text-[12px] font-medium tracking-[0.16em] text-stone uppercase">
-                We look at
-              </p>
-              <ul className="mt-4 grid grid-cols-2 gap-px border border-line bg-line">
-                {loopScanReviews.map((item) => (
-                  <li
-                    key={item}
-                    className="bg-cream px-4 py-3.5 text-sm text-ink"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
+          <Reveal className="lg:col-span-7" delay={80}>
+            <SystemsFlow />
+          </Reveal>
+        </Container>
+      </section>
+
+      <section className="py-20 md:py-24">
+        <Container>
+          <div className="grid items-center gap-12 lg:grid-cols-12">
+            <Reveal className="relative aspect-[4/5] overflow-hidden lg:col-span-5">
+              <Image
+                src="/images/plant-interior.jpg"
+                alt="Hands-on work on the manufacturing floor"
+                fill
+                className="object-cover"
+                sizes="(min-width: 1024px) 40vw, 100vw"
+              />
             </Reveal>
-            <Reveal className="lg:col-span-6" delay={80}>
-              <p className="text-[12px] font-medium tracking-[0.16em] text-stone uppercase">
-                You leave with
+            <Reveal className="lg:col-span-7" delay={80}>
+              <Eyebrow>Why LoopWorks</Eyebrow>
+              <h2 className="mt-5 text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
+                Built from the work.
+              </h2>
+              <p className="mt-5 text-[16px] leading-7 text-graphite">
+                LoopWorks was built from firsthand experience across
+                manufacturing, supply chain, procurement, supplier development,
+                production planning, continuous improvement, and manufacturing
+                engineering.
               </p>
-              <ul className="mt-4 divide-y divide-line border-y border-line">
-                {loopScan.deliverables.map((item) => (
-                  <li
-                    key={item}
-                    className="flex gap-3 py-3 text-[15px] text-ink"
-                  >
-                    <span className="mt-2.5 h-px w-3 shrink-0 bg-copper" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <p className="mt-4 text-[16px] leading-7 text-graphite">
+                We understand the reality behind ERP systems, supplier problems,
+                production constraints, inventory risk, quality issues,
+                spreadsheets, manual reporting, and the workarounds teams use
+                every day.
+              </p>
+              <p className="mt-8 font-serif text-2xl leading-snug text-ink">
+                We do not start with AI. We start with the work.
+              </p>
             </Reveal>
           </div>
-          <div className="mt-10">
-            <Button href="/first-loop">{loopScan.cta}</Button>
-          </div>
-          <div className="mt-16 grid gap-6 border-t border-line pt-12 md:grid-cols-2">
-            {laterServices.map((service) => (
-              <div key={service.slug}>
-                <p className="text-[12px] font-medium tracking-[0.04em] text-copper uppercase">
-                  Next
-                </p>
-                <h3 className="mt-2 text-xl font-medium tracking-tight text-ink">
-                  {service.name}
+          <div className="mt-16 grid gap-px border border-line bg-line md:grid-cols-4">
+            {trustPrinciples.map((principle, index) => (
+              <Reveal
+                key={principle.title}
+                delay={index * 40}
+                className="bg-cream p-6 md:p-7"
+              >
+                <h3 className="text-lg font-medium tracking-tight text-ink">
+                  {principle.title}
                 </h3>
-                <p className="mt-3 text-[15px] leading-7 text-graphite">
-                  {service.summary}
+                <p className="mt-3 text-sm leading-6 text-graphite">
+                  {principle.text}
                 </p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </Container>
       </section>
 
-      <section className="border-y border-line bg-paper py-20 md:py-24">
-        <Container className="grid gap-16 lg:grid-cols-12">
-          <Reveal className="lg:col-span-6">
-            <Eyebrow>Why LoopWorks</Eyebrow>
-            <h2 className="mt-5 text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-              Built from manufacturing experience.
-            </h2>
-            <p className="mt-5 text-[16px] leading-7 text-graphite">
-              LoopWorks was built around firsthand experience in manufacturing,
-              supply chain, procurement, supplier development, operations, and
-              continuous improvement.
-            </p>
-            <p className="mt-4 text-[16px] leading-7 text-graphite">
-              We understand the realities behind ERP systems, supplier problems,
-              production constraints, spreadsheets, quality issues, inventory
-              risk, and the workarounds teams use every day.
-            </p>
-          </Reveal>
-          <Reveal className="lg:col-span-6" delay={80}>
-            <h2 className="text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-              Better work. Not more software.
-            </h2>
-            <p className="mt-5 text-[16px] leading-7 text-graphite">
-              LoopWorks works with the systems you already have whenever
-              possible. The goal is not to add another platform. The goal is to
-              make your existing people, processes, information, and technology
-              work better together.
-            </p>
-          </Reveal>
-        </Container>
-      </section>
+      <LoopScanOffer />
 
       <section className="py-20 md:py-24">
         <Container>
@@ -391,7 +369,7 @@ export default function HomePage() {
             </p>
             <div className="mt-10">
               <Button href="/first-loop" variant="dark">
-                Find Your First Loop
+                Start a LoopScan
               </Button>
             </div>
           </Reveal>

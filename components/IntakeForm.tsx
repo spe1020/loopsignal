@@ -62,14 +62,14 @@ export function IntakeForm() {
           name="process"
           rows={5}
           className={`${field} resize-y`}
-          placeholder="Tell us about something that takes too long, requires too much manual work, depends on scattered information, or causes recurring problems."
+          placeholder="Tell us about something that takes too long, requires repetitive work, depends on disconnected information, or regularly creates frustration."
         />
       </label>
       <button
         type="submit"
         className="mt-2 inline-flex items-center justify-center rounded-[2px] bg-copper px-6 py-3.5 text-[14px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark"
       >
-        Find My First Loop
+        Start My LoopScan
       </button>
     </form>
   );
