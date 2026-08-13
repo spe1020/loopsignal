@@ -16,6 +16,7 @@ export const informationSources = [
   "Production Data",
   "Shared Drives",
   "Tribal Knowledge",
+  "Inventory Data",
 ];
 
 export const solutions = [
@@ -217,6 +218,7 @@ export const existingSystems = [
   "Shared Drives",
   "Supplier Data",
   "Production Data",
+  "Maintenance Records",
 ];
 
 export const loopWorksOutcomes = [

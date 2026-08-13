@@ -95,7 +95,7 @@ export default function HomePage() {
               </h2>
             </Reveal>
             <Reveal className="lg:col-span-7" delay={80}>
-              <ul className="grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-3">
+              <ul className="grid grid-cols-2 gap-px border border-line bg-line">
                 {informationSources.map((source) => (
                   <li
                     key={source}
