@@ -89,12 +89,13 @@ export const services = [
       "A focused review of your operation designed to identify where process improvement, AI, and automation can create the most value.",
     deliverables: [
       "Current-state workflow",
-      "Friction points",
-      "Opportunity map",
+      "Key friction points",
+      "Prioritized opportunities",
       "Business impact",
       "Technical feasibility",
       "Risk considerations",
-      "Prioritized roadmap",
+      "Recommended first implementation",
+      "Next-step roadmap",
     ],
     cta: "Start a LoopScan",
   },
@@ -130,17 +131,6 @@ export const services = [
     cta: "Keep Improving",
   },
 ] as const;
-
-export const loopScanReviews = [
-  "Repetitive work",
-  "Information gaps",
-  "Delays",
-  "Manual reporting",
-  "Disconnected systems",
-  "Decision bottlenecks",
-  "Tribal knowledge",
-  "Recurring operational problems",
-];
 
 export const howItWorks = [
   {
@@ -214,3 +204,147 @@ export const featuredArticleSlugs = [
   "ai-is-not-your-manufacturing-strategy",
   "what-ai-can-actually-do-for-procurement",
 ] as const;
+
+export const existingSystems = [
+  "ERP",
+  "Email",
+  "Excel",
+  "Quality Systems",
+  "Shared Drives",
+  "Supplier Data",
+  "Production Data",
+];
+
+export const loopWorksOutcomes = [
+  "Better decisions",
+  "Less manual work",
+  "Faster response",
+];
+
+export const trustPrinciples = [
+  {
+    title: "Practical first",
+    text: "Start with a real operational problem.",
+  },
+  {
+    title: "Human in the loop",
+    text: "Keep judgment and decision authority where it matters.",
+  },
+  {
+    title: "Work with what you have",
+    text: "Use existing systems whenever possible.",
+  },
+  {
+    title: "Measure the result",
+    text: "Every implementation should improve a real business outcome.",
+  },
+] as const;
+
+export const loopScanSteps = [
+  {
+    step: "01",
+    name: "Observe",
+    summary: "Understand how the work actually happens.",
+    points: [
+      "Workflows",
+      "Systems",
+      "Reports",
+      "Spreadsheets",
+      "Handoffs",
+      "Manual tasks",
+      "Recurring problems",
+    ],
+  },
+  {
+    step: "02",
+    name: "Identify",
+    summary: "Find the friction that slows the operation.",
+    points: [
+      "Repetitive work",
+      "Information gaps",
+      "Bottlenecks",
+      "Delays",
+      "Manual reporting",
+      "Decision friction",
+      "Tribal knowledge",
+      "Recurring exceptions",
+    ],
+  },
+  {
+    step: "03",
+    name: "Prioritize",
+    summary: "Score opportunities before recommending technology.",
+    points: [
+      "Business impact",
+      "Feasibility",
+      "Risk",
+      "Data availability",
+      "Implementation effort",
+    ],
+  },
+  {
+    step: "04",
+    name: "Recommend",
+    summary: "Create a practical roadmap for where to begin.",
+    points: [
+      "What to improve",
+      "What to automate",
+      "Where AI could help",
+      "What not to automate",
+      "Where to begin",
+    ],
+  },
+] as const;
+
+export const loopScanFindings = [
+  {
+    area: "Procurement",
+    text: "Buyers spending hours each week following up on overdue purchase orders.",
+  },
+  {
+    area: "Supply Chain",
+    text: "Material shortages being discovered after production is already at risk.",
+  },
+  {
+    area: "Operations",
+    text: "Managers manually assembling daily or weekly production reports.",
+  },
+  {
+    area: "Quality",
+    text: "Teams searching old corrective actions every time a recurring problem appears.",
+  },
+  {
+    area: "Engineering",
+    text: "Employees spending significant time locating specifications and historical documents.",
+  },
+  {
+    area: "Knowledge",
+    text: "Critical processes depending on one experienced person knowing where information lives.",
+  },
+] as const;
+
+export const commercialJourney = [
+  {
+    step: "1",
+    name: "LoopScan",
+    text: "Find the opportunity.",
+  },
+  {
+    step: "2",
+    name: "LoopBuild",
+    text: "Build and prove one high-value system.",
+  },
+  {
+    step: "3",
+    name: "LoopOps",
+    text: "Operate, improve, and expand what works.",
+  },
+] as const;
+
+export const founder = {
+  name: "Seth Sager",
+  role: "Founder",
+  linkedin: "https://www.linkedin.com/in/seth-sager-a381781a",
+  background:
+    "Seth has worked from the shop floor through manufacturing engineering, production planning, purchasing, and supply chain — with a focus on lean methods, supplier development, and practical process improvement.",
+};

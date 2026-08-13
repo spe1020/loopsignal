@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Button } from "@/components/Button";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
+import { founder, trustPrinciples } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "About",
@@ -67,6 +68,59 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <section className="border-y border-line bg-paper py-24 md:py-32">
+        <Container className="grid items-start gap-12 lg:grid-cols-12">
+          <Reveal className="lg:col-span-4">
+            <div className="relative aspect-[4/5] overflow-hidden">
+              <Image
+                src="/images/gemba.jpg"
+                alt="A manufacturing technician inspecting equipment on the shop floor"
+                fill
+                className="object-cover"
+                sizes="(min-width: 1024px) 33vw, 100vw"
+              />
+              <div className="absolute inset-0 bg-ink/55" />
+              <div className="absolute inset-0 flex flex-col justify-end p-7 text-cream">
+                <p className="font-mono text-[11px] tracking-[0.18em] text-copper">
+                  SS
+                </p>
+                <p className="mt-4 text-2xl font-medium tracking-tight">
+                  {founder.name}
+                </p>
+                <p className="mt-1 text-sm text-white/70">{founder.role}</p>
+              </div>
+            </div>
+          </Reveal>
+          <Reveal className="lg:col-span-8" delay={80}>
+            <Eyebrow>Founder</Eyebrow>
+            <h2 className="mt-5 text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
+              Built by an operator.
+            </h2>
+            <p className="mt-6 text-[16px] leading-8 text-graphite">
+              LoopWorks was founded from years of hands-on experience solving
+              problems across manufacturing and supply chain operations.
+            </p>
+            <p className="mt-4 text-[16px] leading-8 text-graphite">
+              The idea is simple: manufacturers already have capable people and
+              powerful systems. The opportunity is to connect them better,
+              remove friction, and use modern technology where it creates real
+              value.
+            </p>
+            <p className="mt-4 text-[16px] leading-8 text-graphite">
+              {founder.background}
+            </p>
+            <a
+              href={founder.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-8 inline-flex text-[13px] font-medium text-copper hover:text-copper-dark"
+            >
+              LinkedIn →
+            </a>
+          </Reveal>
+        </Container>
+      </section>
+
       <section className="py-24 md:py-32">
         <Container className="grid gap-16 lg:grid-cols-12">
           <Reveal className="lg:col-span-5">
@@ -103,6 +157,20 @@ export default function AboutPage() {
             ))}
           </div>
         </Container>
+        <Container className="mt-16">
+          <div className="grid gap-px border border-line bg-line md:grid-cols-4">
+            {trustPrinciples.map((principle) => (
+              <div key={principle.title} className="bg-cream p-6">
+                <h3 className="text-[15px] font-medium tracking-tight text-ink">
+                  {principle.title}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-graphite">
+                  {principle.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Container>
       </section>
 
       <section className="border-y border-line bg-paper py-24 md:py-32">
@@ -132,7 +200,7 @@ export default function AboutPage() {
               We build better loops.
             </p>
             <div className="mt-10">
-              <Button href="/first-loop">Find Your First Loop</Button>
+              <Button href="/first-loop">Start a LoopScan</Button>
             </div>
           </Reveal>
         </Container>
