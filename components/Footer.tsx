@@ -12,8 +12,8 @@ export function Footer() {
             Better systems. Better work.
           </p>
           <p className="mt-3 max-w-sm text-sm leading-6 text-white/45">
-            LoopWorks helps manufacturers improve the flow of work, information,
-            and decisions.
+            LoopWorks helps manufacturers improve how work gets done using
+            process improvement, AI, and automation.
           </p>
         </div>
 
@@ -42,7 +42,15 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5">
               <li>
                 <Link
-                  href="/talk-to-us?intent=loopscan"
+                  href="/first-loop"
+                  className="text-sm text-white/70 transition-colors hover:text-cream"
+                >
+                  Find Your First Loop
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/first-loop"
                   className="text-sm text-white/70 transition-colors hover:text-cream"
                 >
                   LoopScan
@@ -50,26 +58,10 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/talk-to-us?intent=loopbuild"
+                  href="/solutions"
                   className="text-sm text-white/70 transition-colors hover:text-cream"
                 >
-                  LoopBuild
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/talk-to-us?intent=loopops"
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  LoopOps
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/talk-to-us"
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  Talk to Us
+                  Solutions
                 </Link>
               </li>
             </ul>
@@ -79,23 +71,20 @@ export function Footer() {
               Approach
             </p>
             <p className="mt-4 text-sm leading-6 text-white/55">
-              Find the friction.
+              See.
               <br />
-              Improve the process.
+              Simplify.
               <br />
-              Build the system.
+              Build.
               <br />
-              Measure the result.
-              <br />
-              Repeat.
+              Learn.
             </p>
           </div>
         </div>
       </div>
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-[1120px] flex-col gap-2 px-6 py-6 text-xs text-white/35 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+        <div className="mx-auto flex max-w-[1120px] px-6 py-6 text-xs text-white/35 lg:px-8">
           <p>© {new Date().getFullYear()} LoopWorks. All rights reserved.</p>
-          <p>Built for manufacturers who want better work, not more software.</p>
         </div>
       </div>
     </footer>

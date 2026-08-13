@@ -1,89 +1,58 @@
-import { operationalLoop } from "@/lib/content";
+import { howItWorks } from "@/lib/content";
 
-export function OperationalLoop() {
+export function MethodLoop() {
   return (
-    <div className="relative">
-      <div className="grid grid-cols-1 gap-0 border border-line sm:grid-cols-5">
-        {operationalLoop.map((step, index) => (
-          <div
-            key={step}
-            className="relative flex min-h-[108px] flex-col justify-between border-line px-5 py-5 sm:border-r sm:last:border-r-0 [&:not(:last-child)]:border-b sm:[&:not(:last-child)]:border-b-0"
-          >
-            <span className="font-mono text-[11px] tracking-[0.14em] text-copper">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <p className="mt-6 text-[15px] font-medium tracking-tight text-ink">
-              {step}
-            </p>
-            {index < operationalLoop.length - 1 && (
-              <span
-                aria-hidden
-                className="absolute top-1/2 right-3 hidden -translate-y-1/2 text-stone/50 sm:block"
-              >
-                →
-              </span>
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="flex items-center gap-4 border border-t-0 border-line px-5 py-3">
-        <span className="h-px flex-1 bg-line" />
-        <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-stone">
-          A continuous operational loop
-        </p>
-        <span className="h-px flex-1 bg-line" />
-      </div>
-    </div>
-  );
-}
-
-export function ProcessLoop() {
-  const steps = [
-    { n: "01", name: "See" },
-    { n: "02", name: "Simplify" },
-    { n: "03", name: "Build" },
-    { n: "04", name: "Learn" },
-  ];
-
-  return (
-    <div className="relative overflow-hidden border border-white/10 bg-ink">
+    <div className="relative overflow-hidden border border-white/10">
       <svg
-        className="pointer-events-none absolute inset-0 h-full w-full opacity-40"
-        viewBox="0 0 800 280"
+        className="pointer-events-none absolute inset-0 hidden h-full w-full opacity-50 md:block"
+        viewBox="0 0 1000 420"
         fill="none"
         aria-hidden
         preserveAspectRatio="none"
       >
         <rect
           className="loop-dash"
-          x="70"
-          y="40"
-          width="660"
-          height="200"
-          rx="100"
+          x="48"
+          y="36"
+          width="904"
+          height="348"
+          rx="174"
           stroke="#c24e1d"
-          strokeWidth="1.25"
-          opacity="0.7"
+          strokeWidth="1.4"
         />
       </svg>
-      <div className="relative grid grid-cols-2 gap-px bg-white/10 md:grid-cols-4">
-        {steps.map((step) => (
+      <div className="relative grid gap-px bg-white/10 md:grid-cols-2">
+        {howItWorks.map((step) => (
           <div
             key={step.name}
-            className="flex flex-col justify-between bg-ink px-6 py-8 md:min-h-[220px]"
+            className="flex min-h-[180px] flex-col justify-between bg-ink px-7 py-8 md:min-h-[210px] md:px-10"
           >
             <span className="font-mono text-[11px] tracking-[0.16em] text-copper">
-              {step.n}
+              {step.step}
             </span>
-            <p className="mt-10 text-2xl font-medium tracking-tight text-cream md:text-[28px]">
-              {step.name}
-            </p>
+            <div className="mt-8">
+              <h3 className="text-2xl font-medium tracking-tight text-cream md:text-[32px]">
+                {step.name}
+              </h3>
+              <p className="mt-3 max-w-sm text-[15px] leading-6 text-white/55">
+                {step.summary}
+              </p>
+            </div>
           </div>
         ))}
       </div>
-      <p className="relative border-t border-white/10 px-6 py-4 text-center text-[12px] tracking-[0.16em] text-white/50 uppercase">
-        See → Simplify → Build → Learn → Repeat
-      </p>
+      <div className="relative border-t border-white/10 px-6 py-5 text-center">
+        <p className="text-[12px] tracking-[0.18em] text-white/55 uppercase">
+          See → Simplify → Build → Learn
+        </p>
+        <p className="mt-2 text-sm text-copper">
+          Kaizen is built into the process.
+        </p>
+      </div>
     </div>
   );
+}
+
+export function ProcessLoop() {
+  return <MethodLoop />;
 }

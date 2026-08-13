@@ -71,11 +71,11 @@ export default function SolutionsPage() {
               className={index % 2 === 1 ? "lg:col-span-6 lg:order-1" : "lg:col-span-6"}
               delay={80}
             >
-              <p className="font-mono text-[11px] tracking-[0.16em] text-copper">
-                {String(index + 1).padStart(2, "0")}
-              </p>
-              <h2 className="mt-4 text-3xl font-medium tracking-[-0.03em] text-ink md:text-4xl">
+              <p className="text-[12px] font-medium tracking-[0.04em] text-copper uppercase">
                 {solution.title}
+              </p>
+              <h2 className="mt-3 text-3xl font-medium tracking-[-0.03em] text-ink md:text-4xl">
+                {solution.outcome}
               </h2>
               <p className="mt-5 text-[16px] leading-7 text-graphite">
                 {solution.summary}
@@ -99,32 +99,42 @@ export default function SolutionsPage() {
       <section className="border-t border-line py-24 md:py-32">
         <Container>
           <Reveal>
-            <Eyebrow>Services</Eyebrow>
+            <Eyebrow>How to start</Eyebrow>
             <h2 className="mt-5 max-w-2xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-              Three ways to work together.
+              Not sure where AI fits? Start with the work.
             </h2>
           </Reveal>
-          <div className="mt-14 grid gap-px border border-line bg-line lg:grid-cols-3">
-            {services.map((service) => (
-              <div key={service.slug} className="flex flex-col bg-cream p-8 md:p-10">
-                <h3 className="text-2xl font-medium tracking-tight text-ink">
+          <div className="mt-14 border border-line bg-cream p-8 md:p-12">
+            <h3 className="text-2xl font-medium tracking-tight text-ink">
+              {services[0].name}
+            </h3>
+            <p className="mt-4 max-w-2xl text-[16px] leading-7 text-graphite">
+              {services[0].summary}
+            </p>
+            <ul className="mt-8 grid gap-2 sm:grid-cols-2">
+              {services[0].deliverables.map((item) => (
+                <li key={item} className="flex gap-3 text-sm text-graphite">
+                  <span className="mt-2 h-px w-3 shrink-0 bg-copper" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-10">
+              <Button href="/first-loop">{services[0].cta}</Button>
+            </div>
+          </div>
+          <div className="mt-6 grid gap-6 md:grid-cols-2">
+            {services.slice(1).map((service) => (
+              <div key={service.slug} className="border border-line bg-cream p-8">
+                <p className="text-[12px] font-medium tracking-[0.04em] text-copper uppercase">
+                  Next
+                </p>
+                <h3 className="mt-2 text-xl font-medium tracking-tight text-ink">
                   {service.name}
                 </h3>
-                <p className="mt-4 text-[15px] leading-7 text-graphite">
+                <p className="mt-3 text-[15px] leading-7 text-graphite">
                   {service.summary}
                 </p>
-                <ul className="mt-8 flex-1 space-y-2.5">
-                  {service.deliverables.map((item) => (
-                    <li key={item} className="text-sm text-graphite">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-10">
-                  <Button href={`/talk-to-us?intent=${service.slug}`}>
-                    {service.cta}
-                  </Button>
-                </div>
               </div>
             ))}
           </div>

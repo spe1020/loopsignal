@@ -7,23 +7,24 @@ export const nav = [
 ] as const;
 
 export const informationSources = [
-  "ERP systems",
-  "Spreadsheets",
+  "ERP",
   "Email",
-  "Supplier correspondence",
+  "Spreadsheets",
   "Specifications",
-  "Quality records",
-  "Production reports",
-  "Shared drives",
-  "Employee knowledge",
+  "Quality Records",
+  "Supplier Information",
+  "Production Data",
+  "Shared Drives",
+  "Tribal Knowledge",
 ];
 
 export const solutions = [
   {
     slug: "supply-chain-intelligence",
+    outcome: "See supply problems earlier",
     title: "Supply Chain Intelligence",
     summary:
-      "Help teams identify shortages, supplier risk, inventory issues, and exceptions earlier — while there is still time to act.",
+      "Help teams identify inventory risk, shortages, supplier issues, and exceptions before they become emergencies.",
     examples: [
       "Inventory risk",
       "PO exceptions",
@@ -34,9 +35,10 @@ export const solutions = [
   },
   {
     slug: "procurement-automation",
+    outcome: "Give buyers their time back",
     title: "Procurement Automation",
     summary:
-      "Reduce repetitive administrative work for buyers and sourcing teams so they can spend time on suppliers, cost, and risk.",
+      "Reduce repetitive supplier follow-up, RFQ work, quote comparison, and administrative purchasing tasks.",
     examples: [
       "Supplier follow-up",
       "RFQ preparation",
@@ -48,9 +50,10 @@ export const solutions = [
   },
   {
     slug: "manufacturing-intelligence",
+    outcome: "Turn plant data into action",
     title: "Manufacturing Intelligence",
     summary:
-      "Turn plant information into useful operational insight — for the people who run the floor, not a dashboard that nobody opens.",
+      "Transform production, downtime, scrap, quality, and operational information into useful decisions.",
     examples: [
       "Production summaries",
       "Downtime analysis",
@@ -62,9 +65,10 @@ export const solutions = [
   },
   {
     slug: "knowledge-systems",
+    outcome: "Make tribal knowledge searchable",
     title: "Knowledge Systems",
     summary:
-      "Make company knowledge easier to access and use, so work does not depend on whoever happens to remember where the file is.",
+      "Make SOPs, specifications, engineering documents, quality history, supplier knowledge, and maintenance information easier to access and use.",
     examples: [
       "SOP search",
       "Specification retrieval",
@@ -82,23 +86,23 @@ export const services = [
     slug: "loopscan",
     name: "LoopScan",
     summary:
-      "A focused operational assessment to identify where better systems would actually change the work.",
+      "A focused review of your operation designed to identify where process improvement, AI, and automation can create the most value.",
     deliverables: [
-      "Workflow review",
+      "Current-state workflow",
       "Friction points",
       "Opportunity map",
       "Business impact",
       "Technical feasibility",
-      "Risk assessment",
+      "Risk considerations",
       "Prioritized roadmap",
     ],
-    cta: "Start with a LoopScan",
+    cta: "Start a LoopScan",
   },
   {
     slug: "loopbuild",
     name: "LoopBuild",
     summary:
-      "Turn one high-value opportunity into a practical working system — not a slide deck.",
+      "Turn one high-value opportunity into a practical working system.",
     deliverables: [
       "Supplier follow-up automation",
       "RFQ workflow",
@@ -113,7 +117,7 @@ export const services = [
     slug: "loopops",
     name: "LoopOps",
     summary:
-      "Ongoing support and continuous improvement of deployed systems, so the work keeps getting better.",
+      "Ongoing support and continuous improvement after the first system is live.",
     deliverables: [
       "System monitoring",
       "Workflow improvement",
@@ -127,12 +131,22 @@ export const services = [
   },
 ] as const;
 
+export const loopScanReviews = [
+  "Repetitive work",
+  "Information gaps",
+  "Delays",
+  "Manual reporting",
+  "Disconnected systems",
+  "Decision bottlenecks",
+  "Tribal knowledge",
+  "Recurring operational problems",
+];
+
 export const howItWorks = [
   {
     step: "01",
     name: "See",
-    summary:
-      "Go to the work and understand how the process actually operates — not how it is drawn on a slide.",
+    summary: "Understand how the work actually happens.",
     points: [
       "Delays",
       "Repetitive work",
@@ -145,8 +159,7 @@ export const howItWorks = [
   {
     step: "02",
     name: "Simplify",
-    summary:
-      "Improve the process before automating it. Remove unnecessary steps. Define decisions, ownership, and expected outcomes.",
+    summary: "Improve the process before automating it.",
     points: [
       "Remove extra steps",
       "Clarify decisions",
@@ -160,7 +173,7 @@ export const howItWorks = [
     step: "03",
     name: "Build",
     summary:
-      "Connect the right combination of tools and people into a working system — not just a recommendation.",
+      "Connect the right combination of people, information, software, automation, and AI.",
     points: [
       "AI where it helps",
       "Automation",
@@ -174,8 +187,7 @@ export const howItWorks = [
   {
     step: "04",
     name: "Learn",
-    summary:
-      "Measure the impact. Identify the next constraint. Improve again.",
+    summary: "Measure the result and improve again.",
     points: [
       "Measure results",
       "Find the next constraint",
@@ -187,29 +199,18 @@ export const howItWorks = [
   },
 ] as const;
 
-export const operationalLoop = [
-  "Information",
-  "Decision",
-  "Action",
-  "Feedback",
-  "Improvement",
-] as const;
-
 export const useCases = [
   "Buyers manually chasing overdue purchase orders",
   "Planners combining reports every morning",
   "Quality teams searching through years of corrective actions",
-  "Engineers trying to locate old specifications",
-  "Managers manually preparing weekly operating reviews",
+  "Engineers trying to find old specifications",
   "Supply chain teams discovering shortages too late",
+  "Managers manually preparing operating reviews",
   "Employees relying on one experienced person who knows where everything is",
 ];
 
-export const philosophy = [
-  "AI is not the strategy. Better operations are the strategy.",
-  "Problems should be made visible.",
-  "Complexity should be removed before it is automated.",
-  "The people closest to the work often understand the problem best.",
-  "Human judgment should remain where it adds value.",
-  "Improvement never stops.",
-];
+export const featuredArticleSlugs = [
+  "why-manufacturers-should-not-automate-waste",
+  "ai-is-not-your-manufacturing-strategy",
+  "what-ai-can-actually-do-for-procurement",
+] as const;
