@@ -1,7 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { getUtmParams, track } from "@/lib/analytics";
+import {
+  trackLoopScanAreaSelected,
+  trackLoopScanFormError,
+  trackLoopScanFormStart,
+  trackLoopScanFormSubmit,
+  trackLoopScanPageView,
+  trackScheduleClick,
+} from "@/lib/analytics";
+import { getLeadAttribution } from "@/lib/attribution";
 import { loopScanAreas } from "@/lib/content";
 
 const fieldClass =
@@ -32,13 +40,13 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
   const started = useRef(false);
 
   useEffect(() => {
-    track("loopscan_page_view", getUtmParams());
+    trackLoopScanPageView();
   }, []);
 
   function markStarted() {
     if (started.current) return;
     started.current = true;
-    track("loopscan_form_start");
+    trackLoopScanFormStart();
   }
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
@@ -74,7 +82,6 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
       setFormError("Please check the highlighted fields.");
-      track("loopscan_form_error", { reason: "validation" });
       return;
     }
 
@@ -86,6 +93,7 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
     );
 
     try {
+      const attribution = getLeadAttribution();
       const response = await fetch("/api/loopscan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -96,9 +104,11 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
           area: form.area,
           process: form.process.trim(),
           submittedAt: new Date().toISOString(),
-          referrer: document.referrer || undefined,
-          landingPage: window.location.href,
-          utm: getUtmParams(),
+          landingPage: attribution.landingPage,
+          referringSource: attribution.referringSource,
+          referrer: attribution.referrer,
+          firstVisitAt: attribution.firstVisitAt,
+          utm: attribution.utm,
           company_website: honeypot,
         }),
       });
@@ -110,17 +120,23 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
           payload.error ??
             "We couldn’t send that just now. Please try again in a moment.",
         );
-        track("loopscan_form_error", { reason: "server" });
+        trackLoopScanFormError({
+          category: "server",
+          area: form.area,
+        });
         return;
       }
 
-      track("loopscan_form_submit", { area: form.area });
+      trackLoopScanFormSubmit(form.area);
       setSubmitted(true);
     } catch {
       setFormError(
         "We couldn’t send that just now. Please try again in a moment.",
       );
-      track("loopscan_form_error", { reason: "network" });
+      trackLoopScanFormError({
+        category: "network",
+        area: form.area,
+      });
     } finally {
       setSubmitting(false);
     }
@@ -150,7 +166,7 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
             </p>
             <a
               href={calendarUrl}
-              onClick={() => track("schedule_click")}
+              onClick={() => trackScheduleClick()}
               className="mt-6 inline-flex items-center justify-center rounded-[2px] bg-copper px-6 py-3.5 text-[14px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark"
             >
               Schedule a 20-Minute Conversation
@@ -267,7 +283,7 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
                   checked={selected}
                   onChange={() => {
                     update("area", area);
-                    track("loopscan_area_selected", { area });
+                    trackLoopScanAreaSelected(area);
                   }}
                   className="sr-only"
                 />

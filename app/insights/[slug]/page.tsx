@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/Button";
+import { InsightViewTracker } from "@/components/InsightViewTracker";
 import { Container } from "@/components/Reveal";
 import { articles, getArticle } from "@/lib/articles";
 
@@ -20,6 +21,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: article.title,
     description: article.dek,
+    alternates: { canonical: `/insights/${article.slug}` },
+    openGraph: {
+      title: article.title,
+      description: article.dek,
+      url: `/insights/${article.slug}`,
+      type: "article",
+    },
   };
 }
 
@@ -32,6 +40,7 @@ export default async function ArticlePage({ params }: Props) {
 
   return (
     <article className="py-20 md:py-28">
+      <InsightViewTracker slug={article.slug} category={article.category} />
       <Container className="max-w-[760px]">
         <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-copper">
           {article.category}
@@ -92,7 +101,9 @@ export default async function ArticlePage({ params }: Props) {
             Show us the process. We’ll help you make it better.
           </p>
           <div className="mt-6">
-            <Button href="/loopscan">Find Your First Loop</Button>
+            <Button href="/loopscan" location="article" articleSlug={article.slug}>
+              Find Your First Loop
+            </Button>
           </div>
         </div>
       </Container>

@@ -16,7 +16,9 @@ export const metadata: Metadata = {
     description:
       "Tell LoopWorks about a manufacturing process that takes too long, requires repetitive work, or depends on disconnected information. Start with the work and find your first improvement opportunity.",
     type: "website",
+    url: "/loopscan",
   },
+  alternates: { canonical: "/loopscan" },
 };
 
 const nextSteps = [

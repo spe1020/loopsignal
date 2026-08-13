@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Reveal";
+import { TrackedLink } from "@/components/TrackedLink";
 
 export default function NotFound() {
   return (
@@ -18,12 +18,14 @@ export default function NotFound() {
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Button href="/">Home</Button>
-          <Link
+          <TrackedLink
             href="/loopscan"
+            location="not_found"
+            ctaText="Talk to Us"
             className="inline-flex items-center px-5 py-3 text-[13px] font-medium text-ink"
           >
             Talk to Us
-          </Link>
+          </TrackedLink>
         </div>
       </Container>
     </section>

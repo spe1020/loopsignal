@@ -6,10 +6,15 @@ import {
   loopScanSteps,
   services,
 } from "@/lib/content";
+import type { CtaLocation } from "@/lib/analytics";
 
 const loopScan = services[0];
 
-export function LoopScanOffer() {
+export function LoopScanOffer({
+  ctaLocation = "loopscan_section",
+}: {
+  ctaLocation?: CtaLocation;
+}) {
   return (
     <section className="border-y border-line bg-cream py-20 md:py-28">
       <Container>
@@ -29,7 +34,9 @@ export function LoopScanOffer() {
             before recommending technology.
           </p>
           <div className="mt-8">
-            <Button href="/loopscan">Start a LoopScan</Button>
+            <Button href="/loopscan" location={ctaLocation}>
+              Start a LoopScan
+            </Button>
           </div>
         </Reveal>
 
@@ -170,8 +177,10 @@ export function LoopScanOffer() {
             problems.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-5">
-            <Button href="/loopscan">Start a LoopScan</Button>
-            <Button href="/loopscan" variant="text">
+            <Button href="/loopscan" location={ctaLocation}>
+              Start a LoopScan
+            </Button>
+            <Button href="/loopscan" variant="text" location={ctaLocation}>
               Tell Us About the Process →
             </Button>
           </div>

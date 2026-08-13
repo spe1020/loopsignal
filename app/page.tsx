@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/Button";
 import { LoopScanOffer } from "@/components/LoopScanOffer";
 import { MethodLoop } from "@/components/Loops";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
+import { SolutionInterestLink } from "@/components/SolutionInterestLink";
 import { SystemsFlow } from "@/components/SystemsFlow";
 import { articles } from "@/lib/articles";
 import {
@@ -17,6 +19,10 @@ import {
 const featuredArticles = featuredArticleSlugs
   .map((slug) => articles.find((article) => article.slug === slug))
   .filter((article) => article != null);
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   return (
@@ -47,7 +53,9 @@ export default function HomePage() {
               using AI, automation, and process improvement.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-5">
-              <Button href="/loopscan">Find Your First Loop</Button>
+              <Button href="/loopscan" location="hero">
+                Find Your First Loop
+              </Button>
               <Button href="/solutions" variant="text">
                 See What We Build →
               </Button>
@@ -138,7 +146,9 @@ export default function HomePage() {
                 ))}
               </ul>
               <div className="mt-8">
-                <Button href="/loopscan">Find Your First Loop</Button>
+                <Button href="/loopscan" location="use_cases">
+                  Find Your First Loop
+                </Button>
               </div>
             </div>
           </div>
@@ -163,20 +173,23 @@ export default function HomePage() {
           </Reveal>
           <div className="mt-12 grid gap-px border border-line bg-line md:grid-cols-2">
             {solutions.map((solution, index) => (
-              <Reveal
-                key={solution.slug}
-                delay={index * 50}
-                className="bg-cream p-8 md:p-10"
-              >
-                <h3 className="text-2xl font-medium tracking-tight text-ink">
-                  {solution.outcome}
-                </h3>
-                <p className="mt-3 text-[12px] font-medium tracking-[0.04em] text-copper uppercase">
-                  {solution.title}
-                </p>
-                <p className="mt-4 max-w-md text-[15px] leading-7 text-graphite">
-                  {solution.summary}
-                </p>
+              <Reveal key={solution.slug} delay={index * 50} className="bg-cream">
+                <SolutionInterestLink
+                  href={`/solutions#${solution.slug}`}
+                  solution={solution.interest}
+                  interactionType="card_click"
+                  className="block h-full p-8 transition-colors hover:bg-paper md:p-10"
+                >
+                  <h3 className="text-2xl font-medium tracking-tight text-ink">
+                    {solution.outcome}
+                  </h3>
+                  <p className="mt-3 text-[12px] font-medium tracking-[0.04em] text-copper uppercase">
+                    {solution.title}
+                  </p>
+                  <p className="mt-4 max-w-md text-[15px] leading-7 text-graphite">
+                    {solution.summary}
+                  </p>
+                </SolutionInterestLink>
               </Reveal>
             ))}
           </div>
@@ -196,6 +209,16 @@ export default function HomePage() {
               LoopWorks can turn that knowledge into a secure, searchable system
               your team can actually use.
             </p>
+            <div className="mt-8">
+              <SolutionInterestLink
+                href="/solutions#knowledge-systems"
+                solution="knowledge"
+                interactionType="learn_more"
+                className="text-[13px] font-medium tracking-[0.02em] text-copper hover:text-copper-dark"
+              >
+                See knowledge systems →
+              </SolutionInterestLink>
+            </div>
           </Reveal>
           <Reveal className="relative aspect-[5/4] overflow-hidden lg:col-span-6" delay={80}>
             <Image
@@ -368,7 +391,7 @@ export default function HomePage() {
               Show us the process. We’ll help you make it better.
             </p>
             <div className="mt-10">
-              <Button href="/loopscan" variant="dark">
+              <Button href="/loopscan" variant="dark" location="final_cta">
                 Start a LoopScan
               </Button>
             </div>

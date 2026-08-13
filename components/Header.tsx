@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
+import { TrackedLink } from "./TrackedLink";
 import { nav } from "@/lib/content";
 
 export function Header() {
@@ -59,12 +60,14 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-4">
-          <Link
+          <TrackedLink
             href="/loopscan"
+            location="navigation"
+            ctaText="Talk to Us"
             className="hidden rounded-[2px] bg-copper px-4 py-2.5 text-[13px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark sm:inline-flex"
           >
             Talk to Us
-          </Link>
+          </TrackedLink>
           <button
             type="button"
             className="flex h-10 w-10 items-center justify-center lg:hidden"
@@ -101,13 +104,15 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
-            <Link
+            <TrackedLink
               href="/loopscan"
+              location="navigation"
+              ctaText="Talk to Us"
               onClick={() => setOpen(false)}
               className="mt-6 inline-flex items-center justify-center rounded-[2px] bg-copper px-4 py-3 text-[13px] font-medium text-white"
             >
               Talk to Us
-            </Link>
+            </TrackedLink>
           </nav>
         </div>
       )}

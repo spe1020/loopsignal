@@ -1,3 +1,10 @@
+import {
+  sanitizeIsoTimestamp,
+  sanitizePath,
+  sanitizeReferrerUrl,
+  sanitizeReferringSource,
+  sanitizeUtm,
+} from "@/lib/attribution";
 import { loopScanAreas } from "@/lib/content";
 
 export type LoopScanLead = {
@@ -7,8 +14,10 @@ export type LoopScanLead = {
   area: (typeof loopScanAreas)[number];
   process: string;
   submittedAt: string;
-  referrer?: string;
   landingPage?: string;
+  referringSource?: string;
+  referrer?: string;
+  firstVisitAt?: string;
   utm?: {
     utm_source?: string;
     utm_medium?: string;
@@ -42,8 +51,6 @@ export function parseLoopScanLead(input: unknown): LoopScanLead | string {
     return "Please describe the process you’d like to improve.";
   }
 
-  const utm = body.utm && typeof body.utm === "object" ? body.utm : {};
-
   return {
     name,
     company,
@@ -51,27 +58,13 @@ export function parseLoopScanLead(input: unknown): LoopScanLead | string {
     area: area as (typeof loopScanAreas)[number],
     process,
     submittedAt:
-      typeof body.submittedAt === "string"
-        ? body.submittedAt
-        : new Date().toISOString(),
-    referrer:
-      typeof body.referrer === "string" ? body.referrer : undefined,
-    landingPage:
-      typeof body.landingPage === "string" ? body.landingPage : undefined,
-    utm: {
-      utm_source: optionalString((utm as Record<string, unknown>).utm_source),
-      utm_medium: optionalString((utm as Record<string, unknown>).utm_medium),
-      utm_campaign: optionalString(
-        (utm as Record<string, unknown>).utm_campaign,
-      ),
-      utm_content: optionalString((utm as Record<string, unknown>).utm_content),
-      utm_term: optionalString((utm as Record<string, unknown>).utm_term),
-    },
+      sanitizeIsoTimestamp(body.submittedAt) ?? new Date().toISOString(),
+    landingPage: sanitizePath(body.landingPage),
+    referringSource: sanitizeReferringSource(body.referringSource),
+    referrer: sanitizeReferrerUrl(body.referrer),
+    firstVisitAt: sanitizeIsoTimestamp(body.firstVisitAt),
+    utm: sanitizeUtm(body.utm),
   };
-}
-
-function optionalString(value: unknown) {
-  return typeof value === "string" && value.length > 0 ? value : undefined;
 }
 
 export async function deliverLead(lead: LoopScanLead) {
@@ -84,6 +77,8 @@ export async function deliverLead(lead: LoopScanLead) {
         company: lead.company,
         area: lead.area,
         submittedAt: lead.submittedAt,
+        landingPage: lead.landingPage,
+        referringSource: lead.referringSource,
       },
     );
     return;

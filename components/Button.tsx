@@ -1,4 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  trackInsightCtaClick,
+  trackLoopScanCTA,
+  type CtaLocation,
+} from "@/lib/analytics";
 
 const variants = {
   primary:
@@ -16,17 +24,45 @@ type ButtonProps = {
   children: React.ReactNode;
   variant?: keyof typeof variants;
   className?: string;
+  location?: CtaLocation;
+  articleSlug?: string;
 };
+
+function labelFromChildren(children: React.ReactNode) {
+  return typeof children === "string" ? children : undefined;
+}
 
 export function Button({
   href,
   children,
   variant = "primary",
   className = "",
+  location,
+  articleSlug,
 }: ButtonProps) {
+  const pathname = usePathname();
+  const ctaText = labelFromChildren(children);
+
+  function onClick() {
+    if (!href.startsWith("/loopscan") || !location) return;
+    trackLoopScanCTA({
+      location,
+      page: pathname,
+      cta_text: ctaText,
+    });
+    if (location === "article") {
+      trackInsightCtaClick({
+        article_slug: articleSlug,
+        page: pathname,
+        cta_text: ctaText,
+      });
+    }
+  }
+
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={`inline-flex items-center justify-center rounded-[2px] font-medium tracking-[0.02em] transition-colors ${variants[variant]} ${className}`}
     >
       {children}
