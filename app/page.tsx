@@ -47,7 +47,7 @@ export default function HomePage() {
               using AI, automation, and process improvement.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-5">
-              <Button href="/first-loop">Find Your First Loop</Button>
+              <Button href="/loopscan">Find Your First Loop</Button>
               <Button href="/solutions" variant="text">
                 See What We Build →
               </Button>
@@ -138,7 +138,7 @@ export default function HomePage() {
                 ))}
               </ul>
               <div className="mt-8">
-                <Button href="/first-loop">Find Your First Loop</Button>
+                <Button href="/loopscan">Find Your First Loop</Button>
               </div>
             </div>
           </div>
@@ -368,7 +368,7 @@ export default function HomePage() {
               Show us the process. We’ll help you make it better.
             </p>
             <div className="mt-10">
-              <Button href="/first-loop" variant="dark">
+              <Button href="/loopscan" variant="dark">
                 Start a LoopScan
               </Button>
             </div>

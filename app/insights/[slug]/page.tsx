@@ -92,7 +92,7 @@ export default async function ArticlePage({ params }: Props) {
             Show us the process. We’ll help you make it better.
           </p>
           <div className="mt-6">
-            <Button href="/first-loop">Find Your First Loop</Button>
+            <Button href="/loopscan">Find Your First Loop</Button>
           </div>
         </div>
       </Container>

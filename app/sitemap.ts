@@ -8,7 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/how-it-works",
     "/about",
     "/insights",
-    "/first-loop",
+    "/loopscan",
   ].map((path) => ({
     url: `https://loopworks.com${path}`,
     lastModified: new Date(),

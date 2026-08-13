@@ -29,7 +29,7 @@ export function LoopScanOffer() {
             before recommending technology.
           </p>
           <div className="mt-8">
-            <Button href="/first-loop">Start a LoopScan</Button>
+            <Button href="/loopscan">Start a LoopScan</Button>
           </div>
         </Reveal>
 
@@ -170,8 +170,8 @@ export function LoopScanOffer() {
             problems.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-5">
-            <Button href="/first-loop">Start a LoopScan</Button>
-            <Button href="/first-loop" variant="text">
+            <Button href="/loopscan">Start a LoopScan</Button>
+            <Button href="/loopscan" variant="text">
               Tell Us About the Process →
             </Button>
           </div>
