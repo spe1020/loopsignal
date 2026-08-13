@@ -204,8 +204,8 @@ export const useCases = [
 ];
 
 export const featuredArticleSlugs = [
-  "why-manufacturers-should-not-automate-waste",
   "ai-is-not-your-manufacturing-strategy",
+  "why-manufacturers-should-not-automate-waste",
   "what-ai-can-actually-do-for-procurement",
 ] as const;
 
