@@ -17,7 +17,7 @@ export function MethodLoop() {
           width="904"
           height="348"
           rx="174"
-          stroke="#c24e1d"
+          stroke="#E4571E"
           strokeWidth="1.4"
         />
       </svg>

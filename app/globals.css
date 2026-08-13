@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --paper: #f3f1eb;
-  --paper-2: #e8e4db;
-  --cream: #faf9f6;
-  --ink: #1b1a17;
-  --graphite: #3d3b36;
-  --stone: #6e6a63;
-  --line: #d9d3c7;
-  --copper: #c24e1d;
-  --copper-dark: #9c3e17;
-  --copper-soft: #ead7cc;
+  --paper: #f3f3f1;
+  --paper-2: #ececec;
+  --cream: #fafaf8;
+  --ink: #1f1f1f;
+  --graphite: #4a4a4a;
+  --stone: #7a7a7a;
+  --line: #e6e6e6;
+  --copper: #e4571e;
+  --copper-dark: #c44a18;
+  --copper-soft: #f6e3da;
 }
 
 @theme inline {
