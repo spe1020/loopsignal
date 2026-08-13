@@ -55,6 +55,7 @@ export function Button({
         article_slug: articleSlug,
         page: pathname,
         cta_text: ctaText,
+        destination: "loopscan",
       });
     }
   }

@@ -137,7 +137,7 @@ Fired when an Insights article is viewed.
 Allowed metadata:
 
 - `article_slug`
-- `article_category`
+- `article_category` (controlled, e.g. `manufacturing_ai`)
 - `referring_source` (`linkedin`, `google`, `direct`, `referral`, `email`, `other`)
 
 ### `insight_cta_click`
@@ -149,6 +149,7 @@ Allowed metadata:
 - `article_slug`
 - `page`
 - `cta_text`
+- `destination` (`loopscan`)
 
 ## Privacy
 

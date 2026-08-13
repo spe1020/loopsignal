@@ -177,11 +177,13 @@ export function trackInsightCtaClick(input: {
   article_slug?: string;
   page?: string;
   cta_text?: string;
+  destination?: string;
 }) {
   trackEvent("insight_cta_click", {
     article_slug: input.article_slug,
     page: input.page ?? window.location.pathname,
     cta_text: input.cta_text,
+    destination: input.destination ?? "loopscan",
   });
 }
 

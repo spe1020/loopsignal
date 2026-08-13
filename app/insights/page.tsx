@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
-import { articles, insightTopics } from "@/lib/articles";
+import { articles, formatArticleDate, insightTopics } from "@/lib/articles";
 
 export const metadata: Metadata = {
   title: "Insights",
@@ -54,15 +54,16 @@ export default function InsightsPage() {
                     {article.category}
                   </p>
                   <p className="mt-2 text-sm text-stone">
-                    {article.readTime}
+                    {formatArticleDate(article.date)}
                   </p>
+                  <p className="mt-1 text-sm text-stone">{article.readTime}</p>
                 </div>
                 <div className="md:col-span-9">
                   <h2 className="text-2xl font-medium tracking-tight text-ink md:text-[28px]">
                     {article.title}
                   </h2>
                   <p className="mt-3 max-w-2xl text-[15px] leading-7 text-graphite">
-                    {article.dek}
+                    {article.excerpt ?? article.dek}
                   </p>
                 </div>
               </Link>

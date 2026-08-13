@@ -11,10 +11,357 @@ export type Article = {
   date: string;
   readTime: string;
   dek: string;
+  excerpt?: string;
   blocks: ArticleBlock[];
+  author?: string;
+  kicker?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  relatedSlugs?: string[];
 };
 
+export function formatArticleDate(date: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(`${date}T00:00:00`));
+}
+
+export function articleAnalyticsCategory(article: Article) {
+  return article.category
+    .toLowerCase()
+    .replace(/&/g, " ")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_|_$/g, "");
+}
+
+export function getRelatedArticles(article: Article, limit = 3) {
+  const preferred = (article.relatedSlugs ?? [])
+    .map((slug) => getArticle(slug))
+    .filter((item): item is Article => Boolean(item));
+
+  const rest = articles.filter(
+    (item) =>
+      item.slug !== article.slug &&
+      !preferred.some((related) => related.slug === item.slug),
+  );
+
+  return [...preferred, ...rest].slice(0, limit);
+}
+
 export const articles: Article[] = [
+  {
+    slug: "ai-is-not-your-manufacturing-strategy",
+    title: "AI Is Not Your Manufacturing Strategy",
+    category: "Manufacturing AI",
+    kicker: "Manufacturing AI / Operations",
+    author: "Seth Sager",
+    date: "2026-08-12",
+    readTime: "8 min",
+    dek: "Manufacturers should not start by asking where they can use AI. Start with the work, find the friction, and improve the process first.",
+    excerpt:
+      "Manufacturers do not need to start with an AI strategy. Start with the work, find the friction, and improve the process first.",
+    seoTitle: "AI Is Not Your Manufacturing Strategy | LoopWorks",
+    seoDescription:
+      "Manufacturers should not start by asking where to use AI. Start with the work, find operational friction, simplify the process, and then decide where AI or automation creates value.",
+    relatedSlugs: [
+      "why-manufacturers-should-not-automate-waste",
+      "what-ai-can-actually-do-for-procurement",
+    ],
+    blocks: [
+      {
+        type: "p",
+        text: "Manufacturers are being told they need an AI strategy.",
+      },
+      {
+        type: "p",
+        text: "I think that starts in the wrong place.",
+      },
+      {
+        type: "p",
+        text: "AI is moving quickly. New tools appear every week. Vendors are promising automation, agents, copilots, digital workers, and smarter factories.",
+      },
+      {
+        type: "p",
+        text: "Some of it is useful.",
+      },
+      {
+        type: "p",
+        text: "Some of it is noise.",
+      },
+      {
+        type: "p",
+        text: "But the real question for a manufacturer is not “Where can we use AI?”",
+      },
+      {
+        type: "quote",
+        text: "Where is the work harder than it should be?",
+      },
+      {
+        type: "p",
+        text: "That is a very different starting point.",
+      },
+      {
+        type: "h2",
+        text: "Start with the work",
+      },
+      {
+        type: "p",
+        text: "Walk through almost any manufacturing organization and you will find capable people compensating for imperfect systems.",
+      },
+      {
+        type: "p",
+        text: "A buyer spends Friday afternoon chasing late purchase orders.",
+      },
+      {
+        type: "p",
+        text: "A planner pulls information from several reports and rebuilds it in Excel.",
+      },
+      {
+        type: "p",
+        text: "Quality searches through years of corrective actions trying to determine whether a problem has happened before.",
+      },
+      {
+        type: "p",
+        text: "An engineer knows a specification exists somewhere, but not where.",
+      },
+      {
+        type: "p",
+        text: "A production manager manually assembles the same operating report every morning.",
+      },
+      {
+        type: "p",
+        text: "A critical process depends on one experienced employee who knows how everything really works.",
+      },
+      {
+        type: "p",
+        text: "None of these problems begin as AI problems.",
+      },
+      {
+        type: "p",
+        text: "They are work problems.",
+      },
+      {
+        type: "p",
+        text: "They involve friction, missing connections, repetitive tasks, information that is difficult to access, and decisions that happen later than they should.",
+      },
+      {
+        type: "p",
+        text: "That is where AI becomes interesting.",
+      },
+      {
+        type: "h2",
+        text: "Don't automate waste",
+      },
+      {
+        type: "p",
+        text: "Manufacturing already has a framework for thinking about this.",
+      },
+      {
+        type: "p",
+        text: "Lean taught us to look for waste. Kaizen taught us that improvement is continuous. The gemba taught us that if we want to understand the work, we need to go see the work.",
+      },
+      {
+        type: "p",
+        text: "Those principles do not disappear because AI exists. In fact, they become more important.",
+      },
+      {
+        type: "p",
+        text: "A bad process does not become a good process because an AI agent is running it.",
+      },
+      {
+        type: "p",
+        text: "You can automate unnecessary approvals. You can automate duplicate reporting. You can automate a workflow nobody should be doing in the first place.",
+      },
+      {
+        type: "quote",
+        text: "Do not automate waste.",
+      },
+      {
+        type: "p",
+        text: "You will simply create waste faster.",
+      },
+      {
+        type: "p",
+        text: "The sequence matters.",
+      },
+      {
+        type: "ul",
+        items: [
+          "Understand the process.",
+          "Find the friction.",
+          "Simplify the work.",
+          "Then decide what should be automated.",
+        ],
+      },
+      {
+        type: "p",
+        text: "Sometimes AI will be the right answer. Sometimes traditional automation will be enough. Sometimes the right solution will be changing the process and writing no software at all.",
+      },
+      {
+        type: "p",
+        text: "That is still a successful outcome.",
+      },
+      {
+        type: "h2",
+        text: "The information usually already exists",
+      },
+      {
+        type: "p",
+        text: "One of the most interesting things about manufacturing is how much useful information already exists inside the organization.",
+      },
+      {
+        type: "p",
+        text: "It lives in ERP systems, email, spreadsheets, quality records, supplier correspondence, specifications, shared drives, production reports, maintenance records, and people’s heads.",
+      },
+      {
+        type: "p",
+        text: "The challenge is often not generating more information. The challenge is connecting what already exists.",
+      },
+      {
+        type: "p",
+        text: "A buyer does not necessarily need another dashboard. They may need the system to recognize that a purchase order is late, understand the supplier’s previous communication, identify whether the material is becoming a production risk, and tell them where their attention is actually needed.",
+      },
+      {
+        type: "p",
+        text: "A quality engineer may not need another quality system. They may need to ask: Have we seen this defect before? What happened? What corrective action did we take? Did it work?",
+      },
+      {
+        type: "p",
+        text: "A plant manager may not need another report. They may need the important exceptions from five different systems surfaced before the morning meeting.",
+      },
+      {
+        type: "p",
+        text: "That is where modern AI can become powerful. Not as another destination employees have to visit. As an intelligent layer connecting information to the work.",
+      },
+      {
+        type: "h2",
+        text: "The goal is not a factory without people",
+      },
+      {
+        type: "p",
+        text: "There is a tendency to frame AI primarily around eliminating labor. That misses a much larger opportunity.",
+      },
+      {
+        type: "p",
+        text: "The most valuable manufacturing systems may be the ones that make experienced people dramatically more effective.",
+      },
+      {
+        type: "p",
+        text: "Take the buyer who spends hours chasing suppliers. The valuable part of their job is not writing “Can you provide an updated ship date?” for the twentieth time that week.",
+      },
+      {
+        type: "p",
+        text: "Their value is understanding which supplier represents a real risk, when to escalate, when to push, when to find another source, and how one late material affects the larger operation.",
+      },
+      {
+        type: "quote",
+        text: "AI can do more of the gathering. The person can do more of the judgment.",
+      },
+      {
+        type: "p",
+        text: "The same pattern exists in planning, engineering, quality, maintenance, and operations.",
+      },
+      {
+        type: "p",
+        text: "The goal should not be removing people from every loop. It should be designing better loops between people, information, decisions, and action.",
+      },
+      {
+        type: "h2",
+        text: "Keep humans where judgment matters",
+      },
+      {
+        type: "p",
+        text: "Not every decision should be automated.",
+      },
+      {
+        type: "p",
+        text: "A system may be capable of drafting supplier communication without being authorized to commit money. It may identify a potential quality issue without deciding whether production should stop. It may recommend a sourcing decision without selecting the supplier. It may identify inventory risk without changing the production schedule.",
+      },
+      {
+        type: "p",
+        text: "These boundaries matter.",
+      },
+      {
+        type: "p",
+        text: "A good AI implementation defines what the system can observe, what it can recommend, what it can execute, what requires human approval, and what it should never do.",
+      },
+      {
+        type: "p",
+        text: "That is not a limitation. It is good system design.",
+      },
+      {
+        type: "h2",
+        text: "Find the first loop",
+      },
+      {
+        type: "p",
+        text: "If I were sitting with a manufacturing leadership team exploring AI, I would not begin with a presentation about large language models.",
+      },
+      {
+        type: "p",
+        text: "I would ask:",
+      },
+      {
+        type: "ul",
+        items: [
+          "Where are people repeatedly searching for information?",
+          "What report does someone manually build every day?",
+          "What process generates the most unnecessary email?",
+          "Where are teams entering the same information more than once?",
+          "What recurring problem always seems to surprise you?",
+          "What decision happens later than it should?",
+          "Where does critical knowledge depend on one person?",
+          "What process does your team hate doing?",
+        ],
+      },
+      {
+        type: "p",
+        text: "There is usually an answer. That is the place to begin.",
+      },
+      {
+        type: "p",
+        text: "Take one workflow. Understand it. Measure the current state. Improve it. Build something small. Measure the result. Learn. Then repeat.",
+      },
+      {
+        type: "p",
+        text: "That approach may not sound as exciting as an enterprise AI transformation. It is probably much more useful.",
+      },
+      {
+        type: "h2",
+        text: "Better operations are the strategy",
+      },
+      {
+        type: "p",
+        text: "AI will become increasingly embedded in manufacturing. But manufacturers do not need AI for the sake of having AI.",
+      },
+      {
+        type: "p",
+        text: "They need better flow, better visibility, better decisions, less repetitive work, less time searching, fewer surprises, more resilient supply chains, more accessible knowledge, and better systems.",
+      },
+      {
+        type: "p",
+        text: "AI can help create those outcomes.",
+      },
+      {
+        type: "quote",
+        text: "Better operations are the strategy.",
+      },
+      {
+        type: "p",
+        text: "And the best place to start may be much simpler than most companies think.",
+      },
+      {
+        type: "quote",
+        text: "Show me the process your team hates doing.",
+      },
+      {
+        type: "p",
+        text: "There is probably a better loop hiding inside it.",
+      },
+    ],
+  },
   {
     slug: "why-manufacturers-should-not-automate-waste",
     title: "Why Manufacturers Should Not Automate Waste",
@@ -63,44 +410,6 @@ export const articles: Article[] = [
       {
         type: "p",
         text: "Automate the value. Do not scale the waste.",
-      },
-    ],
-  },
-  {
-    slug: "ai-is-not-your-manufacturing-strategy",
-    title: "AI Is Not Your Manufacturing Strategy",
-    category: "Manufacturing AI",
-    date: "2026-06-22",
-    readTime: "5 min",
-    dek: "Better operations are the strategy. Tools are how you execute it.",
-    blocks: [
-      {
-        type: "p",
-        text: "Manufacturers do not have an AI problem. They have work that takes too long, information that is hard to find, and decisions that happen later than they should.",
-      },
-      {
-        type: "p",
-        text: "Those are operational problems. They show up in shortages, overtime, expedites, quality escapes, and meetings that exist to reconstruct what already happened.",
-      },
-      {
-        type: "quote",
-        text: "AI is not the strategy. Better operations are the strategy.",
-      },
-      {
-        type: "h2",
-        text: "Start with the constraint",
-      },
-      {
-        type: "p",
-        text: "A useful system begins with a constraint you can name. Purchase orders that sit unanswered. A morning report that three people assemble by hand. A quality investigation that starts with a search through shared drives.",
-      },
-      {
-        type: "p",
-        text: "Once the constraint is visible, the tools become obvious. Sometimes the answer is a cleaner workflow. Sometimes it is an integration. Sometimes a model can draft, retrieve, or watch for exceptions. The tool is chosen after the work is understood — not before.",
-      },
-      {
-        type: "p",
-        text: "Companies that invert this order collect pilots. Companies that keep the order collect results.",
       },
     ],
   },
