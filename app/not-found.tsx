@@ -19,7 +19,7 @@ export default function NotFound() {
         <div className="mt-10 flex flex-wrap gap-3">
           <Button href="/">Home</Button>
           <Link
-            href="/talk-to-us"
+            href="/first-loop"
             className="inline-flex items-center px-5 py-3 text-[13px] font-medium text-ink"
           >
             Talk to Us

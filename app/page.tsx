@@ -1,16 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/Button";
-import { OperationalLoop } from "@/components/Loops";
+import { MethodLoop } from "@/components/Loops";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
 import { articles } from "@/lib/articles";
 import {
+  featuredArticleSlugs,
   informationSources,
-  philosophy,
+  loopScanReviews,
   services,
   solutions,
   useCases,
 } from "@/lib/content";
+
+const featuredArticles = featuredArticleSlugs
+  .map((slug) => articles.find((article) => article.slug === slug))
+  .filter((article) => article != null);
+
+const loopScan = services[0];
+const laterServices = services.slice(1);
 
 export default function HomePage() {
   return (
@@ -27,7 +35,7 @@ export default function HomePage() {
               "linear-gradient(to bottom, black 0%, transparent 85%)",
           }}
         />
-        <Container className="relative pt-20 pb-16 md:pt-28 md:pb-24">
+        <Container className="relative pt-20 pb-16 md:pt-28 md:pb-20">
           <Reveal>
             <Eyebrow>LoopWorks</Eyebrow>
             <h1 className="mt-6 max-w-4xl text-[44px] leading-[1.05] font-medium tracking-[-0.035em] text-ink sm:text-6xl md:text-[84px]">
@@ -36,24 +44,21 @@ export default function HomePage() {
               Better work.
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-8 text-graphite md:text-[19px]">
-              LoopWorks helps manufacturers improve the flow of work,
-              information, and decisions through practical AI, automation, and
-              process improvement.
+              We help manufacturers eliminate repetitive work, connect
+              disconnected information, and make better operational decisions
+              using AI, automation, and process improvement.
             </p>
-            <div className="mt-10 flex flex-wrap gap-3">
-              <Button href="/talk-to-us">Find Your First Loop</Button>
-              <Button href="/solutions" variant="secondary">
-                See What We Build
+            <div className="mt-10 flex flex-wrap items-center gap-5">
+              <Button href="/first-loop">Find Your First Loop</Button>
+              <Button href="/solutions" variant="text">
+                See What We Build →
               </Button>
             </div>
-          </Reveal>
-          <Reveal className="mt-16 md:mt-20" delay={120}>
-            <OperationalLoop />
           </Reveal>
         </Container>
       </section>
 
-      <section className="relative h-[52vh] min-h-[360px] max-h-[560px] overflow-hidden">
+      <section className="relative h-[46vh] min-h-[320px] max-h-[480px] overflow-hidden">
         <Image
           src="/images/plant.jpg"
           alt="Manufacturing plant floor with production equipment along a marked aisle"
@@ -66,14 +71,14 @@ export default function HomePage() {
         <div className="absolute inset-x-0 bottom-0">
           <Container className="pb-8">
             <p className="max-w-xl text-sm leading-6 text-white/85">
-              The information is already in the plant. The work is getting it to
-              the right person at the right time.
+              The information is already there. The challenge is getting the
+              right information to the right person at the right time.
             </p>
           </Container>
         </div>
       </section>
 
-      <section className="py-24 md:py-32">
+      <section className="py-20 md:py-24">
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <Reveal className="lg:col-span-5">
@@ -84,19 +89,7 @@ export default function HomePage() {
               </h2>
             </Reveal>
             <Reveal className="lg:col-span-7" delay={80}>
-              <p className="text-[17px] leading-8 text-graphite">
-                Manufacturers often have information spread across ERP systems,
-                spreadsheets, email, supplier correspondence, specifications,
-                quality records, production reports, shared drives, and employee
-                knowledge.
-              </p>
-              <p className="mt-5 text-[17px] leading-8 text-graphite">
-                The problem is often not missing information. It is getting the
-                right information to the right person at the right time.
-                LoopWorks connects those pieces into better operational
-                workflows.
-              </p>
-              <ul className="mt-10 grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-3">
+              <ul className="grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-3">
                 {informationSources.map((source) => (
                   <li
                     key={source}
@@ -111,7 +104,50 @@ export default function HomePage() {
         </Container>
       </section>
 
-      <section className="border-y border-line bg-paper py-24 md:py-32">
+      <section className="border-y border-line bg-paper py-20 md:py-24">
+        <Container>
+          <div className="grid items-start gap-12 lg:grid-cols-12">
+            <Reveal className="relative hidden aspect-[4/5] overflow-hidden lg:col-span-5 lg:block">
+              <Image
+                src="/images/gemba.jpg"
+                alt="A manufacturing technician inspecting equipment on the shop floor"
+                fill
+                className="object-cover"
+                sizes="40vw"
+              />
+            </Reveal>
+            <div className="lg:col-span-7">
+              <Reveal>
+                <Eyebrow>Where we start</Eyebrow>
+                <h2 className="mt-5 text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
+                  Show us the process your team hates doing.
+                </h2>
+                <p className="mt-5 text-[16px] leading-7 text-graphite">
+                  These are the kinds of problems LoopWorks is built to solve.
+                </p>
+              </Reveal>
+              <ul className="mt-8 divide-y divide-line border-y border-line">
+                {useCases.map((item, index) => (
+                  <li
+                    key={item}
+                    className="flex gap-5 py-3.5 text-[15px] leading-6 text-ink"
+                  >
+                    <span className="font-mono text-[11px] tracking-[0.12em] text-copper">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-8">
+                <Button href="/first-loop">Find Your First Loop</Button>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-20 md:py-24">
         <Container>
           <Reveal className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
@@ -127,218 +163,180 @@ export default function HomePage() {
               All solutions →
             </Link>
           </Reveal>
-          <div className="mt-14 grid gap-px border border-line bg-line md:grid-cols-2">
+          <div className="mt-12 grid gap-px border border-line bg-line md:grid-cols-2">
             {solutions.map((solution, index) => (
               <Reveal
                 key={solution.slug}
-                delay={index * 60}
+                delay={index * 50}
                 className="bg-cream p-8 md:p-10"
               >
-                <span className="font-mono text-[11px] tracking-[0.16em] text-copper">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-5 text-2xl font-medium tracking-tight text-ink">
-                  {solution.title}
+                <h3 className="text-2xl font-medium tracking-tight text-ink">
+                  {solution.outcome}
                 </h3>
+                <p className="mt-3 text-[12px] font-medium tracking-[0.04em] text-copper uppercase">
+                  {solution.title}
+                </p>
                 <p className="mt-4 max-w-md text-[15px] leading-7 text-graphite">
                   {solution.summary}
                 </p>
-                <ul className="mt-8 flex flex-wrap gap-2">
-                  {solution.examples.map((example) => (
-                    <li
-                      key={example}
-                      className="border border-line px-3 py-1.5 text-[12px] text-graphite"
-                    >
-                      {example}
-                    </li>
-                  ))}
-                </ul>
               </Reveal>
             ))}
           </div>
         </Container>
       </section>
 
-      <section className="bg-ink py-24 text-cream md:py-32">
-        <Container>
-          <Reveal>
-            <Eyebrow>How it works</Eyebrow>
-            <h2 className="mt-5 max-w-2xl text-3xl font-medium tracking-[-0.03em] md:text-[40px]">
-              See. Simplify. Build. Learn. Repeat.
+      <section className="border-y border-line bg-paper py-20 md:py-24">
+        <Container className="grid items-center gap-12 lg:grid-cols-12">
+          <Reveal className="lg:col-span-6">
+            <Eyebrow>Knowledge systems</Eyebrow>
+            <h2 className="mt-5 text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
+              What happens when the person who knows everything retires?
             </h2>
-            <p className="mt-5 max-w-xl text-[16px] leading-7 text-white/60">
-              We go to the work first. Then we improve the process. Then we
-              build a system. Then we measure, and start again.
+            <p className="mt-6 max-w-xl text-[16px] leading-8 text-graphite">
+              Critical manufacturing knowledge often lives across experienced
+              employees, documents, shared drives, emails, and old systems.
+              LoopWorks can turn that knowledge into a secure, searchable system
+              your team can actually use.
             </p>
           </Reveal>
-          <div className="mt-14 grid gap-px bg-white/10 md:grid-cols-4">
-            {[
-              {
-                n: "01",
-                name: "See",
-                text: "Go to the work. Find delays, workarounds, and disconnected information.",
-              },
-              {
-                n: "02",
-                name: "Simplify",
-                text: "Improve the process before automating it. Define decisions and ownership.",
-              },
-              {
-                n: "03",
-                name: "Build",
-                text: "Connect AI, automation, ERP, documents, and people into a working system.",
-              },
-              {
-                n: "04",
-                name: "Learn",
-                text: "Measure the impact. Identify the next constraint. Improve again.",
-              },
-            ].map((step, index) => (
-              <Reveal
-                key={step.name}
-                delay={index * 70}
-                className="bg-ink px-6 py-8 md:min-h-[280px] md:px-7"
-              >
-                <p className="font-mono text-[11px] tracking-[0.16em] text-copper">
-                  {step.n}
-                </p>
-                <h3 className="mt-8 text-2xl font-medium tracking-tight">
-                  {step.name}
-                </h3>
-                <p className="mt-4 text-sm leading-6 text-white/55">
-                  {step.text}
-                </p>
-              </Reveal>
-            ))}
-          </div>
-          <p className="mt-8 text-center text-[12px] tracking-[0.16em] text-white/40 uppercase">
-            A continuous loop — not a one-time project
-          </p>
-          <div className="mt-10">
-            <Button href="/how-it-works" variant="light">
-              How we work
-            </Button>
-          </div>
+          <Reveal className="relative aspect-[5/4] overflow-hidden lg:col-span-6" delay={80}>
+            <Image
+              src="/images/assembly.jpg"
+              alt="An engineer working with production information at an assembly station"
+              fill
+              className="object-cover"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
+          </Reveal>
         </Container>
       </section>
 
-      <section className="py-24 md:py-32">
+      <section className="bg-ink py-20 text-cream md:py-28">
         <Container>
           <Reveal>
-            <Eyebrow>Services</Eyebrow>
-            <h2 className="mt-5 max-w-xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-              Start small. Build something real. Keep improving.
+            <Eyebrow>The LoopWorks Method</Eyebrow>
+            <h2 className="mt-5 max-w-2xl text-3xl font-medium tracking-[-0.03em] md:text-[40px]">
+              See. Simplify. Build. Learn.
             </h2>
           </Reveal>
-          <div className="mt-14 grid gap-6 lg:grid-cols-3">
-            {services.map((service, index) => (
-              <Reveal
-                key={service.slug}
-                delay={index * 70}
-                className="flex flex-col border border-line bg-cream p-8"
-              >
-                <h3 className="text-2xl font-medium tracking-tight text-ink">
-                  {service.name}
-                </h3>
-                <p className="mt-4 flex-1 text-[15px] leading-7 text-graphite">
-                  {service.summary}
-                </p>
-                <ul className="mt-8 space-y-2">
-                  {service.deliverables.slice(0, 5).map((item) => (
-                    <li
-                      key={item}
-                      className="flex gap-3 text-sm text-graphite"
-                    >
-                      <span className="mt-2 h-px w-3 shrink-0 bg-copper" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href={`/talk-to-us?intent=${service.slug}`}
-                  className="mt-10 text-[13px] font-medium text-copper hover:text-copper-dark"
-                >
-                  {service.cta} →
-                </Link>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal className="mt-12" delay={80}>
+            <MethodLoop />
+          </Reveal>
+          <Reveal className="mt-14 max-w-2xl" delay={100}>
+            <h3 className="text-2xl font-medium tracking-tight">
+              Technology should serve the work.
+            </h3>
+            <p className="mt-4 text-[16px] leading-7 text-white/60">
+              We simplify the process before automating it, keep human judgment
+              where it matters, and continuously improve what we build.
+            </p>
+            <p className="mt-6 font-serif text-2xl text-cream">
+              We build better loops.
+            </p>
+          </Reveal>
         </Container>
       </section>
 
-      <section className="border-y border-line bg-paper py-24 md:py-32">
+      <section className="py-20 md:py-24">
         <Container>
-          <div className="grid gap-16 lg:grid-cols-12">
-            <Reveal className="lg:col-span-4">
-              <Eyebrow>Philosophy</Eyebrow>
-              <h2 className="mt-5 text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-                Technology should serve the work.
-              </h2>
-            </Reveal>
-            <div className="lg:col-span-8">
-              <ul className="divide-y divide-line border-y border-line">
-                {philosophy.map((line, index) => (
-                  <Reveal key={line} delay={index * 50}>
-                    <li className="py-6 font-serif text-xl leading-snug text-ink md:text-[26px]">
-                      {line}
-                    </li>
-                  </Reveal>
-                ))}
-              </ul>
-              <p className="mt-10 text-2xl font-medium tracking-tight text-copper">
-                We build better loops.
+          <Reveal>
+            <Eyebrow>LoopScan</Eyebrow>
+            <h2 className="mt-5 max-w-2xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
+              Not sure where AI fits? Start with the work.
+            </h2>
+            <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
+              LoopScan is a focused review of your operation designed to
+              identify where process improvement, AI, and automation can create
+              the most value.
+            </p>
+          </Reveal>
+          <div className="mt-12 grid gap-12 lg:grid-cols-12">
+            <Reveal className="lg:col-span-6">
+              <p className="text-[12px] font-medium tracking-[0.16em] text-stone uppercase">
+                We look at
               </p>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <section className="py-24 md:py-32">
-        <Container>
-          <div className="grid items-start gap-12 lg:grid-cols-12">
-            <Reveal className="relative aspect-[4/5] overflow-hidden lg:col-span-5">
-              <Image
-                src="/images/gemba.jpg"
-                alt="A manufacturing technician inspecting equipment on the shop floor"
-                fill
-                className="object-cover"
-                sizes="(min-width: 1024px) 40vw, 100vw"
-              />
-            </Reveal>
-            <div className="lg:col-span-7">
-              <Reveal>
-                <Eyebrow>Where we start</Eyebrow>
-                <h2 className="mt-5 text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-                  Show us the process your team hates doing.
-                </h2>
-                <p className="mt-5 text-[16px] leading-7 text-graphite">
-                  These are not side tasks. They are the connective tissue of
-                  the operation — and they are ideal starting points for
-                  LoopWorks.
-                </p>
-              </Reveal>
-              <ul className="mt-10 divide-y divide-line border-y border-line">
-                {useCases.map((item, index) => (
+              <ul className="mt-4 grid grid-cols-2 gap-px border border-line bg-line">
+                {loopScanReviews.map((item) => (
                   <li
                     key={item}
-                    className="flex gap-5 py-4 text-[15px] leading-6 text-ink"
+                    className="bg-cream px-4 py-3.5 text-sm text-ink"
                   >
-                    <span className="font-mono text-[11px] tracking-[0.12em] text-copper">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
                     {item}
                   </li>
                 ))}
               </ul>
-              <div className="mt-10">
-                <Button href="/talk-to-us">Find Your First Loop</Button>
+            </Reveal>
+            <Reveal className="lg:col-span-6" delay={80}>
+              <p className="text-[12px] font-medium tracking-[0.16em] text-stone uppercase">
+                You leave with
+              </p>
+              <ul className="mt-4 divide-y divide-line border-y border-line">
+                {loopScan.deliverables.map((item) => (
+                  <li
+                    key={item}
+                    className="flex gap-3 py-3 text-[15px] text-ink"
+                  >
+                    <span className="mt-2.5 h-px w-3 shrink-0 bg-copper" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+          </div>
+          <div className="mt-10">
+            <Button href="/first-loop">{loopScan.cta}</Button>
+          </div>
+          <div className="mt-16 grid gap-6 border-t border-line pt-12 md:grid-cols-2">
+            {laterServices.map((service) => (
+              <div key={service.slug}>
+                <p className="text-[12px] font-medium tracking-[0.04em] text-copper uppercase">
+                  Next
+                </p>
+                <h3 className="mt-2 text-xl font-medium tracking-tight text-ink">
+                  {service.name}
+                </h3>
+                <p className="mt-3 text-[15px] leading-7 text-graphite">
+                  {service.summary}
+                </p>
               </div>
-            </div>
+            ))}
           </div>
         </Container>
       </section>
 
-      <section className="border-t border-line bg-paper py-24 md:py-32">
+      <section className="border-y border-line bg-paper py-20 md:py-24">
+        <Container className="grid gap-16 lg:grid-cols-12">
+          <Reveal className="lg:col-span-6">
+            <Eyebrow>Why LoopWorks</Eyebrow>
+            <h2 className="mt-5 text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
+              Built from manufacturing experience.
+            </h2>
+            <p className="mt-5 text-[16px] leading-7 text-graphite">
+              LoopWorks was built around firsthand experience in manufacturing,
+              supply chain, procurement, supplier development, operations, and
+              continuous improvement.
+            </p>
+            <p className="mt-4 text-[16px] leading-7 text-graphite">
+              We understand the realities behind ERP systems, supplier problems,
+              production constraints, spreadsheets, quality issues, inventory
+              risk, and the workarounds teams use every day.
+            </p>
+          </Reveal>
+          <Reveal className="lg:col-span-6" delay={80}>
+            <h2 className="text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
+              Better work. Not more software.
+            </h2>
+            <p className="mt-5 text-[16px] leading-7 text-graphite">
+              LoopWorks works with the systems you already have whenever
+              possible. The goal is not to add another platform. The goal is to
+              make your existing people, processes, information, and technology
+              work better together.
+            </p>
+          </Reveal>
+        </Container>
+      </section>
+
+      <section className="py-20 md:py-24">
         <Container>
           <Reveal className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
@@ -354,25 +352,19 @@ export default function HomePage() {
               All insights →
             </Link>
           </Reveal>
-          <div className="mt-14 grid gap-px border border-line bg-line md:grid-cols-3">
-            {articles.slice(0, 3).map((article, index) => (
-              <Reveal key={article.slug} delay={index * 70} className="bg-cream">
+          <div className="mt-12 grid gap-px border border-line bg-line md:grid-cols-3">
+            {featuredArticles.map((article, index) => (
+              <Reveal key={article.slug} delay={index * 50} className="bg-cream">
                 <Link
                   href={`/insights/${article.slug}`}
-                  className="flex h-full flex-col p-8 transition-colors hover:bg-paper"
+                  className="flex h-full flex-col p-7 transition-colors hover:bg-paper"
                 >
                   <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-copper">
                     {article.category}
                   </p>
-                  <h3 className="mt-4 text-xl font-medium tracking-tight text-ink">
+                  <h3 className="mt-3 text-lg font-medium tracking-tight text-ink">
                     {article.title}
                   </h3>
-                  <p className="mt-4 flex-1 text-sm leading-6 text-graphite">
-                    {article.dek}
-                  </p>
-                  <p className="mt-8 text-[12px] text-stone">
-                    {article.readTime}
-                  </p>
                 </Link>
               </Reveal>
             ))}
@@ -380,7 +372,7 @@ export default function HomePage() {
         </Container>
       </section>
 
-      <section className="bg-ink py-24 text-cream md:py-32">
+      <section className="bg-ink py-20 text-cream md:py-28">
         <Container>
           <Reveal>
             <h2 className="max-w-3xl text-4xl font-medium tracking-[-0.035em] md:text-6xl">
@@ -398,8 +390,8 @@ export default function HomePage() {
               Show us the process. We’ll help you make it better.
             </p>
             <div className="mt-10">
-              <Button href="/talk-to-us" variant="dark">
-                Talk to LoopWorks
+              <Button href="/first-loop" variant="dark">
+                Find Your First Loop
               </Button>
             </div>
           </Reveal>

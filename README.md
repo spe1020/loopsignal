@@ -20,7 +20,7 @@ Open [http://localhost:3000](http://localhost:3000).
 - `/how-it-works` — See → Simplify → Build → Learn
 - `/about` — Company
 - `/insights` — Articles
-- `/talk-to-us` — Contact
+- `/first-loop` — Intake
 
 ## Stack
 

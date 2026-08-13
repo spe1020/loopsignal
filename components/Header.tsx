@@ -60,7 +60,7 @@ export function Header() {
 
         <div className="flex items-center gap-4">
           <Link
-            href="/talk-to-us"
+            href="/first-loop"
             className="hidden rounded-[2px] bg-copper px-4 py-2.5 text-[13px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark sm:inline-flex"
           >
             Talk to Us
@@ -102,7 +102,7 @@ export function Header() {
               </Link>
             ))}
             <Link
-              href="/talk-to-us"
+              href="/first-loop"
               onClick={() => setOpen(false)}
               className="mt-6 inline-flex items-center justify-center rounded-[2px] bg-copper px-4 py-3 text-[13px] font-medium text-white"
             >

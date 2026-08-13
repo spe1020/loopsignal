@@ -25,7 +25,7 @@ export default function HowItWorksPage() {
             <p className="mt-6 max-w-2xl text-lg leading-8 text-graphite">
               We do not start with a tool. We start with the work — how it
               actually operates, where it stalls, and what would make it
-              clearer.
+              clearer. Kaizen is built into the process.
             </p>
           </Reveal>
           <Reveal className="mt-14" delay={100}>
@@ -83,7 +83,7 @@ export default function HowItWorksPage() {
               next constraint. Improve again.
             </p>
             <div className="mt-8">
-              <Button href="/talk-to-us" variant="dark">
+              <Button href="/first-loop" variant="dark">
                 Find Your First Loop
               </Button>
             </div>

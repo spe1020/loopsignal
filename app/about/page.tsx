@@ -40,10 +40,14 @@ export default function AboutPage() {
               It needs better systems.
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-8 text-graphite">
-              LoopWorks was built around that belief. We combine hands-on
-              manufacturing and supply chain experience with Lean thinking,
-              Kaizen, automation, and modern AI tools — focused on practical
-              improvement and measurable results.
+              LoopWorks was built around firsthand experience in manufacturing,
+              supply chain, procurement, supplier development, operations, and
+              continuous improvement.
+            </p>
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-graphite">
+              We understand the realities behind ERP systems, supplier problems,
+              production constraints, spreadsheets, quality issues, inventory
+              risk, and the workarounds teams use every day.
             </p>
           </Reveal>
         </Container>
@@ -128,7 +132,7 @@ export default function AboutPage() {
               We build better loops.
             </p>
             <div className="mt-10">
-              <Button href="/talk-to-us">Talk to Us</Button>
+              <Button href="/first-loop">Find Your First Loop</Button>
             </div>
           </Reveal>
         </Container>
