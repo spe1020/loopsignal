@@ -12,6 +12,10 @@ import {
 import { getLeadAttribution } from "@/lib/attribution";
 import { loopScanAreas } from "@/lib/content";
 
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xeajkpoy";
+const SUBMIT_ERROR =
+  "Something went wrong. Please try again or email us directly.";
+
 const fieldClass =
   "w-full border bg-cream px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-stone/70 focus:border-ink";
 
@@ -92,34 +96,41 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
       new FormData(event.currentTarget).get("company_website") ?? "",
     );
 
+    if (honeypot.trim().length > 0) {
+      setSubmitted(true);
+      setSubmitting(false);
+      return;
+    }
+
     try {
       const attribution = getLeadAttribution();
-      const response = await fetch("/api/loopscan", {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           name: form.name.trim(),
           company: form.company.trim(),
           email: form.email.trim(),
           area: form.area,
-          process: form.process.trim(),
-          submittedAt: new Date().toISOString(),
-          landingPage: attribution.landingPage,
-          referringSource: attribution.referringSource,
-          referrer: attribution.referrer,
-          firstVisitAt: attribution.firstVisitAt,
-          utm: attribution.utm,
-          company_website: honeypot,
+          process_description: form.process.trim(),
+          utm_source: attribution.utm.utm_source ?? "",
+          utm_medium: attribution.utm.utm_medium ?? "",
+          utm_campaign: attribution.utm.utm_campaign ?? "",
+          utm_content: attribution.utm.utm_content ?? "",
+          utm_term: attribution.utm.utm_term ?? "",
+          referrer: attribution.referrer ?? attribution.referringSource ?? "",
         }),
       });
 
-      const payload = (await response.json()) as { error?: string };
+      const payload = (await response.json().catch(() => null)) as {
+        ok?: boolean;
+      } | null;
 
-      if (!response.ok) {
-        setFormError(
-          payload.error ??
-            "We couldn’t send that just now. Please try again in a moment.",
-        );
+      if (!response.ok || payload?.ok === false) {
+        setFormError(SUBMIT_ERROR);
         trackLoopScanFormError({
           category: "server",
           area: form.area,
@@ -130,9 +141,7 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
       trackLoopScanFormSubmit(form.area);
       setSubmitted(true);
     } catch {
-      setFormError(
-        "We couldn’t send that just now. Please try again in a moment.",
-      );
+      setFormError(SUBMIT_ERROR);
       trackLoopScanFormError({
         category: "network",
         area: form.area,
@@ -302,7 +311,7 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
           What process would you like to improve?
         </span>
         <textarea
-          name="process"
+          name="process_description"
           rows={6}
           value={form.process}
           onChange={(event) => update("process", event.target.value)}
@@ -320,7 +329,7 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
 
       <button
         type="submit"
-        disabled={submitting}
+        disabled={submitting || submitted}
         className="mt-2 inline-flex items-center justify-center rounded-[2px] bg-copper px-6 py-3.5 text-[14px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark disabled:cursor-not-allowed disabled:opacity-70"
       >
         {submitting ? "Sending…" : "Find My First Loop"}

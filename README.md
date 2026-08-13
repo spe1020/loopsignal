@@ -24,10 +24,8 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## LoopScan leads
 
-Copy `.env.example` to `.env.local` and set:
+The `/loopscan` form submits to Formspree and keeps the on-site confirmation state. Copy `.env.example` to `.env.local` and set:
 
-- `LEAD_WEBHOOK_URL` — destination for submitted LoopScan leads
-- `LEAD_WEBHOOK_SECRET` — optional bearer token for the webhook
 - `CALENDAR_URL` — optional scheduling link shown after submission
 
 ## Stack
