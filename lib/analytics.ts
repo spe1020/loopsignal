@@ -30,6 +30,13 @@ export const analyticsEvents = [
   "loopknow_answer_generated",
   "loopknow_no_answer",
   "loopknow_loopscan_click",
+  "loopsource_page_view",
+  "loopsource_sample_run",
+  "loopsource_supplier_select",
+  "loopsource_priority_change",
+  "loopsource_volume_change",
+  "loopsource_dual_source_toggle",
+  "loopsource_loopscan_click",
 ] as const;
 
 export type AnalyticsEvent = (typeof analyticsEvents)[number];
@@ -53,6 +60,7 @@ export type CtaLocation =
   | "not_found"
   | "signal"
   | "loopknow"
+  | "loopsource"
   | "demo";
 
 export type SolutionInterest =
@@ -304,6 +312,74 @@ export function trackKnowNoAnswer(category: string) {
 export function trackKnowLoopScanClick(input: { cta_text?: string }) {
   trackEvent("loopknow_loopscan_click", {
     page: "/know",
+    cta_text: input.cta_text,
+    destination: "loopscan",
+  });
+}
+
+export type SourceDemoMeta = {
+  sample_scenario: string;
+  optimization_mode: string;
+  demand_bucket: string;
+  source_mode: string;
+  selected_supplier_rank?: number;
+};
+
+export function trackSourcePageView() {
+  trackEvent("loopsource_page_view", {
+    referring_page: getReferringPage(),
+  });
+}
+
+export function trackSourceSampleRun(meta: SourceDemoMeta) {
+  trackEvent("loopsource_sample_run", {
+    sample_scenario: meta.sample_scenario,
+    optimization_mode: meta.optimization_mode,
+    demand_bucket: meta.demand_bucket,
+    source_mode: meta.source_mode,
+  });
+}
+
+export function trackSourceSupplierSelect(meta: SourceDemoMeta) {
+  trackEvent("loopsource_supplier_select", {
+    sample_scenario: meta.sample_scenario,
+    optimization_mode: meta.optimization_mode,
+    demand_bucket: meta.demand_bucket,
+    source_mode: meta.source_mode,
+    selected_supplier_rank: meta.selected_supplier_rank,
+  });
+}
+
+export function trackSourcePriorityChange(meta: SourceDemoMeta) {
+  trackEvent("loopsource_priority_change", {
+    sample_scenario: meta.sample_scenario,
+    optimization_mode: meta.optimization_mode,
+    demand_bucket: meta.demand_bucket,
+    source_mode: meta.source_mode,
+  });
+}
+
+export function trackSourceVolumeChange(meta: SourceDemoMeta) {
+  trackEvent("loopsource_volume_change", {
+    sample_scenario: meta.sample_scenario,
+    optimization_mode: meta.optimization_mode,
+    demand_bucket: meta.demand_bucket,
+    source_mode: meta.source_mode,
+  });
+}
+
+export function trackSourceDualSourceToggle(meta: SourceDemoMeta) {
+  trackEvent("loopsource_dual_source_toggle", {
+    sample_scenario: meta.sample_scenario,
+    optimization_mode: meta.optimization_mode,
+    demand_bucket: meta.demand_bucket,
+    source_mode: meta.source_mode,
+  });
+}
+
+export function trackSourceLoopScanClick(input: { cta_text?: string }) {
+  trackEvent("loopsource_loopscan_click", {
+    page: "/source",
     cta_text: input.cta_text,
     destination: "loopscan",
   });

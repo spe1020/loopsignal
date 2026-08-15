@@ -5,7 +5,7 @@ import { Container, Eyebrow, Reveal } from "@/components/Reveal";
 export const metadata: Metadata = {
   title: "Demos",
   description:
-    "See LoopWorks in action: LoopSignal for supply risk, and LoopKnow for manufacturing knowledge.",
+    "See LoopWorks in action: LoopSignal for supply risk, LoopKnow for manufacturing knowledge, and LoopSource for sourcing decisions.",
   alternates: { canonical: "/demo" },
   openGraph: {
     title: "Demos",

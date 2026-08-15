@@ -62,7 +62,7 @@ Fired when a visitor clicks a LoopScan call to action, including:
 
 Allowed metadata:
 
-- `location`: `hero`, `solutions`, `loopscan_section`, `footer`, `article`, `navigation`, `use_cases`, `final_cta`, `about`, `how_it_works`, `not_found`, `signal`, `loopknow`, `demo`
+- `location`: `hero`, `solutions`, `loopscan_section`, `footer`, `article`, `navigation`, `use_cases`, `final_cta`, `about`, `how_it_works`, `not_found`, `signal`, `loopknow`, `loopsource`, `demo`
 - `page`: current pathname
 - `cta_text`: button label only
 
@@ -220,6 +220,84 @@ Allowed metadata:
 - `cta_text`
 - `destination`: `loopscan`
 
+### `loopsource_page_view`
+
+Fired once when `/source` is viewed.
+
+Allowed metadata:
+
+- `referring_page`
+
+### `loopsource_sample_run`
+
+Fired when the fictional sample RFQ is loaded or reset.
+
+Allowed metadata:
+
+- `sample_scenario` (`machined_aluminum_bracket`)
+- `optimization_mode` (`balanced`, `cost`, `lead_time`, `risk`, `startup_flexibility`)
+- `demand_bucket` (`5000`, `12000`, `25000`, `50000`)
+- `source_mode` (`single`, `dual`)
+
+Do not send supplier names or cost values.
+
+### `loopsource_supplier_select`
+
+Fired when a visitor selects a supplier card or table row.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `optimization_mode`
+- `demand_bucket`
+- `source_mode`
+- `selected_supplier_rank`
+
+Do not send supplier names.
+
+### `loopsource_priority_change`
+
+Fired when the visitor changes the Optimize for setting.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `optimization_mode`
+- `demand_bucket`
+- `source_mode`
+
+### `loopsource_volume_change`
+
+Fired when the visitor changes annual demand.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `optimization_mode`
+- `demand_bucket`
+- `source_mode`
+
+### `loopsource_dual_source_toggle`
+
+Fired when the visitor switches between single-source and dual-source mode.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `optimization_mode`
+- `demand_bucket`
+- `source_mode`
+
+### `loopsource_loopscan_click`
+
+Fired when a LoopSource CTA leads to `/loopscan`.
+
+Allowed metadata:
+
+- `page`: `/source`
+- `cta_text`
+- `destination`: `loopscan`
+
 ## Privacy
 
 Never send to analytics:
@@ -362,7 +440,7 @@ When `loopworks.xyz` is live:
 3. Paste the verification token into `NEXT_PUBLIC_GSC_VERIFICATION`
 4. Submit `https://loopworks.xyz/sitemap.xml`
 
-The sitemap includes `/`, `/solutions`, `/how-it-works`, `/about`, `/insights`, `/loopscan`, `/signal`, `/know`, `/demo`, and individual insight pages. API routes are disallowed in `robots.txt`.
+The sitemap includes `/`, `/solutions`, `/how-it-works`, `/about`, `/insights`, `/loopscan`, `/signal`, `/know`, `/source`, `/demo`, and individual insight pages. API routes are disallowed in `robots.txt`.
 
 Once Search Console has data, watch impressions and clicks around:
 
