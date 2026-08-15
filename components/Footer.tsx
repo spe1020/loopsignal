@@ -71,6 +71,14 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link
+                  href="/brief"
+                  className="text-sm text-white/70 transition-colors hover:text-cream"
+                >
+                  LoopBrief
+                </Link>
+              </li>
+              <li>
                 <TrackedLink
                   href="/loopscan"
                   location="footer"

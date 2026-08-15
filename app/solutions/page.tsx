@@ -123,9 +123,9 @@ export default function SolutionsPage() {
               See LoopWorks in action.
             </h2>
             <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-              Working examples of supply-risk, manufacturing-knowledge, and
-              sourcing-decision workflows — not separate products you have to
-              buy.
+              Working examples of supply-risk, manufacturing-knowledge,
+              sourcing-decision, and daily-operations workflows — not separate
+              products you have to buy.
             </p>
           </Reveal>
           <Reveal className="mt-10" delay={60}>
