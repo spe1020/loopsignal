@@ -4,7 +4,7 @@ import { KnowDemo } from "@/components/know/KnowDemo";
 export const metadata: Metadata = {
   title: "LoopKnow | Manufacturing Knowledge Demo",
   description:
-    "Ask a question against fictional manufacturing documents and see a cited, revision-aware answer. A LoopWorks demo of operational knowledge systems.",
+    "Ask a question against fictional manufacturing documents and see a cited, revision-aware answer. A LoopSignal demo of operational knowledge systems.",
   alternates: { canonical: "/know" },
   openGraph: {
     title: "LoopKnow | Manufacturing Knowledge Demo",

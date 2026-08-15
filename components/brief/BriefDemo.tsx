@@ -112,8 +112,8 @@ export function BriefDemo() {
             Start the day with what matters.
           </h1>
           <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite md:text-[18px]">
-            LoopBrief turns production, quality, supply, maintenance, and
-            inventory signals into a prioritized daily operating brief.
+            LoopBrief turns daily operational information into priorities,
+            ownership, reporting, and action.
           </p>
           <p className="mt-3 max-w-2xl text-[14px] leading-6 text-graphite">
             Less time assembling the meeting. More time solving the problems.
@@ -172,7 +172,7 @@ export function BriefDemo() {
             Your daily meeting already has the data.
           </h2>
           <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-            LoopWorks can help connect production, quality, supply, maintenance,
+            LoopSignal can help connect production, quality, supply, maintenance,
             and planning information into a daily operating system built around
             exceptions and action.
           </p>

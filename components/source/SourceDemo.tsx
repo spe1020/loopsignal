@@ -73,9 +73,9 @@ export function SourceDemo() {
             Compare the quote. Understand the tradeoff.
           </h1>
           <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite md:text-[18px]">
-            LoopSource turns supplier quotes into a normalized sourcing
-            comparison so teams can evaluate cost, lead time, commercial terms,
-            and risk in one place.
+            LoopSource structures sourcing decisions by connecting supplier
+            quotes, commercial terms, requirements, and tradeoffs so teams can
+            evaluate more than unit price.
           </p>
           <p className="mt-3 max-w-2xl text-[14px] leading-6 text-graphite">
             Lowest price is not always lowest cost.
@@ -138,7 +138,7 @@ export function SourceDemo() {
             Your quote comparison is only one sourcing loop.
           </h2>
           <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-            LoopWorks can help connect RFQs, supplier information,
+            LoopSignal can help connect RFQs, supplier information,
             specifications, commercial data, and sourcing decisions into a
             workflow built around how your team actually works.
           </p>

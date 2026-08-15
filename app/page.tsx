@@ -2,19 +2,20 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/Button";
+import { CommercialPath } from "@/components/CommercialPath";
 import { DemoCards } from "@/components/DemoCards";
-import { LoopScanOffer } from "@/components/LoopScanOffer";
 import { MethodLoop } from "@/components/Loops";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
 import { SolutionInterestLink } from "@/components/SolutionInterestLink";
-import { SystemsFlow } from "@/components/SystemsFlow";
 import { articles } from "@/lib/articles";
+import { company } from "@/lib/company";
 import {
+  capabilities,
+  demoNote,
   featuredArticleSlugs,
   informationSources,
   solutions,
   trustPrinciples,
-  useCases,
 } from "@/lib/content";
 
 const featuredArticles = featuredArticleSlugs
@@ -23,6 +24,7 @@ const featuredArticles = featuredArticleSlugs
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
+  description: company.longDescription,
 };
 
 export default function HomePage() {
@@ -42,23 +44,27 @@ export default function HomePage() {
         />
         <Container className="relative pt-20 pb-16 md:pt-28 md:pb-20">
           <Reveal>
-            <Eyebrow>LoopWorks</Eyebrow>
+            <Eyebrow>{company.name}</Eyebrow>
             <h1 className="mt-6 max-w-4xl text-[44px] leading-[1.05] font-medium tracking-[-0.035em] text-ink sm:text-6xl md:text-[84px]">
-              Better systems.
+              Improve the process.
               <br />
-              Better work.
+              Connect the systems.
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-8 text-graphite md:text-[19px]">
-              We help manufacturers eliminate repetitive work, connect
-              disconnected information, and make better operational decisions
-              using AI, automation, and process improvement.
+              LoopSignal helps manufacturers improve how work, information, and
+              decisions move through the organization.
+            </p>
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-graphite md:text-[19px]">
+              We combine process improvement, systems integration, automation,
+              and practical AI to build solutions around the way your operation
+              actually works.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-5">
               <Button href="/loopscan" location="hero">
                 Find Your First Loop
               </Button>
-              <Button href="/solutions" variant="text">
-                See What We Build →
+              <Button href="/demo" variant="text">
+                See It in Action →
               </Button>
             </div>
           </Reveal>
@@ -78,8 +84,7 @@ export default function HomePage() {
         <div className="absolute inset-x-0 bottom-0">
           <Container className="pb-8">
             <p className="max-w-xl text-sm leading-6 text-white/85">
-              The information is already there. The challenge is getting the
-              right information to the right person at the right time.
+              Start with the work.
             </p>
           </Container>
         </div>
@@ -91,12 +96,25 @@ export default function HomePage() {
             <Reveal className="lg:col-span-5">
               <Eyebrow>The problem</Eyebrow>
               <h2 className="mt-5 text-3xl leading-tight font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-                Your systems have the information. Your people are still doing
-                the work to connect it.
+                Your operation already has the information. The challenge is
+                connecting it to the work.
               </h2>
+              <p className="mt-5 text-[16px] leading-7 text-graphite">
+                ERP systems, email, spreadsheets, quality records, supplier
+                updates, production reports, specifications, shared drives, and
+                institutional knowledge already contain valuable information.
+              </p>
+              <p className="mt-4 text-[16px] leading-7 text-graphite">
+                The problem is often how that information moves between people,
+                systems, and decisions.
+              </p>
+              <p className="mt-4 text-[16px] leading-7 text-graphite">
+                LoopSignal improves the process first, connects what should be
+                connected, and automates what makes sense.
+              </p>
             </Reveal>
             <Reveal className="lg:col-span-7" delay={80}>
-              <ul className="grid grid-cols-2 gap-px border border-line bg-line">
+              <ul className="grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-3">
                 {informationSources.map((source) => (
                   <li
                     key={source}
@@ -113,45 +131,37 @@ export default function HomePage() {
 
       <section className="border-y border-line bg-paper py-20 md:py-24">
         <Container>
-          <div className="grid items-start gap-12 lg:grid-cols-12">
-            <Reveal className="relative hidden aspect-[4/5] overflow-hidden lg:col-span-5 lg:block">
-              <Image
-                src="/images/gemba.jpg"
-                alt="A manufacturing technician inspecting equipment on the shop floor"
-                fill
-                className="object-cover"
-                sizes="40vw"
-              />
-            </Reveal>
-            <div className="lg:col-span-7">
-              <Reveal>
-                <Eyebrow>Where we start</Eyebrow>
-                <h2 className="mt-5 text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-                  Show us the process your team hates doing.
-                </h2>
-                <p className="mt-5 text-[16px] leading-7 text-graphite">
-                  These are the kinds of problems LoopWorks is built to solve.
+          <Reveal>
+            <Eyebrow>How we start</Eyebrow>
+            <h2 className="mt-5 max-w-2xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
+              Start with the work.
+            </h2>
+            <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
+              We do not begin by asking where AI can be used. We begin by
+              understanding how the process works today, where the friction
+              exists, and what outcome needs to improve.
+            </p>
+            <p className="mt-4 max-w-2xl text-[16px] leading-7 text-graphite">
+              Sometimes the answer is process redesign. Sometimes it is systems
+              integration. Sometimes it is automation or AI. Often it is a
+              combination.
+            </p>
+          </Reveal>
+          <div className="mt-12 grid gap-px border border-line bg-line md:grid-cols-3">
+            {capabilities.map((capability, index) => (
+              <Reveal
+                key={capability.name}
+                delay={index * 50}
+                className="bg-cream p-7 md:p-8"
+              >
+                <h3 className="text-xl font-medium tracking-tight text-ink">
+                  {capability.name}
+                </h3>
+                <p className="mt-4 text-[15px] leading-7 text-graphite">
+                  {capability.summary}
                 </p>
               </Reveal>
-              <ul className="mt-8 divide-y divide-line border-y border-line">
-                {useCases.map((item, index) => (
-                  <li
-                    key={item}
-                    className="flex gap-5 py-3.5 text-[15px] leading-6 text-ink"
-                  >
-                    <span className="font-mono text-[11px] tracking-[0.12em] text-copper">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-8">
-                <Button href="/loopscan" location="use_cases">
-                  Find Your First Loop
-                </Button>
-              </div>
-            </div>
+            ))}
           </div>
         </Container>
       </section>
@@ -160,9 +170,39 @@ export default function HomePage() {
         <Container>
           <Reveal className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
+              <Eyebrow>Working demos</Eyebrow>
+              <h2 className="mt-5 max-w-3xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
+                See what a better operational loop can look like.
+              </h2>
+              <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
+                These demos are working examples of how process improvement,
+                connected information, automation, and decision support can be
+                applied to common manufacturing workflows.
+              </p>
+            </div>
+            <Link
+              href="/demo"
+              className="shrink-0 text-[13px] font-medium tracking-[0.02em] text-copper hover:text-copper-dark"
+            >
+              All demos →
+            </Link>
+          </Reveal>
+          <Reveal className="mt-10" delay={60}>
+            <DemoCards />
+          </Reveal>
+          <Reveal className="mt-10 max-w-3xl" delay={80}>
+            <p className="text-[16px] leading-7 text-graphite">{demoNote}</p>
+          </Reveal>
+        </Container>
+      </section>
+
+      <section className="border-y border-line bg-paper py-20 md:py-24">
+        <Container>
+          <Reveal className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div>
               <Eyebrow>Solutions</Eyebrow>
               <h2 className="mt-5 max-w-xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-                Practical systems for the work that actually moves.
+                Operational problems LoopSignal can help solve.
               </h2>
             </div>
             <Link
@@ -197,112 +237,21 @@ export default function HomePage() {
         </Container>
       </section>
 
-      <section className="border-y border-line bg-paper py-16 md:py-20">
-        <Container>
-          <Reveal>
-            <Eyebrow>See it in action</Eyebrow>
-            <h2 className="mt-5 max-w-2xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-              See LoopWorks in action.
-            </h2>
-            <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-              Working examples of how LoopWorks turns information you
-              already have into something a team can use.
-            </p>
-          </Reveal>
-          <Reveal className="mt-10" delay={60}>
-            <DemoCards />
-          </Reveal>
-        </Container>
-      </section>
-
-      <section className="py-20 md:py-24">
-        <Container className="grid items-center gap-12 lg:grid-cols-12">
-          <Reveal className="lg:col-span-6">
-            <Eyebrow>Knowledge systems</Eyebrow>
-            <h2 className="mt-5 text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-              What happens when the person who knows everything retires?
-            </h2>
-            <p className="mt-6 max-w-xl text-[16px] leading-8 text-graphite">
-              Critical manufacturing knowledge often lives across experienced
-              employees, documents, shared drives, emails, and old systems.
-              LoopWorks can turn that knowledge into a secure, searchable system
-              your team can actually use.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-5">
-              <SolutionInterestLink
-                href="/solutions#knowledge-systems"
-                solution="knowledge"
-                interactionType="learn_more"
-                className="text-[13px] font-medium tracking-[0.02em] text-copper hover:text-copper-dark"
-              >
-                See knowledge systems →
-              </SolutionInterestLink>
-              <Button href="/know" variant="text">
-                Try LoopKnow →
-              </Button>
-            </div>
-          </Reveal>
-          <Reveal className="relative aspect-[5/4] overflow-hidden lg:col-span-6" delay={80}>
-            <Image
-              src="/images/assembly.jpg"
-              alt="An engineer working with production information at an assembly station"
-              fill
-              className="object-cover"
-              sizes="(min-width: 1024px) 50vw, 100vw"
-            />
-          </Reveal>
-        </Container>
-      </section>
-
       <section className="bg-ink py-20 text-cream md:py-28">
         <Container>
           <Reveal>
-            <Eyebrow>The LoopWorks Method</Eyebrow>
+            <Eyebrow>How we work</Eyebrow>
             <h2 className="mt-5 max-w-2xl text-3xl font-medium tracking-[-0.03em] md:text-[40px]">
-              See. Simplify. Build. Learn.
+              See. Simplify. Connect. Automate. Measure. Improve.
             </h2>
           </Reveal>
           <Reveal className="mt-12" delay={80}>
             <MethodLoop />
           </Reveal>
-          <Reveal className="mt-14 max-w-2xl" delay={100}>
-            <h3 className="text-2xl font-medium tracking-tight">
-              Technology should serve the work.
-            </h3>
-            <p className="mt-4 text-[16px] leading-7 text-white/60">
-              We simplify the process before automating it, keep human judgment
-              where it matters, and continuously improve what we build.
-            </p>
-            <p className="mt-6 font-serif text-2xl text-cream">
-              We build better loops.
-            </p>
-          </Reveal>
         </Container>
       </section>
 
-      <section className="border-y border-line bg-paper py-20 md:py-24">
-        <Container className="grid items-center gap-12 lg:grid-cols-12">
-          <Reveal className="lg:col-span-5">
-            <Eyebrow>How we work with you</Eyebrow>
-            <h2 className="mt-5 text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-              Better work. Not more software.
-            </h2>
-            <p className="mt-5 text-[16px] leading-7 text-graphite">
-              LoopWorks works with the systems you already have whenever
-              possible.
-            </p>
-            <p className="mt-4 text-[16px] leading-7 text-graphite">
-              The goal is not to add another platform, dashboard, or piece of
-              software your team has to manage. The goal is to make your
-              existing people, processes, information, and technology work
-              better together.
-            </p>
-          </Reveal>
-          <Reveal className="lg:col-span-7" delay={80}>
-            <SystemsFlow />
-          </Reveal>
-        </Container>
-      </section>
+      <CommercialPath />
 
       <section className="py-20 md:py-24">
         <Container>
@@ -317,24 +266,21 @@ export default function HomePage() {
               />
             </Reveal>
             <Reveal className="lg:col-span-7" delay={80}>
-              <Eyebrow>Why LoopWorks</Eyebrow>
+              <Eyebrow>Why LoopSignal</Eyebrow>
               <h2 className="mt-5 text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-                Built from the work.
+                Better work. Not more software.
               </h2>
               <p className="mt-5 text-[16px] leading-7 text-graphite">
-                LoopWorks was built from firsthand experience across
-                manufacturing, supply chain, procurement, supplier development,
-                production planning, continuous improvement, and manufacturing
-                engineering.
+                LoopSignal works with the systems you already have whenever
+                possible.
               </p>
               <p className="mt-4 text-[16px] leading-7 text-graphite">
-                We understand the reality behind ERP systems, supplier problems,
-                production constraints, inventory risk, quality issues,
-                spreadsheets, manual reporting, and the workarounds teams use
-                every day.
+                The goal is not to add another platform simply because one can
+                be built. The goal is to improve the process and make your
+                people, information, and systems work better together.
               </p>
               <p className="mt-8 font-serif text-2xl leading-snug text-ink">
-                We do not start with AI. We start with the work.
+                Technology should support judgment, not replace it blindly.
               </p>
             </Reveal>
           </div>
@@ -357,9 +303,7 @@ export default function HomePage() {
         </Container>
       </section>
 
-      <LoopScanOffer />
-
-      <section className="py-20 md:py-24">
+      <section className="border-t border-line py-20 md:py-24">
         <Container>
           <Reveal className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
@@ -402,19 +346,19 @@ export default function HomePage() {
               Find your first loop.
             </h2>
             <p className="mt-8 max-w-xl text-[17px] leading-8 text-white/60">
-              Every organization has work that takes too long, information that
-              is difficult to find, and decisions that happen later than they
+              Every operation has work that takes too long, information that is
+              difficult to connect, and decisions that happen later than they
               should.
             </p>
             <p className="mt-4 max-w-xl text-[17px] leading-8 text-white/60">
-              That is where we start.
+              Start with one process. We’ll help you make it better.
             </p>
-            <p className="mt-8 font-serif text-2xl text-cream md:text-[28px]">
-              Show us the process. We’ll help you make it better.
-            </p>
-            <div className="mt-10">
+            <div className="mt-10 flex flex-wrap items-center gap-5">
               <Button href="/loopscan" variant="dark" location="final_cta">
                 Start a LoopScan
+              </Button>
+              <Button href="/demo" variant="light">
+                Explore the Demos
               </Button>
             </div>
           </Reveal>

@@ -8,17 +8,34 @@ export const nav = [
 ] as const;
 
 export const informationSources = [
-  "ERP",
+  "ERP systems",
   "Email",
   "Spreadsheets",
+  "Quality records",
+  "Supplier updates",
+  "Production reports",
   "Specifications",
-  "Quality Records",
-  "Supplier Information",
-  "Production Data",
-  "Shared Drives",
-  "Tribal Knowledge",
-  "Inventory Data",
+  "Shared drives",
+  "Institutional knowledge",
 ];
+
+export const capabilities = [
+  {
+    name: "Process Improvement",
+    summary:
+      "Understand the work, remove unnecessary complexity, reduce waste, clarify ownership, and improve flow.",
+  },
+  {
+    name: "Systems Integration",
+    summary:
+      "Connect the systems and information your teams already rely on, including ERP, email, spreadsheets, quality systems, supplier data, documents, and operational reporting.",
+  },
+  {
+    name: "Automation + AI",
+    summary:
+      "Automate repetitive work, surface exceptions, make information easier to use, and support better decisions where technology creates real operational value.",
+  },
+] as const;
 
 export const solutions = [
   {
@@ -27,15 +44,19 @@ export const solutions = [
     outcome: "See supply problems earlier",
     title: "Supply Chain Intelligence",
     summary:
-      "Help teams identify inventory risk, shortages, supplier issues, and exceptions before they become emergencies.",
+      "Identify shortages, supplier issues, inventory constraints, and exceptions before they become larger operational problems.",
     examples: [
-      "Inventory risk",
-      "PO exceptions",
-      "Supplier lead-time monitoring",
-      "Shortage alerts",
-      "Supply reporting",
-      "Open order status",
+      "Open PO exceptions",
+      "Material risk",
+      "Inventory coverage",
+      "Supplier follow-up",
+      "Replenishment priorities",
+      "Lead-time issues",
+      "Supplier communication",
+      "Supply constraints",
     ],
+    demoHref: "/supply",
+    demoName: "LoopSupply",
   },
   {
     slug: "procurement-automation",
@@ -43,31 +64,38 @@ export const solutions = [
     outcome: "Give buyers their time back",
     title: "Procurement Automation",
     summary:
-      "Reduce repetitive supplier follow-up, RFQ work, quote comparison, and administrative purchasing tasks.",
+      "Reduce repetitive purchasing work and improve sourcing decisions using better information and structured workflows.",
     examples: [
-      "Supplier follow-up",
-      "RFQ preparation",
-      "Quote comparison",
-      "Supplier intelligence",
-      "Pricing history",
-      "Supplier performance",
+      "RFQ comparison",
+      "Landed cost",
+      "Tooling",
+      "MOQ",
+      "Lead time",
+      "Capacity",
+      "Qualification",
+      "Dual-source scenarios",
     ],
+    demoHref: "/source",
+    demoName: "LoopSource",
   },
   {
     slug: "manufacturing-intelligence",
     interest: "manufacturing",
     outcome: "Turn plant data into action",
     title: "Manufacturing Intelligence",
-    summary:
-      "Transform production, downtime, scrap, quality, and operational information into useful decisions.",
+    summary: "Turn plant information into clear priorities, ownership, and action.",
     examples: [
-      "Production summaries",
-      "Downtime analysis",
-      "Scrap analysis",
-      "Meeting preparation",
-      "Exception monitoring",
-      "Shift handoffs",
+      "Production",
+      "Quality",
+      "Supply",
+      "Maintenance",
+      "Planning",
+      "Executive summaries",
+      "Department briefs",
+      "Actions and accountability",
     ],
+    demoHref: "/brief",
+    demoName: "LoopBrief",
   },
   {
     slug: "knowledge-systems",
@@ -75,17 +103,95 @@ export const solutions = [
     outcome: "Make tribal knowledge searchable",
     title: "Knowledge Systems",
     summary:
-      "Make SOPs, specifications, engineering documents, quality history, supplier knowledge, and maintenance information easier to access and use.",
+      "Make SOPs, specifications, quality history, engineering information, and institutional knowledge easier to access and trust.",
     examples: [
-      "SOP search",
-      "Specification retrieval",
+      "SOPs",
+      "Specifications",
       "Engineering documents",
       "Quality history",
-      "Supplier knowledge",
-      "Maintenance information",
-      "Training support",
-      "Work instructions",
+      "Revision control",
+      "Maintenance knowledge",
+      "Institutional knowledge",
     ],
+    demoHref: "/know",
+    demoName: "LoopKnow",
+  },
+] as const;
+
+export const demos = [
+  {
+    href: "/supply",
+    name: "LoopSupply",
+    headline: "Find the supply exception.",
+    category: "Supply exceptions",
+    promise:
+      "Turn purchasing, supplier, inventory, and open-order information into clear priorities and action.",
+    flow: ["Open PO data", "supply risk", "priority", "action"],
+    description:
+      "Turn purchasing, supplier, inventory, and open-order information into clear priorities and action.",
+    cta: "Try LoopSupply",
+  },
+  {
+    href: "/know",
+    name: "LoopKnow",
+    headline: "Find the trusted answer.",
+    category: "Manufacturing knowledge",
+    promise: "Turn scattered manufacturing knowledge into trusted, usable answers.",
+    flow: ["Documents", "trusted knowledge", "source", "next step"],
+    description:
+      "Turn scattered manufacturing knowledge into trusted, usable answers.",
+    cta: "Try LoopKnow",
+  },
+  {
+    href: "/source",
+    name: "LoopSource",
+    headline: "Structure the sourcing decision.",
+    category: "Sourcing decisions",
+    promise:
+      "Structure sourcing decisions by connecting supplier quotes, commercial terms, requirements, and tradeoffs.",
+    flow: [
+      "Supplier quotes",
+      "normalized comparison",
+      "tradeoffs",
+      "recommendation",
+    ],
+    description:
+      "Structure sourcing decisions by connecting supplier quotes, commercial terms, requirements, and tradeoffs.",
+    cta: "Try LoopSource",
+  },
+  {
+    href: "/brief",
+    name: "LoopBrief",
+    headline: "Coordinate the operation.",
+    category: "Daily operations",
+    promise:
+      "Turn daily operational information into priorities, ownership, reporting, and action.",
+    flow: ["Operational signals", "priorities", "owners", "action"],
+    description:
+      "Turn daily operational information into priorities, ownership, reporting, and action.",
+    cta: "Try LoopBrief",
+  },
+] as const;
+
+export const demoNote =
+  "They are not fixed systems we expect every manufacturer to adopt. They are examples of what can be built around your operation.";
+
+export const demoPhilosophy = [
+  {
+    name: "LoopSupply",
+    line: "Find the supply exception.",
+  },
+  {
+    name: "LoopKnow",
+    line: "Find the trusted answer.",
+  },
+  {
+    name: "LoopSource",
+    line: "Structure the sourcing decision.",
+  },
+  {
+    name: "LoopBrief",
+    line: "Coordinate the operation.",
   },
 ] as const;
 
@@ -93,48 +199,60 @@ export const services = [
   {
     slug: "loopscan",
     name: "LoopScan",
+    headline: "Review the process. Find the friction.",
     summary:
-      "A focused review of your operation designed to identify where process improvement, AI, and automation can create the most value.",
+      "Understand the process.",
+    detail:
+      "LoopScan is a focused operational review designed to understand how the work happens today, where information or decisions break down, and where improvement could create measurable value.",
     deliverables: [
-      "Current-state workflow",
-      "Key friction points",
-      "Prioritized opportunities",
+      "Workflow map",
+      "Friction points",
+      "Information gaps",
+      "System connections",
+      "Repetitive work",
+      "Automation opportunities",
       "Business impact",
-      "Technical feasibility",
-      "Risk considerations",
-      "Recommended first implementation",
-      "Next-step roadmap",
+      "Prioritized roadmap",
     ],
     cta: "Start a LoopScan",
   },
   {
     slug: "loopbuild",
     name: "LoopBuild",
+    headline: "Improve the process. Build the right system around it.",
     summary:
-      "Turn one high-value opportunity into a practical working system.",
+      "Improve and implement it.",
+    detail:
+      "LoopBuild turns a prioritized opportunity into a working solution. That may involve process redesign, systems integration, workflow automation, AI, custom software, or a combination of approaches.",
     deliverables: [
-      "Supplier follow-up automation",
-      "RFQ workflow",
-      "Production reporting",
-      "Supply risk monitoring",
-      "Quality investigations",
-      "Knowledge search",
+      "Purchasing exception workflow",
+      "Supplier follow-up process",
+      "Reporting automation",
+      "Knowledge system",
+      "Sourcing workflow",
+      "Operations management process",
+      "System-to-system integration",
     ],
     cta: "Build Your First Loop",
   },
   {
     slug: "loopops",
     name: "LoopOps",
+    headline: "Operate it. Improve it. Expand what works.",
     summary:
-      "Ongoing support and continuous improvement after the first system is live.",
+      "Run and continuously improve it.",
+    detail:
+      "Once the new process or system is live, LoopOps supports ongoing operation, integration, monitoring, automation, and continuous improvement.",
     deliverables: [
-      "System monitoring",
-      "Workflow improvement",
-      "Integrations",
+      "Workflow support",
+      "System integration",
+      "Reporting",
+      "Automation",
+      "Agent workflows",
+      "Process refinement",
       "Training",
       "Governance",
       "New use cases",
-      "Monthly improvement reviews",
     ],
     cta: "Keep Improving",
   },
@@ -157,42 +275,67 @@ export const howItWorks = [
   {
     step: "02",
     name: "Simplify",
-    summary: "Improve the process before automating it.",
+    summary: "Remove unnecessary steps, clarify ownership, and improve the process.",
     points: [
       "Remove extra steps",
-      "Clarify decisions",
-      "Assign ownership",
+      "Clarify ownership",
       "Define outcomes",
       "Reduce handoffs",
       "Make work visible",
+      "Improve flow",
     ],
   },
   {
     step: "03",
-    name: "Build",
+    name: "Connect",
     summary:
-      "Connect the right combination of people, information, software, automation, and AI.",
+      "Connect the systems, people, and information required to make the workflow work.",
     points: [
-      "AI where it helps",
-      "Automation",
       "ERP data",
+      "Email and spreadsheets",
       "Documents",
-      "APIs and databases",
       "Existing software",
-      "Human decision-makers",
+      "People closest to the work",
       "Process rules",
     ],
   },
   {
     step: "04",
-    name: "Learn",
-    summary: "Measure the result and improve again.",
+    name: "Automate",
+    summary:
+      "Automate repetitive or information-heavy work where it makes sense.",
     points: [
-      "Measure results",
+      "Repetitive tasks",
+      "Information gathering",
+      "Exception routing",
+      "Workflow automation",
+      "AI where it helps",
+      "Human approval where it matters",
+    ],
+  },
+  {
+    step: "05",
+    name: "Measure",
+    summary: "Establish whether the change actually improved the operation.",
+    points: [
+      "Time",
+      "Cost",
+      "Risk",
+      "Quality",
+      "Response time",
+      "Baseline versus result",
+    ],
+  },
+  {
+    step: "06",
+    name: "Improve",
+    summary: "Use the result to strengthen the next loop.",
+    points: [
       "Find the next constraint",
       "Adjust the workflow",
       "Train the team",
       "Expand what works",
+      "Strengthen the process",
       "Repeat",
     ],
   },
@@ -225,7 +368,7 @@ export const existingSystems = [
   "Maintenance Records",
 ];
 
-export const loopWorksOutcomes = [
+export const loopSignalOutcomes = [
   "Better decisions",
   "Less manual work",
   "Faster response",
@@ -335,19 +478,76 @@ export const loopScanFindings = [
 
 export const commercialJourney = [
   {
-    step: "1",
+    step: "01",
     name: "LoopScan",
-    text: "Find the opportunity.",
+    headline: "Understand the process.",
+    text: "Review how the work happens today, where information or decisions break down, and where improvement could create measurable value.",
   },
   {
-    step: "2",
+    step: "02",
     name: "LoopBuild",
-    text: "Build and prove one high-value system.",
+    headline: "Improve and implement it.",
+    text: "Turn a prioritized opportunity into a working solution — process redesign, systems integration, automation, AI, software, or a combination.",
   },
   {
-    step: "3",
+    step: "03",
     name: "LoopOps",
-    text: "Operate, improve, and expand what works.",
+    headline: "Run and continuously improve it.",
+    text: "Support ongoing operation, integration, monitoring, automation, and continuous improvement after the solution is live.",
+  },
+] as const;
+
+export const operatingLoop = [
+  {
+    name: "See",
+    summary: "Understand how the work actually happens.",
+  },
+  {
+    name: "Simplify",
+    summary: "Remove unnecessary steps, clarify ownership, and improve the process.",
+  },
+  {
+    name: "Connect",
+    summary: "Connect the systems, people, and information the workflow requires.",
+  },
+  {
+    name: "Automate",
+    summary: "Automate repetitive or information-heavy work where it makes sense.",
+  },
+  {
+    name: "Measure",
+    summary: "Establish whether the change actually improved the operation.",
+  },
+  {
+    name: "Improve",
+    summary: "Use the result to strengthen the next loop.",
+  },
+] as const;
+
+export const implementationSequence = [
+  {
+    name: "Discover the workflow",
+    summary: "Understand how the work happens today.",
+  },
+  {
+    name: "Establish the baseline",
+    summary: "Define the current time, cost, risk, or performance.",
+  },
+  {
+    name: "Improve the process",
+    summary: "Remove unnecessary complexity before connecting systems or automating work.",
+  },
+  {
+    name: "Build what is needed",
+    summary: "Connect the right information and implement the solution around the work.",
+  },
+  {
+    name: "Define ownership",
+    summary: "Clarify what people, workflows, software, or agents should own.",
+  },
+  {
+    name: "Measure the result",
+    summary: "Determine whether the operation actually improved.",
   },
 ] as const;
 

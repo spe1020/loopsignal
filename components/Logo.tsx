@@ -51,9 +51,9 @@ function Tagline({ tone }: { tone: LogoTone }) {
 
   return (
     <span
-      className={`block text-[9px] font-medium uppercase tracking-[0.16em] sm:text-[10px] ${color}`}
+      className={`block text-[9px] font-medium uppercase tracking-[0.12em] sm:text-[10px] ${color}`}
     >
-      Better systems. Better work
+      Find the signal. Close the loop
       {tone === "mono" ? "." : <span className="text-copper">.</span>}
     </span>
   );
@@ -91,7 +91,7 @@ export function Logo({
 
   const wordmark = (
     <span className="text-[15px] font-medium tracking-[-0.03em] whitespace-nowrap sm:text-[16px]">
-      LoopWorks
+      LoopSignal
     </span>
   );
 
@@ -119,7 +119,7 @@ export function Logo({
   return (
     <Link
       href={href}
-      aria-label="LoopWorks home"
+      aria-label="LoopSignal home"
       className={`inline-flex shrink-0 items-center ${textColor} ${className}`}
     >
       {inner}

@@ -1,8 +1,8 @@
-# LoopWorks analytics
+# LoopSignal analytics
 
-This is the internal reference for how LoopWorks measures the website. The goal is not to collect as much data as possible. The goal is to answer:
+This is the internal reference for how LoopSignal measures the website. The goal is not to collect as much data as possible. The goal is to answer:
 
-1. Are the right people finding LoopWorks?
+1. Are the right people finding LoopSignal?
 2. What are they interested in?
 3. Are they moving toward a conversation?
 4. Which channels and content produce qualified leads?
@@ -521,7 +521,7 @@ Analytics events and lead records are separate. When the LoopScan form succeeds,
 - `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`
 - `firstVisitAt`
 
-This is how LoopWorks answers: **Where did this lead come from?**
+This is how LoopSignal answers: **Where did this lead come from?**
 
 ## Weekly review
 
@@ -600,14 +600,14 @@ Do not automate this until the volume of conversations makes it worth the comple
 
 ## Search Console
 
-When `loopworks.xyz` is live:
+When the production domain is live:
 
-1. Set `NEXT_PUBLIC_SITE_URL=https://loopworks.xyz`
+1. Set `NEXT_PUBLIC_SITE_URL` to the canonical URL (see `.env.example`)
 2. Add the site in Google Search Console
 3. Paste the verification token into `NEXT_PUBLIC_GSC_VERIFICATION`
-4. Submit `https://loopworks.xyz/sitemap.xml`
+4. Submit `{NEXT_PUBLIC_SITE_URL}/sitemap.xml`
 
-The sitemap includes `/`, `/solutions`, `/how-it-works`, `/about`, `/insights`, `/loopscan`, `/signal`, `/know`, `/source`, `/brief`, `/demo`, and individual insight pages. API routes are disallowed in `robots.txt`.
+The sitemap includes `/`, `/solutions`, `/how-it-works`, `/about`, `/insights`, `/loopscan`, `/supply`, `/know`, `/source`, `/brief`, `/demo`, and individual insight pages. `/signal` permanently redirects to `/supply`. API routes are disallowed in `robots.txt`.
 
 Once Search Console has data, watch impressions and clicks around:
 

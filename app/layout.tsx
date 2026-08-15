@@ -3,6 +3,7 @@ import { IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { SiteAnalytics } from "@/components/SiteAnalytics";
+import { company } from "@/lib/company";
 import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -21,18 +22,16 @@ const ibmSerif = IBM_Plex_Serif({
 
 export const metadata: Metadata = {
   title: {
-    default: "LoopWorks — Better systems. Better work.",
-    template: "%s — LoopWorks",
+    default: `${company.name} — ${company.tagline}`,
+    template: `%s — ${company.name}`,
   },
-  description:
-    "LoopWorks helps manufacturers identify operational friction, improve processes, and build practical AI and automation systems that make work faster, clearer, and more reliable.",
+  description: company.executiveDescription,
   metadataBase: new URL(siteUrl),
   openGraph: {
-    title: "LoopWorks — Better systems. Better work.",
-    description:
-      "LoopWorks helps manufacturers make work better using smarter systems.",
+    title: `${company.name} — ${company.tagline}`,
+    description: company.description,
     url: "/",
-    siteName: "LoopWorks",
+    siteName: company.name,
     locale: "en_US",
     type: "website",
   },
@@ -45,6 +44,15 @@ export const metadata: Metadata = {
     : {}),
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: company.name,
+  url: siteUrl,
+  description: company.executiveDescription,
+  slogan: company.tagline,
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -52,6 +60,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${ibmSans.variable} ${ibmSerif.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-cream font-sans text-ink">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

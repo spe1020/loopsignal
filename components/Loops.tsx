@@ -1,8 +1,8 @@
-import { howItWorks } from "@/lib/content";
+import { howItWorks, operatingLoop } from "@/lib/content";
 
 export function MethodLoop() {
   return (
-    <div className="relative overflow-hidden border border-white/10">
+    <div className="relative overflow-hidden border border-white/10 bg-ink">
       <svg
         className="pointer-events-none absolute inset-0 hidden h-full w-full opacity-50 md:block"
         viewBox="0 0 1000 420"
@@ -21,7 +21,7 @@ export function MethodLoop() {
           strokeWidth="1.4"
         />
       </svg>
-      <div className="relative grid gap-px bg-white/10 md:grid-cols-2">
+      <div className="relative grid gap-px bg-white/10 md:grid-cols-2 lg:grid-cols-3">
         {howItWorks.map((step) => (
           <div
             key={step.name}
@@ -42,8 +42,8 @@ export function MethodLoop() {
         ))}
       </div>
       <div className="relative border-t border-white/10 px-6 py-5 text-center">
-        <p className="text-[12px] tracking-[0.18em] text-white/55 uppercase">
-          See → Simplify → Build → Learn
+        <p className="text-[12px] tracking-[0.12em] text-white/55 uppercase">
+          See → Simplify → Connect → Automate → Measure → Improve → Repeat
         </p>
         <p className="mt-2 text-sm text-copper">
           Kaizen is built into the process.
@@ -55,4 +55,33 @@ export function MethodLoop() {
 
 export function ProcessLoop() {
   return <MethodLoop />;
+}
+
+export function OperatingLoop({ inverted = false }: { inverted?: boolean }) {
+  const surface = inverted ? "bg-ink" : "bg-cream";
+  const border = inverted ? "border-white/10" : "border-line";
+  const grid = inverted ? "bg-white/10" : "bg-line";
+  const title = inverted ? "text-cream" : "text-ink";
+  const body = inverted ? "text-white/55" : "text-graphite";
+  const phrase = inverted ? "text-white/55" : "text-stone";
+
+  return (
+    <div>
+      <ol className={`grid gap-px border ${border} ${grid} sm:grid-cols-2 lg:grid-cols-3`}>
+        {operatingLoop.map((step) => (
+          <li key={step.name} className={`${surface} px-5 py-6`}>
+            <h3 className={`text-lg font-medium tracking-tight ${title}`}>
+              {step.name}
+            </h3>
+            <p className={`mt-2 text-sm leading-6 ${body}`}>{step.summary}</p>
+          </li>
+        ))}
+      </ol>
+      <p
+        className={`mt-5 text-center text-[12px] tracking-[0.14em] uppercase ${phrase}`}
+      >
+        See → Simplify → Connect → Automate → Measure → Improve → Repeat
+      </p>
+    </div>
+  );
 }

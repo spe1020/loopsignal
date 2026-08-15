@@ -33,9 +33,9 @@ export function KnowDemo() {
             Your knowledge already exists. Make it usable.
           </h1>
           <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite md:text-[18px]">
-            LoopKnow turns SOPs, specifications, quality records, engineering
-            documents, and other manufacturing knowledge into answers your team
-            can actually use.
+            LoopKnow turns scattered manufacturing knowledge — SOPs,
+            specifications, quality records, engineering documents, and
+            institutional knowledge — into trusted, usable answers.
           </p>
           <p className="mt-3 max-w-2xl text-[14px] leading-6 text-graphite">
             Ask a question. See the answer. Verify the source.
@@ -94,7 +94,7 @@ export function KnowDemo() {
             Your team already has the knowledge.
           </h2>
           <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-            LoopWorks can help organize, connect, and make operational knowledge
+            LoopSignal can help organize, connect, and make operational knowledge
             usable across the systems and documents your team already relies on.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-5">

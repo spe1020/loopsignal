@@ -4,7 +4,7 @@ import { BriefDemo } from "@/components/brief/BriefDemo";
 export const metadata: Metadata = {
   title: "LoopBrief | Daily Operations Brief Demo",
   description:
-    "Turn fictional production, quality, supply, and maintenance signals into a prioritized daily operating brief. A LoopWorks manufacturing command-center demo.",
+    "Turn fictional production, quality, supply, and maintenance signals into a prioritized daily operating brief. A LoopSignal manufacturing operations demo.",
   alternates: { canonical: "/brief" },
   openGraph: {
     title: "LoopBrief | Daily Operations Brief Demo",

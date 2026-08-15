@@ -18,7 +18,7 @@ type Props = {
 export default async function Image({ params }: Props) {
   const { slug } = await params;
   const article = getArticle(slug);
-  const title = article?.title ?? "LoopWorks Insights";
+  const title = article?.title ?? "LoopSignal Insights";
   const dek = article?.dek ?? "Practical writing on work, systems, and improvement.";
 
   return new ImageResponse(
@@ -71,7 +71,7 @@ export default async function Image({ params }: Props) {
               color: brand.orange,
             }}
           >
-            LoopWorks Insights
+            LoopSignal Insights
           </div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>

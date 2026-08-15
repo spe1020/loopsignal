@@ -1,6 +1,8 @@
-# LoopWorks brand assets
+# LoopSignal brand assets
 
 Source of truth for the selected infinity-style loop mark, palette, and lockups.
+
+The loop represents continuous improvement. The orange point represents the signal that creates action.
 
 ## Palette
 
@@ -11,7 +13,7 @@ Source of truth for the selected infinity-style loop mark, palette, and lockups.
 | Medium Gray | `#7A7A7A` | Tagline, secondary text |
 | Light Gray | `#E6E6E6` | Favicon tile, dividers, subtle UI |
 
-Orange is an accent. Do not flood pages with it.
+Orange is an accent. Do not flood pages with it. Do not overuse infinity imagery.
 
 ## Loop mark
 
@@ -25,12 +27,14 @@ Open infinity / figure-eight. Uniform stroke, rounded caps, gap at the top-right
 
 | Context | Treatment |
 | --- | --- |
-| Site header | Horizontal: mark left, LoopWorks wordmark right |
-| Footer | Horizontal with tagline |
+| Site header | Horizontal: mark left, LoopSignal wordmark right |
+| Footer | Horizontal with supporting tagline |
 | Mobile / tight | Same lockup, slightly smaller; mark-only if space is truly constrained |
 | Favicon / app icon | Mark only, on the light-gray or charcoal tile |
 
-Tagline: **BETTER SYSTEMS. BETTER WORK.** with an orange period.
+Primary line: **Improve the process. Connect the systems.**
+
+Supporting line: **Find the signal. Close the loop.** with an orange period.
 
 ## Files
 

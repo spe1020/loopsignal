@@ -1,6 +1,6 @@
 import {
   existingSystems,
-  loopWorksOutcomes,
+  loopSignalOutcomes,
 } from "@/lib/content";
 
 export function SystemsFlow() {
@@ -21,12 +21,12 @@ export function SystemsFlow() {
       <div className="flex items-center gap-4 border-y border-line bg-paper px-5 py-4">
         <span className="h-px flex-1 bg-line" />
         <p className="text-[12px] font-medium tracking-[0.16em] text-copper uppercase">
-          → LoopWorks →
+          → LoopSignal →
         </p>
         <span className="h-px flex-1 bg-line" />
       </div>
       <ul className="grid gap-px bg-line sm:grid-cols-3">
-        {loopWorksOutcomes.map((outcome) => (
+        {loopSignalOutcomes.map((outcome) => (
           <li
             key={outcome}
             className="bg-cream px-4 py-5 text-sm font-medium text-ink"

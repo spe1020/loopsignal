@@ -82,7 +82,7 @@ export const meetingSteps = [
 ] as const;
 export type MeetingStep = (typeof meetingSteps)[number];
 
-export const relatedProducts = ["signal", "know", "source"] as const;
+export const relatedProducts = ["supply", "know", "source"] as const;
 export type RelatedProduct = (typeof relatedProducts)[number];
 
 export const scenarioIds = ["northfield_day_shift"] as const;
@@ -268,7 +268,7 @@ export const actionSources = [
   "loopbrief_supply",
   "loopbrief_maintenance",
   "loopbrief_schedule",
-  "loopsignal",
+  "loopsupply",
   "loopknow",
   "loopsource",
 ] as const;

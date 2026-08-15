@@ -2,17 +2,16 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Button } from "@/components/Button";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
+import { company } from "@/lib/company";
 import { founder, trustPrinciples } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "About",
-  description:
-    "LoopWorks was built around a simple belief: manufacturing does not need more technology for technology’s sake. It needs better systems.",
+  description: company.longDescription,
   alternates: { canonical: "/about" },
   openGraph: {
     title: "About",
-    description:
-      "LoopWorks was built around a simple belief: manufacturing does not need more technology for technology’s sake. It needs better systems.",
+    description: company.executiveDescription,
     url: "/about",
   },
 };
@@ -44,18 +43,15 @@ export default function AboutPage() {
           <Reveal>
             <Eyebrow>About</Eyebrow>
             <h1 className="mt-5 max-w-3xl text-4xl font-medium tracking-[-0.035em] text-ink md:text-6xl">
-              Manufacturing does not need more technology for technology’s sake.
-              It needs better systems.
+              A manufacturing consulting and systems integration company.
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-8 text-graphite">
-              LoopWorks was built around firsthand experience in manufacturing,
-              supply chain, procurement, supplier development, operations, and
-              continuous improvement.
+              {company.longDescription}
             </p>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-graphite">
-              We understand the realities behind ERP systems, supplier problems,
-              production constraints, spreadsheets, quality issues, inventory
-              risk, and the workarounds teams use every day.
+              We help manufacturers improve processes, connect disconnected
+              systems, and automate the work that should not require manual
+              effort.
             </p>
           </Reveal>
         </Container>
@@ -104,14 +100,10 @@ export default function AboutPage() {
               Built by an operator.
             </h2>
             <p className="mt-6 text-[16px] leading-8 text-graphite">
-              LoopWorks was founded from years of hands-on experience solving
-              problems across manufacturing and supply chain operations.
-            </p>
-            <p className="mt-4 text-[16px] leading-8 text-graphite">
-              The idea is simple: manufacturers already have capable people and
-              powerful systems. The opportunity is to connect them better,
-              remove friction, and use modern technology where it creates real
-              value.
+              LoopSignal was created from firsthand experience solving problems
+              across manufacturing, supply chain, procurement, supplier
+              development, production planning, operations, and continuous
+              improvement.
             </p>
             <p className="mt-4 text-[16px] leading-8 text-graphite">
               {founder.background}
@@ -124,6 +116,22 @@ export default function AboutPage() {
             >
               LinkedIn →
             </a>
+          </Reveal>
+        </Container>
+      </section>
+
+      <section className="border-b border-line py-20 md:py-24">
+        <Container>
+          <Reveal className="max-w-3xl">
+            <p className="text-[16px] leading-8 text-graphite">
+              The problems behind the demos on this site are familiar: people
+              chasing information, rebuilding reports, comparing options
+              manually, searching for documents, managing exceptions, and
+              coordinating action across disconnected systems.
+            </p>
+            <p className="mt-8 font-serif text-2xl leading-snug text-ink md:text-[28px]">
+              LoopSignal exists to make those loops work better.
+            </p>
           </Reveal>
         </Container>
       </section>
@@ -142,9 +150,9 @@ export default function AboutPage() {
               show themselves.
             </p>
             <p className="mt-5 text-[16px] leading-8 text-graphite">
-              From there the sequence is disciplined: see, simplify, build,
-              learn. AI is one of the tools in the build step. It is not the
-              reason for the work.
+              From there the sequence is disciplined: see, simplify, connect,
+              automate, measure, improve. Technology follows the problem, not
+              the other way around.
             </p>
           </Reveal>
           <div className="grid gap-px border border-line bg-line lg:col-span-7 sm:grid-cols-2">
@@ -204,7 +212,7 @@ export default function AboutPage() {
               place on the floor.
             </p>
             <p className="mt-5 font-serif text-2xl leading-snug text-ink">
-              We build better loops.
+              Improve the process. Connect the systems.
             </p>
             <div className="mt-10">
               <Button href="/loopscan" location="about">

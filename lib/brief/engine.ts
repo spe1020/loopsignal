@@ -288,7 +288,7 @@ function supplyIssue(row: SupplyView): BriefIssue | null {
     immediateAction: rec.immediateAction,
     structuralAction: rec.structuralAction,
     related: [
-      { product: "signal", label: "View in LoopSignal", href: "/signal" },
+      { product: "supply", label: "View in LoopSupply", href: "/supply" },
       ...(rec.id === "sup-fastener"
         ? [{ product: "source" as const, label: "Review in LoopSource", href: "/source" }]
         : []),
@@ -837,12 +837,12 @@ function buildActions(
         horizon: "immediate",
         status: "open",
         severity: fastener.riskLevel,
-        source: "loopsignal",
-        sourceLabel: "LoopSignal — Supply Risk",
+        source: "loopsupply",
+        sourceLabel: "LoopSupply — Supply Risk",
         notes: "Coverage is 2.8 days with replenishment expected in 4 days.",
         eligibleForBot: true,
         botControl: "draft_only",
-        related: { product: "signal", label: "Open in LoopSignal", href: "/signal" },
+        related: { product: "supply", label: "Open in LoopSupply", href: "/supply" },
       }),
       makeAction({
         id: "act-fastener-source",

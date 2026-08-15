@@ -160,12 +160,12 @@ export function SignalDemo() {
     <>
       <section className="relative overflow-hidden">
         <Container className="relative pt-12 pb-10 md:pt-16 md:pb-12">
-          <Eyebrow>LoopSignal</Eyebrow>
+          <Eyebrow>LoopSupply</Eyebrow>
           <h1 className="mt-4 max-w-3xl text-[36px] leading-[1.08] font-medium tracking-[-0.035em] text-ink sm:text-5xl md:text-[56px]">
             Stop searching the report. Find what needs attention.
           </h1>
           <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite md:text-[18px]">
-            LoopSignal turns an open purchase-order report into a prioritized
+            LoopSupply turns an open purchase-order report into a prioritized
             view of supplier and material risk so buyers can focus on the
             orders that actually need action.
           </p>
@@ -206,7 +206,7 @@ export function SignalDemo() {
               <div>
                 <div className="flex flex-wrap items-baseline gap-x-3">
                   <p className="text-[15px] font-medium tracking-tight text-ink">
-                    LoopSignal
+                    LoopSupply
                   </p>
                   <p className="text-[12px] text-graphite">
                     Supply Risk Console
@@ -271,7 +271,7 @@ export function SignalDemo() {
                     Demo environment
                   </p>
                   <p className="mt-2 text-sm leading-6 text-graphite">
-                    LoopSignal is an early demonstration of the LoopWorks
+                    LoopSupply is an early demonstration of the LoopSignal
                     approach and is not intended to replace production planning,
                     ERP, MRP, or purchasing systems.
                   </p>
@@ -380,13 +380,13 @@ export function SignalDemo() {
               This report started with a CSV.
             </h2>
             <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-              LoopWorks can help connect this kind of decision support to the
+              LoopSignal can help connect this kind of decision support to the
               systems, information, and workflows your team already uses.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-5">
               <TrackedLink
-                href="/loopscan?source=signal"
-                location="signal"
+                href="/loopscan?source=loopsupply"
+                location="loopsupply"
                 ctaText="Find Your First Loop"
                 onClick={() =>
                   trackSignalLoopScanClick({ cta_text: "Find Your First Loop" })
@@ -396,8 +396,8 @@ export function SignalDemo() {
                 Find Your First Loop
               </TrackedLink>
               <TrackedLink
-                href="/loopscan?source=signal"
-                location="signal"
+                href="/loopscan?source=loopsupply"
+                location="loopsupply"
                 ctaText="Start a LoopScan"
                 onClick={() =>
                   trackSignalLoopScanClick({ cta_text: "Start a LoopScan" })
@@ -413,7 +413,7 @@ export function SignalDemo() {
         <section className="py-12 md:py-16">
           <Container>
             <p className="max-w-2xl text-[15px] leading-7 text-graphite">
-              LoopSignal demonstrates what’s possible. LoopScan finds where it
+              LoopSupply demonstrates what’s possible. LoopScan finds where it
               creates value in your operation.
             </p>
           </Container>
