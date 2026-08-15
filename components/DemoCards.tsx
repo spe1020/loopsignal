@@ -5,21 +5,28 @@ const demos = [
     href: "/signal",
     name: "LoopSignal",
     summary: "Find what needs attention in an open PO report.",
-    detail: "Supply risk and purchasing workflow",
+    detail: "Supply chain exceptions",
     cta: "Try LoopSignal",
   },
   {
     href: "/know",
     name: "LoopKnow",
     summary: "Turn manufacturing documents into trusted, cited answers.",
-    detail: "Manufacturing knowledge and document intelligence",
+    detail: "Manufacturing knowledge",
     cta: "Try LoopKnow",
+  },
+  {
+    href: "/source",
+    name: "LoopSource",
+    summary: "Compare supplier quotes and understand the tradeoffs behind the award.",
+    detail: "Sourcing decisions",
+    cta: "Try LoopSource",
   },
 ] as const;
 
 export function DemoCards() {
   return (
-    <div className="grid gap-px border border-line bg-line md:grid-cols-2">
+    <div className="grid gap-px border border-line bg-line lg:grid-cols-3">
       {demos.map((demo) => (
         <article key={demo.href} className="bg-cream p-8 md:p-10">
           <p className="text-[12px] font-medium tracking-[0.04em] text-copper uppercase">

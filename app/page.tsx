@@ -205,7 +205,7 @@ export default function HomePage() {
               See LoopWorks in action.
             </h2>
             <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-              Two working examples of how LoopWorks turns information you
+              Working examples of how LoopWorks turns information you
               already have into something a team can use.
             </p>
           </Reveal>

@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/loopscan",
     "/signal",
     "/know",
+    "/source",
     "/demo",
   ].map((path) => ({
     url: `${siteUrl}${path || "/"}`,
