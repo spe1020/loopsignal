@@ -5,14 +5,22 @@ import { BriefConsole } from "@/components/brief/BriefConsole";
 import { Container, Eyebrow } from "@/components/Reveal";
 import { TrackedLink } from "@/components/TrackedLink";
 import {
+  trackBriefActionSelect,
   trackBriefActionStatusChange,
+  trackBriefAssign,
+  trackBriefBotRun,
   trackBriefCategoryFilter,
   trackBriefCopy,
+  trackBriefEmailPreview,
   trackBriefIssueSelect,
   trackBriefLoopScanClick,
   trackBriefMeetingMode,
+  trackBriefOutcome,
   trackBriefOwnerFilter,
   trackBriefPageView,
+  trackBriefPersonaView,
+  trackBriefReportCopy,
+  trackBriefReportView,
   trackBriefRun,
 } from "@/lib/analytics";
 import { SAMPLE_SCENARIO } from "@/lib/brief";
@@ -68,6 +76,32 @@ export function BriefDemo() {
     [],
   );
   const onCopy = useCallback(() => trackBriefCopy(meta()), []);
+  const onReportView = useCallback((kind: string) => {
+    trackBriefReportView({ ...meta(), report_kind: kind });
+  }, []);
+  const onReportCopy = useCallback((kind: string) => {
+    trackBriefReportCopy({ ...meta(), report_kind: kind });
+  }, []);
+  const onEmailPreview = useCallback(() => trackBriefEmailPreview(meta()), []);
+  const onPersonaView = useCallback((persona: string) => {
+    trackBriefPersonaView({ ...meta(), persona });
+  }, []);
+  const onAssign = useCallback((input: { owner_type: string; bot_type?: string }) => {
+    trackBriefAssign({
+      ...meta(),
+      owner_type: input.owner_type,
+      bot_type: input.bot_type,
+    });
+  }, []);
+  const onBotRun = useCallback((bot_type: string) => {
+    trackBriefBotRun({ ...meta(), bot_type });
+  }, []);
+  const onActionSelect = useCallback((category: string) => {
+    trackBriefActionSelect({ ...meta(), category });
+  }, []);
+  const onOutcome = useCallback((outcome: string) => {
+    trackBriefOutcome({ ...meta(), outcome });
+  }, []);
 
   return (
     <>
@@ -120,6 +154,14 @@ export function BriefDemo() {
             onMeetingMode={onMeetingMode}
             onActionStatusChange={onActionStatusChange}
             onCopy={onCopy}
+            onReportView={onReportView}
+            onReportCopy={onReportCopy}
+            onEmailPreview={onEmailPreview}
+            onPersonaView={onPersonaView}
+            onAssign={onAssign}
+            onBotRun={onBotRun}
+            onActionSelect={onActionSelect}
+            onOutcome={onOutcome}
           />
         </div>
       </section>

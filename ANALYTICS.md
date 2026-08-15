@@ -387,6 +387,84 @@ Allowed metadata:
 - `cta_text`
 - `destination`: `loopscan`
 
+### `loopbrief_report_view`
+
+Fired when a LoopBrief report is opened.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `report_kind` (`executive`, `operations`, `supply_chain`, `procurement`, `quality`, `maintenance`, `planning`, `engineering`, `open_actions`)
+
+### `loopbrief_report_copy`
+
+Fired when a report is copied.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `report_kind`
+
+Do not send report text.
+
+### `loopbrief_email_preview`
+
+Fired when the executive email preview is opened or copied.
+
+Allowed metadata:
+
+- `sample_scenario`
+
+Do not send subject, body, or recipient addresses.
+
+### `loopbrief_persona_view`
+
+Fired when My Actions persona is changed.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `persona` (`plant_manager`, `buyer`, `planner`, `quality_engineer`, `maintenance_lead`, `operations_supervisor`)
+
+### `loopbrief_assign`
+
+Fired when an action is assigned to a human or Demo Bot.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `owner_type` (`human`, `bot`)
+- `bot_type` (`supplier_follow_up`, `reporting`, `knowledge`, `sourcing`, `monitoring`)
+
+Do not send role names from free text.
+
+### `loopbrief_bot_run`
+
+Fired when a Demo Bot simulation is run.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `bot_type`
+
+### `loopbrief_action_select`
+
+Fired when an action is opened.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `category`
+
+### `loopbrief_outcome`
+
+Fired when a completed action outcome is selected.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `outcome` (`resolved`, `monitoring`, `escalated`, `permanent_action_required`, `no_issue_found`)
+
 ## Privacy
 
 Never send to analytics:

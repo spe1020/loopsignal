@@ -190,17 +190,120 @@ export type ChangeItem = {
   tone: Severity;
 };
 
+export const ownerTypes = ["human", "bot"] as const;
+export type OwnerType = (typeof ownerTypes)[number];
+
+export const humanRoles = [
+  "Buyer",
+  "Planner",
+  "Quality Engineer",
+  "Maintenance Technician",
+  "Operations Supervisor",
+  "Manufacturing Engineer",
+  "Supply Chain Manager",
+] as const;
+export type HumanRole = (typeof humanRoles)[number];
+
+export const botTypes = [
+  "supplier_follow_up",
+  "reporting",
+  "knowledge",
+  "sourcing",
+  "monitoring",
+] as const;
+export type BotType = (typeof botTypes)[number];
+
+export const botTaskStatuses = [
+  "queued",
+  "working",
+  "ready_for_review",
+  "approved",
+  "complete",
+  "needs_human_input",
+] as const;
+export type BotTaskStatus = (typeof botTaskStatuses)[number];
+
+export const botControls = [
+  "draft_only",
+  "human_approval_required",
+  "read_only_analysis",
+] as const;
+export type BotControl = (typeof botControls)[number];
+
+export const actionOutcomes = [
+  "resolved",
+  "monitoring",
+  "escalated",
+  "permanent_action_required",
+  "no_issue_found",
+] as const;
+export type ActionOutcome = (typeof actionOutcomes)[number];
+
+export const personas = [
+  "plant_manager",
+  "buyer",
+  "planner",
+  "quality_engineer",
+  "maintenance_lead",
+  "operations_supervisor",
+] as const;
+export type Persona = (typeof personas)[number];
+
+export const reportKinds = [
+  "executive",
+  "operations",
+  "supply_chain",
+  "procurement",
+  "quality",
+  "maintenance",
+  "planning",
+  "engineering",
+  "open_actions",
+] as const;
+export type ReportKind = (typeof reportKinds)[number];
+
+export const actionSources = [
+  "loopbrief_production",
+  "loopbrief_quality",
+  "loopbrief_supply",
+  "loopbrief_maintenance",
+  "loopbrief_schedule",
+  "loopsignal",
+  "loopknow",
+  "loopsource",
+] as const;
+export type ActionSource = (typeof actionSources)[number];
+
+export const actionPriorityTiers = ["high", "medium", "low"] as const;
+export type ActionPriorityTier = (typeof actionPriorityTiers)[number];
+
 export type BriefAction = {
   id: string;
   issueId: string;
   action: string;
+  title: string;
   owner: Owner;
+  department: Owner;
   category: Category;
   priority: number;
+  priorityTier: ActionPriorityTier;
   timing: ActionTiming;
   horizon: ActionHorizon;
   status: ActionStatus;
   severity: Severity;
+  ownerType: OwnerType;
+  assignedRole: HumanRole | "Demo Bot";
+  botType?: BotType;
+  botTask?: string;
+  botControl?: BotControl;
+  botStatus?: BotTaskStatus;
+  source: ActionSource;
+  sourceLabel: string;
+  notes: string;
+  overdue: boolean;
+  dueAgeLabel?: string;
+  related?: RelatedLink;
+  eligibleForBot: boolean;
 };
 
 export type BriefIssue = {
@@ -369,3 +472,72 @@ export const ownerLabels: Record<Owner, Owner> = {
   Planning: "Planning",
   Engineering: "Engineering",
 };
+
+export const ownerTypeLabels: Record<OwnerType, string> = {
+  human: "Human",
+  bot: "Bot",
+};
+
+export const botTypeLabels: Record<BotType, string> = {
+  supplier_follow_up: "Supplier Follow-Up Bot",
+  reporting: "Reporting Bot",
+  knowledge: "Knowledge Bot",
+  sourcing: "Sourcing Bot",
+  monitoring: "Monitoring Bot",
+};
+
+export const botStatusLabels: Record<BotTaskStatus, string> = {
+  queued: "Queued",
+  working: "Working",
+  ready_for_review: "Ready for Review",
+  approved: "Approved",
+  complete: "Complete",
+  needs_human_input: "Needs Human Input",
+};
+
+export const botControlLabels: Record<BotControl, string> = {
+  draft_only: "Draft Only",
+  human_approval_required: "Human Approval Required",
+  read_only_analysis: "Read-Only Analysis",
+};
+
+export const outcomeLabels: Record<ActionOutcome, string> = {
+  resolved: "Resolved",
+  monitoring: "Monitoring",
+  escalated: "Escalated",
+  permanent_action_required: "Permanent Action Required",
+  no_issue_found: "No Issue Found",
+};
+
+export const personaLabels: Record<Persona, string> = {
+  plant_manager: "Plant Manager",
+  buyer: "Buyer",
+  planner: "Planner",
+  quality_engineer: "Quality Engineer",
+  maintenance_lead: "Maintenance Lead",
+  operations_supervisor: "Operations Supervisor",
+};
+
+export const reportKindLabels: Record<ReportKind, string> = {
+  executive: "Executive Summary",
+  operations: "Operations Brief",
+  supply_chain: "Supply Chain Brief",
+  procurement: "Procurement Brief",
+  quality: "Quality Brief",
+  maintenance: "Maintenance Brief",
+  planning: "Planning Brief",
+  engineering: "Engineering Brief",
+  open_actions: "Open Actions Report",
+};
+
+export const priorityTierLabels: Record<ActionPriorityTier, string> = {
+  high: "High",
+  medium: "Medium",
+  low: "Low",
+};
+
+export function priorityTierFor(priority: number): ActionPriorityTier {
+  if (priority <= 2) return "high";
+  if (priority <= 3) return "medium";
+  return "low";
+}
