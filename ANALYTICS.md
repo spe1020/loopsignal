@@ -62,7 +62,7 @@ Fired when a visitor clicks a LoopScan call to action, including:
 
 Allowed metadata:
 
-- `location`: `hero`, `solutions`, `loopscan_section`, `footer`, `article`, `navigation`, `use_cases`, `final_cta`, `about`, `how_it_works`, `not_found`, `signal`, `loopknow`, `loopsource`, `demo`
+- `location`: `hero`, `solutions`, `loopscan_section`, `footer`, `article`, `navigation`, `use_cases`, `final_cta`, `about`, `how_it_works`, `not_found`, `signal`, `loopknow`, `loopsource`, `loopbrief`, `demo`
 - `page`: current pathname
 - `cta_text`: button label only
 
@@ -298,6 +298,95 @@ Allowed metadata:
 - `cta_text`
 - `destination`: `loopscan`
 
+### `loopbrief_page_view`
+
+Fired once when `/brief` is viewed.
+
+Allowed metadata:
+
+- `referring_page`
+
+### `loopbrief_run`
+
+Fired when the fictional daily brief is generated from sample data.
+
+Allowed metadata:
+
+- `sample_scenario` (`northfield_day_shift`)
+
+Do not send plant, supplier, product, or issue text.
+
+### `loopbrief_category_filter`
+
+Fired when a visitor filters the brief by executive-strip category.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `category` (`all`, `production`, `quality`, `supply`, `maintenance`, `schedule`)
+
+### `loopbrief_owner_filter`
+
+Fired when a visitor filters by functional owner.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `owner` (`all`, `Operations`, `Supply Chain`, `Buyer`, `Quality`, `Maintenance`, `Planning`, `Engineering`)
+
+### `loopbrief_issue_select`
+
+Fired when a visitor selects a work center, issue, or priority.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `category`
+- `severity` (`red`, `amber`, `green`, `blue`)
+
+Do not send issue titles, product families, or supplier names.
+
+### `loopbrief_meeting_mode`
+
+Fired when Meeting Mode is toggled.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `meeting_mode` (boolean)
+
+### `loopbrief_action_status_change`
+
+Fired when an action-board status is changed locally.
+
+Allowed metadata:
+
+- `sample_scenario`
+- `action_timing` (`now`, `before_next_shift`, `today`, `this_week`, `longer_term`)
+- `owner` (controlled owner values only)
+
+Do not send the action text.
+
+### `loopbrief_copy`
+
+Fired when the visitor copies the daily brief.
+
+Allowed metadata:
+
+- `sample_scenario`
+
+Do not send the copied brief text.
+
+### `loopbrief_loopscan_click`
+
+Fired when a LoopBrief CTA leads to `/loopscan`.
+
+Allowed metadata:
+
+- `page`: `/brief`
+- `cta_text`
+- `destination`: `loopscan`
+
 ## Privacy
 
 Never send to analytics:
@@ -440,7 +529,7 @@ When `loopworks.xyz` is live:
 3. Paste the verification token into `NEXT_PUBLIC_GSC_VERIFICATION`
 4. Submit `https://loopworks.xyz/sitemap.xml`
 
-The sitemap includes `/`, `/solutions`, `/how-it-works`, `/about`, `/insights`, `/loopscan`, `/signal`, `/know`, `/source`, `/demo`, and individual insight pages. API routes are disallowed in `robots.txt`.
+The sitemap includes `/`, `/solutions`, `/how-it-works`, `/about`, `/insights`, `/loopscan`, `/signal`, `/know`, `/source`, `/brief`, `/demo`, and individual insight pages. API routes are disallowed in `robots.txt`.
 
 Once Search Console has data, watch impressions and clicks around:
 

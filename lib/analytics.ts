@@ -37,6 +37,15 @@ export const analyticsEvents = [
   "loopsource_volume_change",
   "loopsource_dual_source_toggle",
   "loopsource_loopscan_click",
+  "loopbrief_page_view",
+  "loopbrief_run",
+  "loopbrief_category_filter",
+  "loopbrief_owner_filter",
+  "loopbrief_issue_select",
+  "loopbrief_meeting_mode",
+  "loopbrief_action_status_change",
+  "loopbrief_copy",
+  "loopbrief_loopscan_click",
 ] as const;
 
 export type AnalyticsEvent = (typeof analyticsEvents)[number];
@@ -61,6 +70,7 @@ export type CtaLocation =
   | "signal"
   | "loopknow"
   | "loopsource"
+  | "loopbrief"
   | "demo";
 
 export type SolutionInterest =
@@ -380,6 +390,78 @@ export function trackSourceDualSourceToggle(meta: SourceDemoMeta) {
 export function trackSourceLoopScanClick(input: { cta_text?: string }) {
   trackEvent("loopsource_loopscan_click", {
     page: "/source",
+    cta_text: input.cta_text,
+    destination: "loopscan",
+  });
+}
+
+export type BriefDemoMeta = {
+  sample_scenario?: string;
+  category?: string;
+  severity?: string;
+  owner?: string;
+  action_timing?: string;
+  meeting_mode?: boolean;
+};
+
+export function trackBriefPageView() {
+  trackEvent("loopbrief_page_view", {
+    referring_page: getReferringPage(),
+  });
+}
+
+export function trackBriefRun(meta: BriefDemoMeta = {}) {
+  trackEvent("loopbrief_run", {
+    sample_scenario: meta.sample_scenario ?? "northfield_day_shift",
+  });
+}
+
+export function trackBriefCategoryFilter(meta: BriefDemoMeta) {
+  trackEvent("loopbrief_category_filter", {
+    sample_scenario: meta.sample_scenario,
+    category: meta.category,
+  });
+}
+
+export function trackBriefOwnerFilter(meta: BriefDemoMeta) {
+  trackEvent("loopbrief_owner_filter", {
+    sample_scenario: meta.sample_scenario,
+    owner: meta.owner,
+  });
+}
+
+export function trackBriefIssueSelect(meta: BriefDemoMeta) {
+  trackEvent("loopbrief_issue_select", {
+    sample_scenario: meta.sample_scenario,
+    category: meta.category,
+    severity: meta.severity,
+  });
+}
+
+export function trackBriefMeetingMode(meta: BriefDemoMeta) {
+  trackEvent("loopbrief_meeting_mode", {
+    sample_scenario: meta.sample_scenario,
+    meeting_mode: meta.meeting_mode,
+  });
+}
+
+export function trackBriefActionStatusChange(meta: BriefDemoMeta) {
+  trackEvent("loopbrief_action_status_change", {
+    sample_scenario: meta.sample_scenario,
+    action_timing: meta.action_timing,
+    owner: meta.owner,
+  });
+}
+
+export function trackBriefCopy(meta: BriefDemoMeta = {}) {
+  trackEvent("loopbrief_copy", {
+    sample_scenario: meta.sample_scenario ?? "northfield_day_shift",
+  });
+}
+
+export function trackBriefLoopScanClick(input: { cta_text?: string }) {
+  trackEvent("loopbrief_loopscan_click", {
+    page: "/brief",
     cta_text: input.cta_text,
     destination: "loopscan",
   });

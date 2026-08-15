@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/signal",
     "/know",
     "/source",
+    "/brief",
     "/demo",
   ].map((path) => ({
     url: `${siteUrl}${path || "/"}`,
