@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/Button";
+import { DemoCards } from "@/components/DemoCards";
 import { LoopScanOffer } from "@/components/LoopScanOffer";
 import { MethodLoop } from "@/components/Loops";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
@@ -201,22 +202,15 @@ export default function HomePage() {
           <Reveal>
             <Eyebrow>See it in action</Eyebrow>
             <h2 className="mt-5 max-w-2xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-              Find the signal inside an open PO report.
+              See LoopWorks in action.
             </h2>
             <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-              LoopSignal analyzes an open purchase-order report and highlights
-              the orders that may need attention first.
+              Two working examples of how LoopWorks turns information you
+              already have into something a team can use.
             </p>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-stone">
-              No ERP integration. Use sample data or a sanitized CSV.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-5">
-              <Button href="/signal">Try LoopSignal</Button>
-              <p className="max-w-sm text-[13px] leading-6 text-stone">
-                LoopSignal demonstrates what’s possible. LoopScan finds where it
-                creates value in your operation.
-              </p>
-            </div>
+          </Reveal>
+          <Reveal className="mt-10" delay={60}>
+            <DemoCards />
           </Reveal>
         </Container>
       </section>
@@ -234,7 +228,7 @@ export default function HomePage() {
               LoopWorks can turn that knowledge into a secure, searchable system
               your team can actually use.
             </p>
-            <div className="mt-8">
+            <div className="mt-8 flex flex-wrap items-center gap-5">
               <SolutionInterestLink
                 href="/solutions#knowledge-systems"
                 solution="knowledge"
@@ -243,6 +237,9 @@ export default function HomePage() {
               >
                 See knowledge systems →
               </SolutionInterestLink>
+              <Button href="/know" variant="text">
+                Try LoopKnow →
+              </Button>
             </div>
           </Reveal>
           <Reveal className="relative aspect-[5/4] overflow-hidden lg:col-span-6" delay={80}>

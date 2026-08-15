@@ -62,7 +62,7 @@ Fired when a visitor clicks a LoopScan call to action, including:
 
 Allowed metadata:
 
-- `location`: `hero`, `solutions`, `loopscan_section`, `footer`, `article`, `navigation`, `use_cases`, `final_cta`, `about`, `how_it_works`, `not_found`
+- `location`: `hero`, `solutions`, `loopscan_section`, `footer`, `article`, `navigation`, `use_cases`, `final_cta`, `about`, `how_it_works`, `not_found`, `signal`, `loopknow`, `demo`
 - `page`: current pathname
 - `cta_text`: button label only
 
@@ -150,6 +150,75 @@ Allowed metadata:
 - `page`
 - `cta_text`
 - `destination` (`loopscan`)
+
+### `loopknow_page_view`
+
+Fired once when `/know` is viewed.
+
+Allowed metadata:
+
+- `referring_page`
+
+### `loopknow_sample_question`
+
+Fired when a visitor clicks a prepared sample question.
+
+Allowed metadata:
+
+- `question_category`: `torque`, `revision`, `quality_history`, `maintenance`, `material`, `inspection`, `multiple_sources`, `no_answer`, `surface_finish`, `packaging`, `go_nogo`, `general`
+
+Do not send the question text.
+
+### `loopknow_search`
+
+Fired when the document library search is used (query length of two or more characters).
+
+Allowed metadata:
+
+- `result_count`
+- `document_filter`: `all`, `work_instructions`, `specifications`, `quality`, `maintenance`, `engineering`, `standard_work`
+
+Do not send the search text or document content.
+
+### `loopknow_document_view`
+
+Fired when a visitor opens a document from the library, a citation, or an action.
+
+Allowed metadata:
+
+- `document_type`: `work_instruction`, `specification`, `quality`, `maintenance`, `engineering`, `standard_work`
+
+### `loopknow_answer_generated`
+
+Fired when LoopKnow returns a sourced or limited answer.
+
+Allowed metadata:
+
+- `question_category`
+- `answer_state`: `answered`, `revision_change`, `quality_history`, `limited`
+- `source_count`
+- `document_type` of the primary source, when present
+
+Do not send the free-text question or document excerpts.
+
+### `loopknow_no_answer`
+
+Fired when LoopKnow cannot verify an answer from the sample library.
+
+Allowed metadata:
+
+- `question_category`
+- `answer_state`: `no_answer`
+
+### `loopknow_loopscan_click`
+
+Fired when a LoopKnow CTA leads to `/loopscan`.
+
+Allowed metadata:
+
+- `page`: `/know`
+- `cta_text`
+- `destination`: `loopscan`
 
 ## Privacy
 
@@ -293,7 +362,7 @@ When `loopworks.xyz` is live:
 3. Paste the verification token into `NEXT_PUBLIC_GSC_VERIFICATION`
 4. Submit `https://loopworks.xyz/sitemap.xml`
 
-The sitemap includes `/`, `/solutions`, `/how-it-works`, `/about`, `/insights`, `/loopscan`, and individual insight pages. API routes are disallowed in `robots.txt`.
+The sitemap includes `/`, `/solutions`, `/how-it-works`, `/about`, `/insights`, `/loopscan`, `/signal`, `/know`, `/demo`, and individual insight pages. API routes are disallowed in `robots.txt`.
 
 Once Search Console has data, watch impressions and clicks around:
 
