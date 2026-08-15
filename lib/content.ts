@@ -1,7 +1,7 @@
 export const nav = [
   { href: "/", label: "Home" },
   { href: "/solutions", label: "Solutions" },
-  { href: "/signal", label: "Demo" },
+  { href: "/demo", label: "Demo" },
   { href: "/how-it-works", label: "How It Works" },
   { href: "/about", label: "About" },
   { href: "/insights", label: "Insights" },

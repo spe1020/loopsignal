@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Button } from "@/components/Button";
+import { DemoCards } from "@/components/DemoCards";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
 import { LoopScanOffer } from "@/components/LoopScanOffer";
 import { SolutionInterestLink } from "@/components/SolutionInterestLink";
@@ -120,15 +120,15 @@ export default function SolutionsPage() {
           <Reveal>
             <Eyebrow>See it in action</Eyebrow>
             <h2 className="mt-5 max-w-2xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[36px]">
-              Find the signal inside an open PO report.
+              See LoopWorks in action.
             </h2>
             <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-              LoopSignal is a working demo of supply-chain intelligence: upload
-              an open PO report and see which orders may need attention first.
+              Working examples of supply-risk and manufacturing-knowledge
+              workflows — not separate products you have to buy.
             </p>
-            <div className="mt-8">
-              <Button href="/signal">Try LoopSignal</Button>
-            </div>
+          </Reveal>
+          <Reveal className="mt-10" delay={60}>
+            <DemoCards />
           </Reveal>
         </Container>
       </section>

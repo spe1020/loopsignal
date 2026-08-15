@@ -40,10 +40,26 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5">
               <li>
                 <Link
+                  href="/demo"
+                  className="text-sm text-white/70 transition-colors hover:text-cream"
+                >
+                  Demos
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/signal"
                   className="text-sm text-white/70 transition-colors hover:text-cream"
                 >
                   LoopSignal
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/know"
+                  className="text-sm text-white/70 transition-colors hover:text-cream"
+                >
+                  LoopKnow
                 </Link>
               </li>
               <li>

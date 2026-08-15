@@ -23,6 +23,13 @@ export const analyticsEvents = [
   "signal_analysis_success",
   "signal_analysis_error",
   "signal_loopscan_click",
+  "loopknow_page_view",
+  "loopknow_sample_question",
+  "loopknow_search",
+  "loopknow_document_view",
+  "loopknow_answer_generated",
+  "loopknow_no_answer",
+  "loopknow_loopscan_click",
 ] as const;
 
 export type AnalyticsEvent = (typeof analyticsEvents)[number];
@@ -44,7 +51,9 @@ export type CtaLocation =
   | "about"
   | "how_it_works"
   | "not_found"
-  | "signal";
+  | "signal"
+  | "loopknow"
+  | "demo";
 
 export type SolutionInterest =
   | "supply_chain"
@@ -239,6 +248,62 @@ export function trackSignalAnalysisError(category: SignalErrorCategory) {
 export function trackSignalLoopScanClick(input: { cta_text?: string }) {
   trackEvent("signal_loopscan_click", {
     page: "/signal",
+    cta_text: input.cta_text,
+    destination: "loopscan",
+  });
+}
+
+export type KnowAnswerMeta = {
+  question_category: string;
+  answer_state: string;
+  source_count: number;
+  document_type?: string;
+};
+
+export function trackKnowPageView() {
+  trackEvent("loopknow_page_view", {
+    referring_page: getReferringPage(),
+  });
+}
+
+export function trackKnowSampleQuestion(category: string) {
+  trackEvent("loopknow_sample_question", {
+    question_category: category,
+  });
+}
+
+export function trackKnowSearch(input: { result_count: number; filter: string }) {
+  trackEvent("loopknow_search", {
+    result_count: input.result_count,
+    document_filter: input.filter,
+  });
+}
+
+export function trackKnowDocumentView(documentType: string) {
+  trackEvent("loopknow_document_view", {
+    document_type: documentType,
+  });
+}
+
+export function trackKnowAnswerGenerated(meta: KnowAnswerMeta) {
+  trackEvent("loopknow_answer_generated", {
+    question_category: meta.question_category,
+    answer_state: meta.answer_state,
+    source_count: meta.source_count,
+    document_type: meta.document_type,
+  });
+}
+
+export function trackKnowNoAnswer(category: string) {
+  trackEvent("loopknow_no_answer", {
+    question_category: category,
+    answer_state: "no_answer",
+  });
+}
+
+export function trackKnowLoopScanClick(input: { cta_text?: string }) {
+  trackEvent("loopknow_loopscan_click", {
+    page: "/know",
     cta_text: input.cta_text,
     destination: "loopscan",
   });
