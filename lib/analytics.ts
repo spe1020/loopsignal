@@ -178,9 +178,9 @@ export function trackLoopScanAreaSelected(area: string) {
   trackEvent("loopscan_area_selected", { area: toAreaSlug(area) });
 }
 
-export function trackLoopScanFormSubmit(area: string) {
+export function trackLoopScanFormSubmit(area?: string) {
   trackEvent("loopscan_form_submit", {
-    area: toAreaSlug(area),
+    area: area ? toAreaSlug(area) : undefined,
     ...getUtmParams(),
   });
 }
