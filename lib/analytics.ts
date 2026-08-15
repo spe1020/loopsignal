@@ -17,6 +17,12 @@ export const analyticsEvents = [
   "solution_interest",
   "insight_view",
   "insight_cta_click",
+  "signal_page_view",
+  "signal_sample_run",
+  "signal_upload_start",
+  "signal_analysis_success",
+  "signal_analysis_error",
+  "signal_loopscan_click",
 ] as const;
 
 export type AnalyticsEvent = (typeof analyticsEvents)[number];
@@ -37,7 +43,8 @@ export type CtaLocation =
   | "final_cta"
   | "about"
   | "how_it_works"
-  | "not_found";
+  | "not_found"
+  | "signal";
 
 export type SolutionInterest =
   | "supply_chain"
@@ -58,6 +65,19 @@ export type OperationalArea =
   | "other";
 
 export type FormErrorCategory = "server" | "network";
+
+export type SignalErrorCategory =
+  | "validation"
+  | "size"
+  | "parse"
+  | "server"
+  | "network";
+
+export type SignalAnalysisMeta = {
+  source: "sample" | "upload";
+  row_count_bucket: string;
+  inventory_fields: boolean;
+};
 
 const areaSlugs: Record<string, OperationalArea> = {
   Procurement: "procurement",
@@ -184,6 +204,43 @@ export function trackInsightCtaClick(input: {
     page: input.page ?? window.location.pathname,
     cta_text: input.cta_text,
     destination: input.destination ?? "loopscan",
+  });
+}
+
+export function trackSignalPageView() {
+  trackEvent("signal_page_view", {
+    referring_page: getReferringPage(),
+  });
+}
+
+export function trackSignalSampleRun() {
+  trackEvent("signal_sample_run", { source: "sample" });
+}
+
+export function trackSignalUploadStart() {
+  trackEvent("signal_upload_start", { source: "upload" });
+}
+
+export function trackSignalAnalysisSuccess(meta: SignalAnalysisMeta) {
+  trackEvent("signal_analysis_success", {
+    source: meta.source,
+    row_count_bucket: meta.row_count_bucket,
+    inventory_fields: meta.inventory_fields,
+  });
+}
+
+export function trackSignalAnalysisError(category: SignalErrorCategory) {
+  trackEvent("signal_analysis_error", {
+    error_category: category,
+    page: "/signal",
+  });
+}
+
+export function trackSignalLoopScanClick(input: { cta_text?: string }) {
+  trackEvent("signal_loopscan_click", {
+    page: "/signal",
+    cta_text: input.cta_text,
+    destination: "loopscan",
   });
 }
 

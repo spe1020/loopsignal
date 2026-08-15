@@ -1,6 +1,7 @@
 export const nav = [
   { href: "/", label: "Home" },
   { href: "/solutions", label: "Solutions" },
+  { href: "/signal", label: "Demo" },
   { href: "/how-it-works", label: "How It Works" },
   { href: "/about", label: "About" },
   { href: "/insights", label: "Insights" },
@@ -33,6 +34,7 @@ export const solutions = [
       "Supplier lead-time monitoring",
       "Shortage alerts",
       "Supply reporting",
+      "Open order status",
     ],
   },
   {
@@ -82,6 +84,7 @@ export const solutions = [
       "Supplier knowledge",
       "Maintenance information",
       "Training support",
+      "Work instructions",
     ],
   },
 ] as const;
@@ -177,6 +180,7 @@ export const howItWorks = [
       "APIs and databases",
       "Existing software",
       "Human decision-makers",
+      "Process rules",
     ],
   },
   {

@@ -196,7 +196,32 @@ export default function HomePage() {
         </Container>
       </section>
 
-      <section className="border-y border-line bg-paper py-20 md:py-24">
+      <section className="border-y border-line bg-paper py-16 md:py-20">
+        <Container>
+          <Reveal>
+            <Eyebrow>See it in action</Eyebrow>
+            <h2 className="mt-5 max-w-2xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
+              Find the signal inside an open PO report.
+            </h2>
+            <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
+              LoopSignal analyzes an open purchase-order report and highlights
+              the orders that may need attention first.
+            </p>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-stone">
+              No ERP integration. Use sample data or a sanitized CSV.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-5">
+              <Button href="/signal">Try LoopSignal</Button>
+              <p className="max-w-sm text-[13px] leading-6 text-stone">
+                LoopSignal demonstrates what’s possible. LoopScan finds where it
+                creates value in your operation.
+              </p>
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+
+      <section className="py-20 md:py-24">
         <Container className="grid items-center gap-12 lg:grid-cols-12">
           <Reveal className="lg:col-span-6">
             <Eyebrow>Knowledge systems</Eyebrow>
