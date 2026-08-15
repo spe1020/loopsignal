@@ -2,8 +2,10 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import { BriefConsole } from "@/components/brief/BriefConsole";
+import { DemoFlow } from "@/components/DemoCards";
 import { Container, Eyebrow } from "@/components/Reveal";
 import { TrackedLink } from "@/components/TrackedLink";
+import { demos } from "@/lib/content";
 import {
   trackBriefActionSelect,
   trackBriefActionStatusChange,
@@ -29,6 +31,8 @@ const marketingPrimary =
   "inline-flex items-center justify-center rounded-[2px] bg-copper px-6 py-3.5 text-[14px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark";
 const marketingSecondary =
   "inline-flex items-center justify-center rounded-[2px] border border-ink/20 bg-transparent px-5 py-3 text-[13px] font-medium tracking-[0.02em] text-ink transition-colors hover:border-ink hover:bg-ink hover:text-cream";
+
+const briefDemo = demos.find((item) => item.href === "/brief")!;
 
 export function BriefDemo() {
   const demoRef = useRef<HTMLElement>(null);
@@ -106,19 +110,16 @@ export function BriefDemo() {
   return (
     <>
       <section className="relative overflow-hidden">
-        <Container className="relative pt-12 pb-10 md:pt-16 md:pb-12">
+        <Container className="relative pt-5 pb-4 md:pt-10 md:pb-8">
           <Eyebrow>LoopBrief</Eyebrow>
-          <h1 className="mt-4 max-w-3xl text-[36px] leading-[1.08] font-medium tracking-[-0.035em] text-ink sm:text-5xl md:text-[56px]">
+          <h1 className="mt-2 max-w-3xl text-[24px] leading-[1.12] font-medium tracking-[-0.035em] text-ink sm:text-4xl md:text-[56px] md:leading-[1.08]">
             Start the day with what matters.
           </h1>
-          <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite md:text-[18px]">
-            LoopBrief turns daily operational information into priorities,
-            ownership, reporting, and action.
+          <p className="mt-3 max-w-2xl text-[15px] leading-6 text-graphite md:text-[18px] md:leading-7">
+            {briefDemo.description}
           </p>
-          <p className="mt-3 max-w-2xl text-[14px] leading-6 text-graphite">
-            Less time assembling the meeting. More time solving the problems.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <DemoFlow steps={briefDemo.flow} className="mt-3" />
+          <div className="mt-5 hidden flex-wrap items-center gap-3 sm:flex">
             <a
               href="#demo"
               onClick={(event) => {
@@ -128,7 +129,7 @@ export function BriefDemo() {
               }}
               className={marketingPrimary}
             >
-              Run Today&apos;s Brief
+              Run it again
             </a>
             <button
               type="button"
@@ -138,13 +139,13 @@ export function BriefDemo() {
               }}
               className={marketingSecondary}
             >
-              Use Sample Data
+              Reset to sample
             </button>
           </div>
         </Container>
       </section>
 
-      <section ref={demoRef} id="demo" className="bg-console py-8 md:py-10">
+      <section ref={demoRef} id="demo" className="bg-console py-3 md:py-8">
         <div className="mx-auto w-full max-w-[1200px] px-6 lg:px-8">
           <BriefConsole
             onRun={onRun}

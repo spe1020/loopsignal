@@ -1,10 +1,10 @@
-import { buildSampleCsv, todayStamp } from "@/lib/signal";
+import { SAMPLE_AS_OF_DATE, buildSampleCsv } from "@/lib/signal";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const csv = buildSampleCsv(todayStamp());
+  const csv = buildSampleCsv(SAMPLE_AS_OF_DATE);
 
   return new Response(csv, {
     headers: {

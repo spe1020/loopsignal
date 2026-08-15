@@ -1,3 +1,4 @@
+import { SAMPLE_AS_OF_DATE } from "@/lib/sample-as-of";
 import type { RfqScenario, SupplierQuote } from "./types";
 
 export const defaultDemand = 12000;
@@ -12,7 +13,7 @@ export const rfqScenario: RfqScenario = {
   qualityTarget: "Standard production requirement",
   destination: "Northfield Assembly Plant (fictional domestic plant)",
   minCapacity: defaultDemand,
-  quoteAsOf: "2026-08-15",
+  quoteAsOf: SAMPLE_AS_OF_DATE,
 };
 
 export const supplierQuotes: SupplierQuote[] = [

@@ -1,4 +1,5 @@
-import { analyzeBrief, todayStamp } from "./engine";
+import { SAMPLE_AS_OF_DATE } from "@/lib/sample-as-of";
+import { analyzeBrief } from "./engine";
 import { buildExecutiveSummary } from "./interpret";
 import { getSampleSnapshot } from "./sample";
 import type { BriefResult } from "./types";
@@ -103,7 +104,9 @@ export {
 
 export const SAMPLE_SCENARIO = "northfield_day_shift";
 
-export function runSampleBrief(briefDate = todayStamp()): BriefResult {
+export { SAMPLE_AS_OF_DATE, formatSampleAsOf } from "@/lib/sample-as-of";
+
+export function runSampleBrief(briefDate = SAMPLE_AS_OF_DATE): BriefResult {
   const analyzed = analyzeBrief(getSampleSnapshot(), briefDate);
   return {
     ...analyzed,

@@ -9,9 +9,11 @@ import {
   StatusBadge,
   coverageCopy,
 } from "@/components/know/StatusBadge";
+import { SampleDataCaption } from "@/components/SampleDataCaption";
 import {
   answerQuestion,
   getDocument,
+  getSampleAnswer,
   sampleQuestions,
   searchDocuments,
 } from "@/lib/know";
@@ -51,14 +53,18 @@ function trackAnswer(answer: KnowAnswer) {
   });
 }
 
+const sampleAnswer = getSampleAnswer();
+
 export function KnowConsole() {
   const [input, setInput] = useState("");
-  const [answer, setAnswer] = useState<KnowAnswer | null>(null);
-  const [selectedId, setSelectedId] = useState<string | undefined>();
+  const [answer, setAnswer] = useState<KnowAnswer | null>(sampleAnswer);
+  const [selectedId, setSelectedId] = useState<string | undefined>(
+    sampleAnswer.primaryDocumentId,
+  );
   const [filter, setFilter] = useState<DocumentFilter>("all");
   const [libraryQuery, setLibraryQuery] = useState("");
   const [libraryOpen, setLibraryOpen] = useState(false);
-  const [samplesOpen, setSamplesOpen] = useState(true);
+  const [samplesOpen, setSamplesOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
   const askRef = useRef<HTMLTextAreaElement>(null);
   const lastSearch = useRef("");
@@ -124,12 +130,12 @@ export function KnowConsole() {
 
   function reset() {
     setInput("");
-    setAnswer(null);
-    setSelectedId(undefined);
+    setAnswer(sampleAnswer);
+    setSelectedId(sampleAnswer.primaryDocumentId);
     setFilter("all");
     setLibraryQuery("");
     setLibraryOpen(false);
-    setSamplesOpen(true);
+    setSamplesOpen(false);
     lastSearch.current = "";
   }
 
@@ -152,6 +158,7 @@ export function KnowConsole() {
           <p className="mt-1 font-mono text-[10px] tracking-[0.08em] text-stone">
             DEMO · FICTIONAL SAMPLE DOCUMENTS
           </p>
+          <SampleDataCaption className="mt-1" />
         </div>
         <div className="flex flex-wrap gap-2">
           <button
@@ -180,7 +187,7 @@ export function KnowConsole() {
         </div>
       </header>
 
-      <p className="border-b border-[#d9d9d2] bg-[#fafaf7] px-4 py-2 text-[12px] leading-5 text-graphite md:px-5">
+      <p className="line-clamp-2 border-b border-[#d9d9d2] bg-[#fafaf7] px-4 py-2 text-[12px] leading-5 text-graphite md:line-clamp-none md:px-5">
         <span className="font-medium text-ink">Public demo. </span>
         Do not upload confidential, proprietary, export-controlled, personal, or
         sensitive company documents. This demo uses fictional manufacturing
@@ -295,8 +302,24 @@ function AskWorkspace({
   onAction: (documentId?: string) => void;
 }) {
   return (
-    <div className="flex h-full flex-col px-4 py-4 md:px-5">
-      <h2 className="text-[15px] font-medium tracking-tight text-ink">
+    <div className="flex h-full flex-col px-4 py-3 md:px-5 md:py-4">
+      {answer ? (
+        <div>
+          <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-stone">
+            Question
+          </p>
+          <p className="mt-1 text-[14px] leading-6 text-ink">{answer.question}</p>
+          <AnswerReport
+            answer={answer}
+            onSelectSource={onSelectSource}
+            onAction={onAction}
+          />
+        </div>
+      ) : (
+        <EmptyState />
+      )}
+
+      <h2 className="mt-5 text-[15px] font-medium tracking-tight text-ink">
         Ask LoopKnow
       </h2>
       <textarea
@@ -309,7 +332,7 @@ function AskWorkspace({
             onAsk();
           }
         }}
-        rows={3}
+        rows={2}
         placeholder="Ask about a process, specification, quality issue, setup, maintenance procedure, or document revision..."
         className="mt-3 w-full resize-none border border-[#c8c8c0] bg-white px-3 py-3 text-[14px] leading-6 text-ink outline-none placeholder:text-stone focus:border-ink"
       />
@@ -322,7 +345,7 @@ function AskWorkspace({
         </p>
       </div>
 
-      {samplesOpen || !answer ? (
+      {samplesOpen ? (
         <div className="mt-4">
           <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-stone">
             Sample questions
@@ -342,16 +365,6 @@ function AskWorkspace({
           </ul>
         </div>
       ) : null}
-
-      {answer ? (
-        <AnswerReport
-          answer={answer}
-          onSelectSource={onSelectSource}
-          onAction={onAction}
-        />
-      ) : (
-        <EmptyState />
-      )}
     </div>
   );
 }
@@ -380,7 +393,7 @@ function AnswerReport({
   const coverage = coverageCopy[answer.coverage];
 
   return (
-    <div className="mt-5 border border-[#d9d9d2] bg-white">
+    <div className="mt-3 border border-[#d9d9d2] bg-white">
       <div className="border-b border-[#d9d9d2] px-4 py-3">
         <div className="flex flex-wrap items-center gap-2">
           <CoverageBadge coverage={answer.coverage} />

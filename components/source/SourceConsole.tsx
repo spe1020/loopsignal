@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { SampleDataCaption } from "@/components/SampleDataCaption";
 import {
   ActionPanels,
   ComparisonTable,
@@ -131,13 +132,14 @@ export function SourceConsole({
           <p className="mt-1 font-mono text-[10px] tracking-[0.08em] text-stone">
             DEMO · FICTIONAL SAMPLE QUOTES
           </p>
+          <SampleDataCaption asOf={result.rfq.quoteAsOf} className="mt-1" />
         </div>
         <div className="flex flex-wrap gap-2">
           <button type="button" onClick={reset} className={consoleBtn}>
             Reset Demo
           </button>
           <button type="button" onClick={runSample} className={consoleBtnSolid}>
-            Sample RFQ
+            Reset to sample RFQ
           </button>
           <button
             type="button"
