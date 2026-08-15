@@ -1,4 +1,7 @@
-/** LoopWorks brand tokens and loop-mark geometry. */
+/** LoopSignal brand tokens and loop-mark geometry.
+ * The loop represents continuous improvement.
+ * The orange point represents the signal that creates action.
+ */
 
 export const brand = {
   orange: "#E4571E",

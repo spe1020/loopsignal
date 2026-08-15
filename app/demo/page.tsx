@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
 import { DemoCards } from "@/components/DemoCards";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
+import { demoNote, demoPhilosophy } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Demos",
   description:
-    "See LoopWorks in action: LoopSignal for supply exceptions, LoopKnow for manufacturing knowledge, LoopSource for sourcing decisions, and LoopBrief for daily operations.",
+    "Working examples of how LoopSignal applies process improvement, connected information, automation, and decision support to manufacturing workflows — LoopSupply, LoopKnow, LoopSource, and LoopBrief.",
   alternates: { canonical: "/demo" },
   openGraph: {
     title: "Demos",
     description:
-      "Working examples of how LoopWorks turns existing operational information into something a team can use.",
+      "Examples of what can be built around your operation — not fixed systems every manufacturer is expected to adopt.",
     url: "/demo",
   },
 };
@@ -22,16 +23,40 @@ export default function DemoPage() {
         <Reveal>
           <Eyebrow>Demos</Eyebrow>
           <h1 className="mt-5 max-w-3xl text-4xl font-medium tracking-[-0.035em] text-ink md:text-6xl">
-            See LoopWorks in action.
+            See what a better operational loop can look like.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-graphite">
-            These are working examples of the LoopWorks approach — not separate
-            products you have to buy. Each demo uses fictional manufacturing
-            data.
+            These demos are working examples of how process improvement,
+            connected information, automation, and decision support can be
+            applied to common manufacturing workflows.
           </p>
         </Reveal>
         <Reveal className="mt-12" delay={60}>
-          <DemoCards />
+          <DemoCards variant="showcase" />
+        </Reveal>
+        <Reveal className="mt-16 border-t border-line pt-16" delay={80}>
+          <h2 className="max-w-2xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
+            Different workflows. Same philosophy.
+          </h2>
+          <ul className="mt-10 grid gap-px border border-line bg-line sm:grid-cols-2">
+            {demoPhilosophy.map((item) => (
+              <li key={item.name} className="bg-cream p-6 md:p-7">
+                <p className="text-[12px] font-medium tracking-[0.04em] text-copper uppercase">
+                  {item.name}
+                </p>
+                <p className="mt-3 text-lg font-medium tracking-tight text-ink">
+                  {item.line}
+                </p>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-8 max-w-3xl text-[16px] leading-7 text-graphite">
+            LoopSignal adapts the approach to the process, systems, and needs of
+            each manufacturer.
+          </p>
+          <p className="mt-4 max-w-3xl text-[16px] leading-7 text-graphite">
+            {demoNote}
+          </p>
         </Reveal>
       </Container>
     </section>

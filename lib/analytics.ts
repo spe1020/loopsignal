@@ -75,7 +75,7 @@ export type CtaLocation =
   | "about"
   | "how_it_works"
   | "not_found"
-  | "signal"
+  | "loopsupply"
   | "loopknow"
   | "loopsource"
   | "loopbrief"
@@ -145,7 +145,7 @@ export function trackEvent(event: AnalyticsEvent, props?: AnalyticsProps) {
 
   const data = compact(props);
   window.dispatchEvent(
-    new CustomEvent("loopworks:analytics", { detail: { event, data } }),
+    new CustomEvent("loopsignal:analytics", { detail: { event, data } }),
   );
   vercelTrack(event, data);
 }
@@ -267,13 +267,13 @@ export function trackSignalAnalysisSuccess(meta: SignalAnalysisMeta) {
 export function trackSignalAnalysisError(category: SignalErrorCategory) {
   trackEvent("signal_analysis_error", {
     error_category: category,
-    page: "/signal",
+    page: "/supply",
   });
 }
 
 export function trackSignalLoopScanClick(input: { cta_text?: string }) {
   trackEvent("signal_loopscan_click", {
-    page: "/signal",
+    page: "/supply",
     cta_text: input.cta_text,
     destination: "loopscan",
   });

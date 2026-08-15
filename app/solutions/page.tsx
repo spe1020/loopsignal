@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { DemoCards } from "@/components/DemoCards";
+import Link from "next/link";
+import { CommercialPath } from "@/components/CommercialPath";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
-import { LoopScanOffer } from "@/components/LoopScanOffer";
 import { SolutionInterestLink } from "@/components/SolutionInterestLink";
 import { solutions } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Solutions",
   description:
-    "Supply chain intelligence, procurement automation, manufacturing intelligence, and knowledge systems — plus LoopScan, LoopBuild, and LoopOps.",
+    "Process improvement, systems integration, and practical automation for supply chain, procurement, plant operations, and manufacturing knowledge — plus LoopScan, LoopBuild, and LoopOps.",
   alternates: { canonical: "/solutions" },
   openGraph: {
     title: "Solutions",
     description:
-      "Supply chain intelligence, procurement automation, manufacturing intelligence, and knowledge systems — plus LoopScan, LoopBuild, and LoopOps.",
+      "Process improvement, systems integration, and practical automation for supply chain, procurement, plant operations, and manufacturing knowledge — plus LoopScan, LoopBuild, and LoopOps.",
     url: "/solutions",
   },
 };
@@ -46,13 +46,13 @@ export default function SolutionsPage() {
           <Reveal>
             <Eyebrow>Solutions</Eyebrow>
             <h1 className="mt-5 max-w-3xl text-4xl font-medium tracking-[-0.035em] text-ink md:text-6xl">
-              Systems that make operational work faster, clearer, and more
-              reliable.
+              Operational problems LoopSignal can help solve.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-graphite">
-              AI is a tool, not the headline. We build around the work:
-              shortages, follow-up, reporting, search, and the decisions that
-              currently wait on all of it.
+              We start with the work: shortages, purchasing, plant operations,
+              and knowledge. Each area has a working demo that shows what a
+              better loop can look like — not a fixed product every manufacturer
+              is expected to adopt.
             </p>
           </Reveal>
         </Container>
@@ -100,12 +100,18 @@ export default function SolutionsPage() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-8">
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+                <Link
+                  href={solution.demoHref}
+                  className="text-[13px] font-medium tracking-[0.02em] text-copper hover:text-copper-dark"
+                >
+                  See it in action → {solution.demoName}
+                </Link>
                 <SolutionInterestLink
                   href="/loopscan"
                   solution={solution.interest}
                   interactionType="cta_click"
-                  className="text-[13px] font-medium tracking-[0.02em] text-copper hover:text-copper-dark"
+                  className="text-[13px] font-medium tracking-[0.02em] text-stone hover:text-ink"
                 >
                   Find a loop in this area →
                 </SolutionInterestLink>
@@ -115,26 +121,7 @@ export default function SolutionsPage() {
         </section>
       ))}
 
-      <section className="border-t border-line py-16 md:py-20">
-        <Container>
-          <Reveal>
-            <Eyebrow>See it in action</Eyebrow>
-            <h2 className="mt-5 max-w-2xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[36px]">
-              See LoopWorks in action.
-            </h2>
-            <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-              Working examples of supply-risk, manufacturing-knowledge,
-              sourcing-decision, and daily-operations workflows — not separate
-              products you have to buy.
-            </p>
-          </Reveal>
-          <Reveal className="mt-10" delay={60}>
-            <DemoCards />
-          </Reveal>
-        </Container>
-      </section>
-
-      <LoopScanOffer ctaLocation="solutions" />
+      <CommercialPath ctaLocation="solutions" showLoopBuildDetail={false} />
     </>
   );
 }

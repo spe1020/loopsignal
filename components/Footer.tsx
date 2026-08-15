@@ -10,8 +10,9 @@ export function Footer() {
         <div className="lg:col-span-5">
           <Logo inverted showTagline />
           <p className="mt-5 max-w-sm text-sm leading-6 text-white/45">
-            LoopWorks helps manufacturers improve how work gets done using
-            process improvement, AI, and automation.
+            LoopSignal helps manufacturers improve processes, connect
+            disconnected systems, and automate the work that should not
+            require manual effort.
           </p>
         </div>
 
@@ -48,10 +49,10 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/signal"
+                  href="/supply"
                   className="text-sm text-white/70 transition-colors hover:text-cream"
                 >
-                  LoopSignal
+                  LoopSupply
                 </Link>
               </li>
               <li>
@@ -113,20 +114,18 @@ export function Footer() {
               Approach
             </p>
             <p className="mt-4 text-sm leading-6 text-white/55">
-              See.
+              LoopScan.
               <br />
-              Simplify.
+              LoopBuild.
               <br />
-              Build.
-              <br />
-              Learn.
+              LoopOps.
             </p>
           </div>
         </div>
       </div>
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-[1120px] px-6 py-6 text-xs text-white/35 lg:px-8">
-          <p>© {new Date().getFullYear()} LoopWorks. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} LoopSignal. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -62,7 +62,7 @@ export const articles: Article[] = [
     dek: "Manufacturers should not start by asking where they can use AI. Start with the work, find the friction, and improve the process first.",
     excerpt:
       "Manufacturers do not need to start with an AI strategy. Start with the work, find the friction, and improve the process first.",
-    seoTitle: "AI Is Not Your Manufacturing Strategy | LoopWorks",
+    seoTitle: "AI Is Not Your Manufacturing Strategy | LoopSignal",
     seoDescription:
       "Manufacturers should not start by asking where to use AI. Start with the work, find operational friction, simplify the process, and then decide where AI or automation creates value.",
     relatedSlugs: [

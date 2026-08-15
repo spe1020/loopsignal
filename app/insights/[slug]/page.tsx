@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!article) return {};
 
   const title =
-    article.seoTitle ?? `${article.title} | LoopWorks`;
+    article.seoTitle ?? `${article.title} | LoopSignal`;
   const description = article.seoDescription ?? article.dek;
   const url = `/insights/${article.slug}`;
 
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       url,
       type: "article",
-      siteName: "LoopWorks",
+      siteName: "LoopSignal",
       locale: "en_US",
       publishedTime: `${article.date}T00:00:00.000Z`,
       authors: [article.author ?? founder.name],
@@ -77,7 +77,7 @@ export default async function ArticlePage({ params }: Props) {
     },
     publisher: {
       "@type": "Organization",
-      name: "LoopWorks",
+      name: "LoopSignal",
       url: siteUrl,
     },
     mainEntityOfPage: canonical,
@@ -176,7 +176,7 @@ export default async function ArticlePage({ params }: Props) {
             <div className="relative h-[88px] w-[72px] shrink-0 overflow-hidden">
               <Image
                 src="/images/gemba.jpg"
-                alt={`${author}, founder of LoopWorks`}
+                alt={`${author}, founder of LoopSignal`}
                 fill
                 className="object-cover"
                 sizes="72px"
@@ -188,15 +188,15 @@ export default async function ArticlePage({ params }: Props) {
             </div>
             <div className="min-w-0">
               <p className="text-[15px] leading-7 text-graphite">
-                {author} is the founder of LoopWorks and a manufacturing and
+                {author} is the founder of LoopSignal and a manufacturing and
                 supply chain leader with experience across procurement,
                 operations, supplier development, production planning,
                 continuous improvement, and manufacturing engineering.
               </p>
               <p className="mt-3 text-[15px] leading-7 text-graphite">
-                LoopWorks helps manufacturers find operational friction and
-                build better systems using process improvement, automation, and
-                AI.
+                LoopSignal is a manufacturing consulting and systems
+                integration company focused on process improvement, automation,
+                and practical AI.
               </p>
               <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[13px] font-medium">
                 <a
@@ -208,7 +208,7 @@ export default async function ArticlePage({ params }: Props) {
                   LinkedIn
                 </a>
                 <Link href="/" className="text-copper hover:text-copper-dark">
-                  LoopWorks
+                  LoopSignal
                 </Link>
               </div>
             </div>

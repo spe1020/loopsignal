@@ -1,8 +1,8 @@
-# LoopWorks
+# LoopSignal
 
-Better systems. Better work.
+Improve the process. Connect the systems.
 
-A B2B website for LoopWorks — process improvement, practical automation, and operational systems for manufacturers.
+A website for LoopSignal — a manufacturing consulting and systems integration company focused on process improvement, automation, and practical AI.
 
 ## Run locally
 
@@ -16,17 +16,20 @@ Open [http://localhost:3000](http://localhost:3000).
 ## Pages
 
 - `/` — Home
-- `/solutions` — Solutions and services
-- `/how-it-works` — See → Simplify → Build → Learn
+- `/solutions` — Operational problems LoopSignal can help solve
+- `/how-it-works` — See → Simplify → Connect → Automate → Measure → Improve
 - `/about` — Company
 - `/insights` — Articles
 - `/loopscan` — LoopScan intake
+- `/demo` — Working examples (LoopSupply, LoopKnow, LoopSource, LoopBrief)
+- `/supply` — LoopSupply demo (`/signal` redirects here)
 
 ## LoopScan leads
 
 The `/loopscan` form submits to Formspree and keeps the on-site confirmation state. Copy `.env.example` to `.env.local` and set:
 
 - `CALENDAR_URL` — optional scheduling link shown after submission
+- `NEXT_PUBLIC_SITE_URL` — canonical site URL for metadata, sitemap, and structured data
 
 ## Stack
 

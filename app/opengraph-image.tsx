@@ -6,10 +6,11 @@ import {
   LOOP_MARK_STROKE_WIDTH,
   LOOP_MARK_VIEWBOX,
 } from "@/lib/brand";
+import { company } from "@/lib/company";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "LoopWorks — Better systems. Better work.";
+export const alt = `${company.name} — ${company.tagline}`;
 
 export default function OpenGraphImage() {
   return new ImageResponse(
@@ -68,7 +69,7 @@ export default function OpenGraphImage() {
                 letterSpacing: -0.6,
               }}
             >
-              LoopWorks
+              {company.name}
             </div>
             <div
               style={{
@@ -79,7 +80,7 @@ export default function OpenGraphImage() {
                 color: brand.gray,
               }}
             >
-              Better systems. Better work.
+              {company.supportingTagline}
             </div>
           </div>
         </div>
@@ -88,25 +89,25 @@ export default function OpenGraphImage() {
             style={{
               display: "flex",
               flexDirection: "column",
-              fontSize: 72,
+              fontSize: 64,
               lineHeight: 1.05,
               letterSpacing: -2,
               fontWeight: 500,
             }}
           >
-            <div style={{ display: "flex" }}>Better systems.</div>
-            <div style={{ display: "flex" }}>Better work.</div>
+            <div style={{ display: "flex" }}>Improve the process.</div>
+            <div style={{ display: "flex" }}>Connect the systems.</div>
           </div>
           <div
             style={{
               display: "flex",
               fontSize: 24,
               color: brand.gray,
-              maxWidth: 720,
+              maxWidth: 780,
             }}
           >
-            Practical systems for manufacturers — process, automation, and AI
-            that serve the work.
+            Manufacturing consulting and systems integration — process
+            improvement, automation, and practical AI.
           </div>
         </div>
       </div>

@@ -6,15 +6,15 @@ import { loopScanIntakeExamples } from "@/lib/content";
 export const metadata: Metadata = {
   title: {
     absolute:
-      "LoopScan | Find Your First Manufacturing AI & Automation Opportunity | LoopWorks",
+      "LoopScan | Find Your First Loop | LoopSignal",
   },
   description:
-    "Tell LoopWorks about a manufacturing process that takes too long, requires repetitive work, or depends on disconnected information. Start with the work and find your first improvement opportunity.",
+    "Tell LoopSignal about a manufacturing process that takes too long, requires repetitive work, or depends on disconnected information. Start with the work and find your first improvement opportunity.",
   openGraph: {
     title:
-      "LoopScan | Find Your First Manufacturing AI & Automation Opportunity | LoopWorks",
+      "LoopScan | Find Your First Loop | LoopSignal",
     description:
-      "Tell LoopWorks about a manufacturing process that takes too long, requires repetitive work, or depends on disconnected information. Start with the work and find your first improvement opportunity.",
+      "Tell LoopSignal about a manufacturing process that takes too long, requires repetitive work, or depends on disconnected information. Start with the work and find your first improvement opportunity.",
     type: "website",
     url: "/loopscan",
   },
@@ -49,17 +49,17 @@ export default function LoopScanPage() {
           <div className="lg:col-span-5">
             <Eyebrow>LoopScan</Eyebrow>
             <h1 className="mt-5 text-4xl font-medium tracking-[-0.035em] text-ink md:text-5xl">
-              Find your first loop.
+              Review the process. Find the friction.
             </h1>
             <p className="mt-6 text-[16px] leading-8 text-graphite">
+              LoopScan is a focused operational review designed to understand
+              how the work happens today, where information or decisions break
+              down, and where improvement could create measurable value.
+            </p>
+            <p className="mt-4 text-[16px] leading-8 text-graphite">
               Tell us about a process that takes too long, requires too much
               manual work, depends on disconnected information, or repeatedly
               creates problems.
-            </p>
-            <p className="mt-4 text-[16px] leading-8 text-graphite">
-              We’ll start with the work, understand the friction, and help
-              determine whether process improvement, automation, or AI can make
-              it better.
             </p>
             <div className="mt-12 hidden lg:block">
               <h2 className="text-xl font-medium tracking-tight text-ink">

@@ -10,7 +10,7 @@ export async function GET() {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
       "Content-Disposition":
-        'attachment; filename="loopsignal-open-po-sample.csv"',
+        'attachment; filename="loopsupply-open-po-sample.csv"',
       "Cache-Control": "no-store",
     },
   });

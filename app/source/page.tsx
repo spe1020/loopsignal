@@ -4,7 +4,7 @@ import { SourceDemo } from "@/components/source/SourceDemo";
 export const metadata: Metadata = {
   title: "LoopSource | Supplier Quote Comparison Demo",
   description:
-    "Compare fictional supplier quotes by landed cost, lead time, commercial terms, and risk — not unit price alone. A LoopWorks sourcing decision demo.",
+    "Compare fictional supplier quotes by landed cost, lead time, commercial terms, and risk — not unit price alone. A LoopSignal sourcing decision demo.",
   alternates: { canonical: "/source" },
   openGraph: {
     title: "LoopSource | Supplier Quote Comparison Demo",

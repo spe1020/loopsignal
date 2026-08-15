@@ -44,6 +44,7 @@ export function Header() {
                 ? pathname === "/"
                 : item.href === "/demo"
                   ? pathname === "/demo" ||
+                    pathname.startsWith("/supply") ||
                     pathname.startsWith("/signal") ||
                     pathname.startsWith("/know") ||
                     pathname.startsWith("/source") ||

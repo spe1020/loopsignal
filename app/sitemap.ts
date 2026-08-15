@@ -10,7 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/about",
     "/insights",
     "/loopscan",
-    "/signal",
+    "/supply",
     "/know",
     "/source",
     "/brief",
