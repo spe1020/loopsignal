@@ -46,6 +46,14 @@ export const analyticsEvents = [
   "loopbrief_action_status_change",
   "loopbrief_copy",
   "loopbrief_loopscan_click",
+  "loopbrief_report_view",
+  "loopbrief_report_copy",
+  "loopbrief_email_preview",
+  "loopbrief_persona_view",
+  "loopbrief_assign",
+  "loopbrief_bot_run",
+  "loopbrief_action_select",
+  "loopbrief_outcome",
 ] as const;
 
 export type AnalyticsEvent = (typeof analyticsEvents)[number];
@@ -402,6 +410,11 @@ export type BriefDemoMeta = {
   owner?: string;
   action_timing?: string;
   meeting_mode?: boolean;
+  report_kind?: string;
+  persona?: string;
+  owner_type?: string;
+  bot_type?: string;
+  outcome?: string;
 };
 
 export function trackBriefPageView() {
@@ -464,6 +477,62 @@ export function trackBriefLoopScanClick(input: { cta_text?: string }) {
     page: "/brief",
     cta_text: input.cta_text,
     destination: "loopscan",
+  });
+}
+
+export function trackBriefReportView(meta: BriefDemoMeta) {
+  trackEvent("loopbrief_report_view", {
+    sample_scenario: meta.sample_scenario,
+    report_kind: meta.report_kind,
+  });
+}
+
+export function trackBriefReportCopy(meta: BriefDemoMeta) {
+  trackEvent("loopbrief_report_copy", {
+    sample_scenario: meta.sample_scenario,
+    report_kind: meta.report_kind,
+  });
+}
+
+export function trackBriefEmailPreview(meta: BriefDemoMeta = {}) {
+  trackEvent("loopbrief_email_preview", {
+    sample_scenario: meta.sample_scenario ?? "northfield_day_shift",
+  });
+}
+
+export function trackBriefPersonaView(meta: BriefDemoMeta) {
+  trackEvent("loopbrief_persona_view", {
+    sample_scenario: meta.sample_scenario,
+    persona: meta.persona,
+  });
+}
+
+export function trackBriefAssign(meta: BriefDemoMeta) {
+  trackEvent("loopbrief_assign", {
+    sample_scenario: meta.sample_scenario,
+    owner_type: meta.owner_type,
+    bot_type: meta.bot_type,
+  });
+}
+
+export function trackBriefBotRun(meta: BriefDemoMeta) {
+  trackEvent("loopbrief_bot_run", {
+    sample_scenario: meta.sample_scenario,
+    bot_type: meta.bot_type,
+  });
+}
+
+export function trackBriefActionSelect(meta: BriefDemoMeta) {
+  trackEvent("loopbrief_action_select", {
+    sample_scenario: meta.sample_scenario,
+    category: meta.category,
+  });
+}
+
+export function trackBriefOutcome(meta: BriefDemoMeta) {
+  trackEvent("loopbrief_outcome", {
+    sample_scenario: meta.sample_scenario,
+    outcome: meta.outcome,
   });
 }
 

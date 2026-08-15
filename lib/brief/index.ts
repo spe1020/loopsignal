@@ -22,23 +22,48 @@ export {
   recommendIssueCopy,
 } from "./interpret";
 export { getSampleSnapshot, sampleSnapshot } from "./sample";
-export type { BriefInterpretationRequest, FutureBriefIngest } from "./ai";
+export {
+  buildExecutiveEmail,
+  buildMyActionsText,
+  buildReport,
+  resolveActions,
+} from "./reports";
+export {
+  EMAIL_SENDING_ENABLED,
+  demoSchedules,
+  executiveGroup,
+} from "./delivery";
+export { botDraft, botPreview, botCapabilities, defaultBotForAction } from "./bots";
+export {
+  accountabilityCounts,
+  actionsForPersona,
+  defaultAccountabilityFilter,
+  filterAccountability,
+  makeStructuralFollowUp,
+} from "./ops";
+export type { BriefInterpretationRequest, FutureBriefIngest, FutureEmailSend } from "./ai";
 export type {
   ActionHorizon,
+  ActionOutcome,
   ActionStatus,
   ActionTiming,
+  BotType,
   BriefAction,
   BriefIssue,
   BriefResult,
   Category,
   ChangeItem,
+  HumanRole,
   MeetingStep,
   Owner,
+  OwnerType,
+  Persona,
   PlantStatus,
   PriorityItem,
   ProductionView,
   QualityView,
   RelatedLink,
+  ReportKind,
   SampleSnapshot,
   ScenarioId,
   Severity,
@@ -46,17 +71,32 @@ export type {
 } from "./types";
 export {
   actionHorizonLabels,
+  actionOutcomes,
   actionStatusLabels,
   actionStatuses,
   actionTimingLabels,
   actionTimings,
+  botControls,
+  botControlLabels,
+  botStatusLabels,
+  botTaskStatuses,
+  botTypeLabels,
+  botTypes,
   categories,
   categoryLabels,
+  humanRoles,
   meetingStepLabels,
   meetingSteps,
+  outcomeLabels,
   owners,
+  ownerTypeLabels,
+  personaLabels,
+  personas,
   plantStatusLabels,
+  priorityTierLabels,
   productionStatusLabels,
+  reportKindLabels,
+  reportKinds,
   severityLabels,
   severityShort,
 } from "./types";

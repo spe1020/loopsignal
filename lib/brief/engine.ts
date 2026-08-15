@@ -1,13 +1,19 @@
 import type {
+  ActionSource,
   ActionTiming,
+  BotControl,
+  BotTaskStatus,
+  BotType,
   BriefAction,
   BriefIssue,
   BriefResult,
   Category,
   CategoryStripItem,
   ChangeItem,
+  HumanRole,
   MaintenanceView,
   Owner,
+  OwnerType,
   PlantStatusView,
   PriorityItem,
   ProductionStatus,
@@ -20,6 +26,7 @@ import type {
 } from "./types";
 import {
   plantStatusLabels,
+  priorityTierFor,
   productionStatusLabels,
   severityShort,
 } from "./types";
@@ -628,15 +635,36 @@ function makeAction(input: {
   id: string;
   issueId: string;
   action: string;
+  title: string;
   owner: Owner;
+  department: Owner;
   category: Category;
   priority: number;
   timing: ActionTiming;
   horizon: BriefAction["horizon"];
   status: BriefAction["status"];
   severity: Severity;
+  ownerType?: OwnerType;
+  assignedRole: HumanRole | "Demo Bot";
+  botType?: BotType;
+  botTask?: string;
+  botControl?: BotControl;
+  botStatus?: BotTaskStatus;
+  source: ActionSource;
+  sourceLabel: string;
+  notes: string;
+  overdue?: boolean;
+  dueAgeLabel?: string;
+  related?: BriefAction["related"];
+  eligibleForBot?: boolean;
 }): BriefAction {
-  return input;
+  return {
+    ownerType: "human",
+    overdue: false,
+    eligibleForBot: false,
+    priorityTier: priorityTierFor(input.priority),
+    ...input,
+  };
 }
 
 function buildActions(
@@ -660,14 +688,22 @@ function buildActions(
       makeAction({
         id: "act-conveyor-verify",
         issueId: "mnt-conveyor",
+        title: "Verify Line 2 conveyor repair",
         action: conveyor.record.immediateAction,
         owner: "Maintenance",
+        department: "Maintenance",
+        assignedRole: "Maintenance Technician",
         category: "maintenance",
         priority: 1,
         timing: "now",
         horizon: "immediate",
         status: "in_progress",
         severity: conveyor.severity,
+        source: "loopbrief_maintenance",
+        sourceLabel: "LoopBrief — Production Exception",
+        notes: "Temporary repair is in place. Confirm it holds through the current run.",
+        eligibleForBot: true,
+        botControl: "read_only_analysis",
       }),
     );
   }
@@ -677,14 +713,20 @@ function buildActions(
       makeAction({
         id: "act-asm2-recovery",
         issueId: "prod-asm2",
+        title: "Confirm Line 2 recovery plan",
         action: line2.record.recommendedAction,
         owner: "Operations",
+        department: "Operations",
+        assignedRole: "Operations Supervisor",
         category: "production",
         priority: 1,
         timing: "before_next_shift",
         horizon: "immediate",
         status: "open",
         severity: line2.severity,
+        source: "loopbrief_production",
+        sourceLabel: "LoopBrief — Production Exception",
+        notes: "140 units below plan. Do not claim recovery unless a plan is agreed.",
       }),
     );
   }
@@ -694,26 +736,87 @@ function buildActions(
       makeAction({
         id: "act-housing-contain",
         issueId: "qty-housing-finish",
+        title: "Maintain housing containment",
         action: housing.record.immediateAction,
         owner: "Quality",
+        department: "Quality",
+        assignedRole: "Quality Engineer",
         category: "quality",
         priority: 2,
         timing: "now",
         horizon: "immediate",
         status: "in_progress",
         severity: housing.severity,
+        source: "loopbrief_quality",
+        sourceLabel: "LoopBrief — Quality Exception",
+        notes: "100% visual inspection remains in place until root cause is confirmed.",
+      }),
+      makeAction({
+        id: "act-housing-verify",
+        issueId: "qty-housing-finish",
+        title: "Containment verification",
+        action: "Verify containment held through the previous shift and document the result.",
+        owner: "Quality",
+        department: "Quality",
+        assignedRole: "Quality Engineer",
+        category: "quality",
+        priority: 2,
+        timing: "now",
+        horizon: "immediate",
+        status: "open",
+        severity: "red",
+        overdue: true,
+        dueAgeLabel: "Yesterday",
+        source: "loopbrief_quality",
+        sourceLabel: "LoopBrief — Quality Exception",
+        notes: "Verification was due on the prior shift and remains open.",
       }),
       makeAction({
         id: "act-housing-root-cause",
         issueId: "qty-housing-finish",
+        title: "Review mold and process parameters",
         action: housing.record.structuralAction,
         owner: "Engineering",
+        department: "Engineering",
+        assignedRole: "Manufacturing Engineer",
         category: "quality",
         priority: 2,
         timing: "this_week",
         horizon: "structural",
         status: "open",
         severity: "blue",
+        source: "loopbrief_quality",
+        sourceLabel: "LoopBrief — Quality Exception",
+        notes: "Structural follow-up after containment is stable.",
+        eligibleForBot: true,
+        botControl: "read_only_analysis",
+        related: { product: "know", label: "Ask LoopKnow", href: "/know" },
+      }),
+      makeAction({
+        id: "act-housing-history",
+        issueId: "qty-housing-finish",
+        title: "Find previous corrective action",
+        action: "Search prior Molded Housing surface-finish corrective actions and return cited history.",
+        owner: "Quality",
+        department: "Quality",
+        assignedRole: "Demo Bot",
+        ownerType: "bot",
+        botType: "knowledge",
+        botTask:
+          "Search LoopKnow for previous surface-finish corrective actions and return cited results to Quality.",
+        botControl: "read_only_analysis",
+        botStatus: "queued",
+        category: "quality",
+        priority: 2,
+        timing: "today",
+        horizon: "immediate",
+        status: "open",
+        severity: "blue",
+        source: "loopknow",
+        sourceLabel: "LoopKnow — Quality History",
+        notes: "Demo Bot. No document system is queried until a person runs the simulation.",
+        eligibleForBot: true,
+        related: { product: "know", label: "Ask LoopKnow", href: "/know" },
       }),
     );
   }
@@ -723,26 +826,44 @@ function buildActions(
       makeAction({
         id: "act-fastener-confirm",
         issueId: "sup-fastener",
+        title: "Confirm fastener shipment",
         action: fastener.record.immediateAction,
         owner: "Buyer",
+        department: "Buyer",
+        assignedRole: "Buyer",
         category: "supply",
         priority: 3,
         timing: "today",
         horizon: "immediate",
         status: "open",
         severity: fastener.riskLevel,
+        source: "loopsignal",
+        sourceLabel: "LoopSignal — Supply Risk",
+        notes: "Coverage is 2.8 days with replenishment expected in 4 days.",
+        eligibleForBot: true,
+        botControl: "draft_only",
+        related: { product: "signal", label: "Open in LoopSignal", href: "/signal" },
       }),
       makeAction({
         id: "act-fastener-source",
         issueId: "sup-fastener",
+        title: "Evaluate alternate fastener source",
         action: fastener.record.structuralAction,
         owner: "Supply Chain",
+        department: "Supply Chain",
+        assignedRole: "Supply Chain Manager",
         category: "supply",
         priority: 3,
         timing: "longer_term",
         horizon: "structural",
         status: "open",
         severity: "blue",
+        source: "loopsource",
+        sourceLabel: "LoopSource — Sourcing Decision",
+        notes: "Second-source review only. No award or RFQ is issued from this demo.",
+        eligibleForBot: true,
+        botControl: "read_only_analysis",
+        related: { product: "source", label: "Open LoopSource", href: "/source" },
       }),
     );
   }
@@ -752,14 +873,20 @@ function buildActions(
       makeAction({
         id: "act-conveyor-replace",
         issueId: "mnt-conveyor",
+        title: "Replace worn conveyor drive",
         action: conveyor.record.structuralAction,
         owner: "Maintenance",
+        department: "Maintenance",
+        assignedRole: "Maintenance Technician",
         category: "maintenance",
         priority: 4,
         timing: "this_week",
         horizon: "structural",
         status: "open",
         severity: "blue",
+        source: "loopbrief_maintenance",
+        sourceLabel: "LoopBrief — Production Exception",
+        notes: "Permanent repair is scheduled after second shift.",
       }),
     );
   }
@@ -769,14 +896,50 @@ function buildActions(
       makeAction({
         id: "act-resin-confirm",
         issueId: "sup-resin",
+        title: "Watch housing resin coverage",
         action: resin.record.immediateAction,
         owner: "Supply Chain",
+        department: "Supply Chain",
+        assignedRole: "Demo Bot",
+        ownerType: "bot",
+        botType: "monitoring",
+        botTask: "Watch resin days of supply and flag if coverage falls below 3.0 days.",
+        botControl: "read_only_analysis",
+        botStatus: "queued",
         category: "supply",
         priority: 5,
         timing: "today",
         horizon: "immediate",
         status: "monitoring",
         severity: resin.riskLevel,
+        source: "loopbrief_supply",
+        sourceLabel: "LoopBrief — Supply Exception",
+        notes: "Demo Bot. Monitoring is simulated locally and does not change inventory systems.",
+        eligibleForBot: true,
+      }),
+    );
+  }
+
+  const pack = production.find((row) => row.record.id === "prod-pack");
+  if (pack) {
+    actions.push(
+      makeAction({
+        id: "act-pack-hold",
+        issueId: "prod-pack",
+        title: "Hold packaging sequence",
+        action: pack.record.recommendedAction,
+        owner: "Operations",
+        department: "Operations",
+        assignedRole: "Operations Supervisor",
+        category: "production",
+        priority: 5,
+        timing: "today",
+        horizon: "immediate",
+        status: "complete",
+        severity: "green",
+        source: "loopbrief_production",
+        sourceLabel: "LoopBrief — Production Exception",
+        notes: "Packaging is on plan. No further action required today.",
       }),
     );
   }

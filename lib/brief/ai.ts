@@ -9,7 +9,7 @@
  * shape.
  *
  * Operational data → deterministic exception engine → structured issues
- * → optional AI synthesis → management brief
+ * → optional AI synthesis → management brief / email template
  */
 export type BriefInterpretationRequest = {
   scenarioId: string;
@@ -30,4 +30,10 @@ export type BriefInterpretationRequest = {
 export type FutureBriefIngest = {
   format: "production_csv" | "downtime" | "quality" | "supply" | "maintenance" | "erp_mes";
   recordCount: number;
+};
+
+export type FutureEmailSend = {
+  groupId: string;
+  template: "executive_brief" | "department_brief";
+  reportKind: string;
 };
