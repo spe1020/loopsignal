@@ -2,6 +2,7 @@
 
 export const company = {
   name: "LoopSignal",
+  contactEmail: "hello@loopsignal.com",
   tagline: "Improve the process. Connect the systems.",
   supportingTagline: "Find the signal. Close the loop.",
   description:
