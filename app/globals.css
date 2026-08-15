@@ -11,6 +11,16 @@
   --copper: #e4571e;
   --copper-dark: #c44a18;
   --copper-soft: #f6e3da;
+  --risk-critical: #b42318;
+  --risk-critical-bg: #fdecea;
+  --risk-amber: #b45309;
+  --risk-amber-bg: #fef4e4;
+  --risk-confirm: #1d4e89;
+  --risk-confirm-bg: #e8f1f8;
+  --risk-track: #177245;
+  --risk-track-bg: #e7f5ec;
+  --console: #e7e7e2;
+  --console-surface: #f5f5f2;
 }
 
 @theme inline {
@@ -24,6 +34,16 @@
   --color-copper: var(--copper);
   --color-copper-dark: var(--copper-dark);
   --color-copper-soft: var(--copper-soft);
+  --color-risk-critical: var(--risk-critical);
+  --color-risk-critical-bg: var(--risk-critical-bg);
+  --color-risk-amber: var(--risk-amber);
+  --color-risk-amber-bg: var(--risk-amber-bg);
+  --color-risk-confirm: var(--risk-confirm);
+  --color-risk-confirm-bg: var(--risk-confirm-bg);
+  --color-risk-track: var(--risk-track);
+  --color-risk-track-bg: var(--risk-track-bg);
+  --color-console: var(--console);
+  --color-console-surface: var(--console-surface);
   --font-sans: var(--font-ibm-sans);
   --font-serif: var(--font-ibm-serif);
 }

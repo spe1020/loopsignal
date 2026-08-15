@@ -39,6 +39,14 @@ export function Footer() {
             </p>
             <ul className="mt-4 space-y-2.5">
               <li>
+                <Link
+                  href="/signal"
+                  className="text-sm text-white/70 transition-colors hover:text-cream"
+                >
+                  LoopSignal
+                </Link>
+              </li>
+              <li>
                 <TrackedLink
                   href="/loopscan"
                   location="footer"
