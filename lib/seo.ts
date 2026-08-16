@@ -72,7 +72,7 @@ export const routeMeta = {
     path: "/loopscan",
     title: "LoopScan",
     description:
-      "Tell LoopSignal about a process that takes too long, needs repetitive work, or depends on disconnected information.",
+      "LoopScan: $7,500, two days on site, findings in 10 business days. An on-site review of how a process actually runs, with an unconditional guarantee.",
   },
   demo: {
     path: "/demo",

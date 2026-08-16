@@ -134,14 +134,7 @@ export default function SecurityPage() {
           </div>
 
           <p className="text-[16px] leading-8 text-graphite">
-            Questions:{" "}
-            <a
-              href={`mailto:${company.contactEmail}`}
-              className="text-copper hover:text-copper-dark"
-            >
-              {company.contactEmail}
-            </a>
-            .
+            Questions: {company.contactEmail}.
           </p>
         </div>
       </Container>

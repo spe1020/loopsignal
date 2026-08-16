@@ -10,6 +10,11 @@ import {
 } from "@/lib/analytics";
 import { getLeadAttribution } from "@/lib/attribution";
 import { company } from "@/lib/company";
+import {
+  cta,
+  loopScanIntents,
+  type LoopScanIntent,
+} from "@/lib/content";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xeajkpoy";
 const PROCESS_MIN_LENGTH = 20;
@@ -18,6 +23,7 @@ const timelines = ["Exploring", "Next quarter", "Active project"] as const;
 
 type Timeline = (typeof timelines)[number];
 type FieldName =
+  | "intent"
   | "process"
   | "name"
   | "role"
@@ -27,6 +33,7 @@ type FieldName =
   | "timeline";
 
 type FormState = {
+  intent: LoopScanIntent;
   process: string;
   name: string;
   role: string;
@@ -39,6 +46,7 @@ type FormState = {
 type FieldErrors = Partial<Record<FieldName, string>>;
 
 const emptyForm: FormState = {
+  intent: "talk",
   process: "",
   name: "",
   role: "",
@@ -49,6 +57,7 @@ const emptyForm: FormState = {
 };
 
 const fieldOrder: FieldName[] = [
+  "intent",
   "process",
   "name",
   "role",
@@ -57,6 +66,27 @@ const fieldOrder: FieldName[] = [
   "systems",
   "timeline",
 ];
+
+const INTENT_EVENT = "loopsignal:loopscan-intent";
+
+function parseIntent(value: string | null | undefined): LoopScanIntent {
+  return value === "book" ? "book" : "talk";
+}
+
+function intentLabel(intent: LoopScanIntent) {
+  return loopScanIntents.find((item) => item.value === intent)?.label ?? "Want to talk through a process";
+}
+
+function writeIntentToUrl(intent: LoopScanIntent, hash?: string) {
+  const url = new URL(window.location.href);
+  url.searchParams.set("intent", intent);
+  if (hash) url.hash = hash;
+  window.history.replaceState(
+    {},
+    "",
+    `${url.pathname}${url.search}${url.hash}`,
+  );
+}
 
 const fieldClass =
   "w-full border bg-cream px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-stone/70 focus:border-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink";
@@ -97,6 +127,11 @@ function validateField(name: FieldName, value: string): string | undefined {
     case "company":
       if (trimmed.length < 2) return "Please enter your company.";
       return undefined;
+    case "intent":
+      if (trimmed !== "book" && trimmed !== "talk") {
+        return "Please choose what brings you here.";
+      }
+      return undefined;
     case "systems":
       return undefined;
     case "timeline":
@@ -118,6 +153,8 @@ function validateForm(form: FormState): FieldErrors {
 
 function formatLeadMessage(form: FormState, extra?: string[]) {
   const lines = [
+    `Intent: ${intentLabel(form.intent)}`,
+    "",
     "What process are we looking at?",
     form.process.trim(),
     "",
@@ -137,12 +174,7 @@ function formatLeadMessage(form: FormState, extra?: string[]) {
 }
 
 function leadSubject(form: FormState) {
-  return `LoopScan — ${form.company.trim()}`;
-}
-
-function mailtoHref(form: FormState) {
-  const body = formatLeadMessage(form);
-  return `mailto:${company.contactEmail}?subject=${encodeURIComponent(leadSubject(form))}&body=${encodeURIComponent(body)}`;
+  return `LoopScan — ${intentLabel(form.intent)} — ${form.company.trim()}`;
 }
 
 function FieldError({ name, message }: { name: FieldName; message?: string }) {
@@ -170,6 +202,26 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
 
   useEffect(() => {
     trackLoopScanPageView();
+  }, []);
+
+  useEffect(() => {
+    function applyIntent(next: LoopScanIntent) {
+      setForm((current) =>
+        current.intent === next ? current : { ...current, intent: next },
+      );
+    }
+
+    applyIntent(
+      parseIntent(new URLSearchParams(window.location.search).get("intent")),
+    );
+
+    function onIntentEvent(event: Event) {
+      const detail = (event as CustomEvent<LoopScanIntent>).detail;
+      applyIntent(parseIntent(detail));
+    }
+
+    window.addEventListener(INTENT_EVENT, onIntentEvent);
+    return () => window.removeEventListener(INTENT_EVENT, onIntentEvent);
   }, []);
 
   useEffect(() => {
@@ -265,6 +317,7 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
           _replyto: form.email.trim(),
           email: form.email.trim(),
           name: form.name.trim(),
+          intent: intentLabel(form.intent),
           message: formatLeadMessage(form, attributionLines),
         }),
       });
@@ -275,7 +328,7 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
 
       if (!response.ok || payload?.ok === false) {
         setFormError(
-          "We couldn’t send that just now. Try again, or email us directly so this doesn’t get lost.",
+          `We couldn’t send that just now. Try again, or email ${company.contactEmail} so this doesn’t get lost.`,
         );
         trackLoopScanFormError({ category: "server" });
         return;
@@ -285,7 +338,7 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
       setSubmitted(true);
     } catch {
       setFormError(
-        "We couldn’t send that just now. Try again, or email us directly so this doesn’t get lost.",
+        `We couldn’t send that just now. Try again, or email ${company.contactEmail} so this doesn’t get lost.`,
       );
       trackLoopScanFormError({ category: "network" });
     } finally {
@@ -414,15 +467,37 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
             >
               Try again
             </button>
-            <a
-              href={mailtoHref(form)}
-              className="inline-flex items-center justify-center rounded-[2px] border border-ink/20 bg-cream px-5 py-2.5 text-[13px] font-medium tracking-[0.02em] text-ink transition-colors hover:border-ink hover:bg-ink hover:text-cream focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
-            >
-              Email us instead
-            </a>
           </div>
         </div>
       ) : null}
+
+      <fieldset className="grid gap-2">
+        <legend className="text-[12px] font-medium text-graphite">
+          What brings you here?
+        </legend>
+        <div className="grid gap-2">
+          {loopScanIntents.map((item) => (
+            <label
+              key={item.value}
+              className="flex cursor-pointer items-start gap-3 border border-line bg-cream px-4 py-3 text-sm text-ink"
+            >
+              <input
+                type="radio"
+                name="intent"
+                value={item.value}
+                checked={form.intent === item.value}
+                onChange={() => {
+                  update("intent", item.value);
+                  writeIntentToUrl(item.value);
+                }}
+                className="mt-0.5 accent-copper"
+              />
+              <span>{item.label}</span>
+            </label>
+          ))}
+        </div>
+        <FieldError name="intent" message={errors.intent} />
+      </fieldset>
 
       <div className="grid gap-2">
         <label
@@ -608,5 +683,40 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
         Start with the problem. We’ll figure out the technology later.
       </p>
     </form>
+  );
+}
+
+export function LoopScanCtas() {
+  function selectIntent(intent: LoopScanIntent) {
+    writeIntentToUrl(intent, "intake");
+    window.dispatchEvent(
+      new CustomEvent<LoopScanIntent>(INTENT_EVENT, { detail: intent }),
+    );
+    document.getElementById("intake")?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  return (
+    <div className="mt-6 flex flex-wrap items-center gap-4">
+      <a
+        href="/loopscan?intent=book#intake"
+        onClick={(event) => {
+          event.preventDefault();
+          selectIntent("book");
+        }}
+        className="inline-flex items-center justify-center rounded-[2px] bg-copper px-5 py-3 text-[13px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark"
+      >
+        {cta.startLoopScan.label}
+      </a>
+      <a
+        href="/loopscan?intent=talk#intake"
+        onClick={(event) => {
+          event.preventDefault();
+          selectIntent("talk");
+        }}
+        className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
+      >
+        {cta.talkThroughProcess.label} →
+      </a>
+    </div>
   );
 }
