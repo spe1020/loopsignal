@@ -15,6 +15,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/source",
     "/brief",
     "/demo",
+    "/security",
+    "/privacy",
   ].map((path) => ({
     url: absoluteUrl(path),
     lastModified: new Date(),

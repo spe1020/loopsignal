@@ -12,13 +12,12 @@ import {
   trackSignalLoopScanClick,
   trackSignalPageView,
   trackSignalSampleRun,
-  trackSignalUploadStart,
   type SignalErrorCategory,
 } from "@/lib/analytics";
-import { demos } from "@/lib/content";
+import { cta, demos } from "@/lib/content";
 import { analyzeSample } from "@/lib/signal";
 import { formatIsoDate } from "@/lib/signal/dates";
-import { SIGNAL_LIMITS, type SignalAnalysisResult } from "@/lib/signal/types";
+import type { SignalAnalysisResult } from "@/lib/signal/types";
 
 const marketingPrimary =
   "inline-flex items-center justify-center rounded-[2px] bg-copper px-6 py-3.5 text-[14px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark disabled:cursor-not-allowed disabled:opacity-70";
@@ -35,7 +34,6 @@ const supplyDemo = demos.find((item) => item.href === "/supply")!;
 function classifyError(message: string, network: boolean): SignalErrorCategory {
   if (network) return "network";
   const lower = message.toLowerCase();
-  if (lower.includes("too large")) return "size";
   if (
     lower.includes("couldn't read this report") ||
     lower.includes("csv") ||
@@ -65,11 +63,11 @@ async function readError(response: Response): Promise<string> {
 }
 
 export function SignalDemo() {
-  const [result, setResult] = useState<SignalAnalysisResult | null>(sampleResult);
+  const [result, setResult] = useState<SignalAnalysisResult | null>(
+    sampleResult,
+  );
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [dragging, setDragging] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
   const demoRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -82,27 +80,17 @@ export function SignalDemo() {
     trackSignalAnalysisError(classifyError(message, network));
   }
 
-  async function runAnalysis(input: { source: "sample" } | { file: File }) {
+  async function runSample() {
     setLoading(true);
     setError("");
 
     try {
-      let response: Response;
-      if ("source" in input) {
-        trackSignalSampleRun();
-        response = await fetch("/api/signal/analyze", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ source: "sample" }),
-        });
-      } else {
-        const body = new FormData();
-        body.append("file", input.file);
-        response = await fetch("/api/signal/analyze", {
-          method: "POST",
-          body,
-        });
-      }
+      trackSignalSampleRun();
+      const response = await fetch("/api/signal/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ source: "sample" }),
+      });
 
       if (!response.ok) {
         showError(await readError(response));
@@ -131,37 +119,10 @@ export function SignalDemo() {
     }
   }
 
-  function onFile(file: File | undefined) {
-    if (!file || loading) return;
-    trackSignalUploadStart();
-    if (file.size > SIGNAL_LIMITS.maxFileBytes) {
-      showError(
-        "This file is too large for the demo. Please upload a CSV under 1 MB.",
-      );
-      return;
-    }
-    const name = file.name.toLowerCase();
-    if (name.endsWith(".xlsx") || name.endsWith(".xls")) {
-      showError(
-        "Please upload a CSV file. Excel workbooks are not supported in this demo.",
-      );
-      return;
-    }
-    void runAnalysis({ file });
-  }
-
   function reset() {
     setResult(sampleResult);
     setError("");
-    if (inputRef.current) inputRef.current.value = "";
   }
-
-  function openUpload() {
-    demoRef.current?.scrollIntoView({ behavior: "smooth" });
-    inputRef.current?.click();
-  }
-
-  const isSample = result?.meta.source === "sample";
 
   return (
     <>
@@ -175,27 +136,31 @@ export function SignalDemo() {
             {supplyDemo.description}
           </p>
           <DemoFlow steps={supplyDemo.flow} className="mt-3" />
+          <p className="mt-3 max-w-2xl text-[14px] leading-6 text-graphite">
+            This is a sample dataset. Running it against your open POs is what
+            a LoopScan is.
+          </p>
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <a
-              href="#upload"
+              href="#demo"
               onClick={(event) => {
                 event.preventDefault();
-                openUpload();
+                demoRef.current?.scrollIntoView({ behavior: "smooth" });
               }}
               className={marketingPrimary}
             >
-              Upload your own file
+              Open the Console
             </a>
             <button
               type="button"
               onClick={() => {
                 demoRef.current?.scrollIntoView({ behavior: "smooth" });
-                void runAnalysis({ source: "sample" });
+                void runSample();
               }}
               disabled={loading}
               className={marketingSecondary}
             >
-              {loading && isSample ? "Reading the report…" : "Run it again"}
+              {loading ? "Reading the report…" : "Run Sample Data"}
             </button>
           </div>
         </Container>
@@ -215,211 +180,86 @@ export function SignalDemo() {
                   </p>
                 </div>
                 <p className="mt-1 font-mono text-[10px] tracking-[0.08em] text-stone">
-                  DEMO
-                  {result && !isSample
-                    ? ` · UPLOADED CSV · Updated ${formatIsoDate(result.meta.asOfDate)}`
+                  DEMO · FICTIONAL SAMPLE DATA
+                  {result
+                    ? ` · Updated ${formatIsoDate(result.meta.asOfDate)}`
                     : ""}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
-                  onClick={() => inputRef.current?.click()}
+                  onClick={() => void runSample()}
                   disabled={loading}
                   className={consoleBtnSolid}
                 >
-                  {loading && !isSample ? "Reading…" : "Upload CSV"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void runAnalysis({ source: "sample" })}
-                  disabled={loading}
-                  className={consoleBtn}
-                >
-                  {loading && isSample ? "Reading…" : "Run it again"}
+                  {loading ? "Reading…" : "Run Sample Data"}
                 </button>
                 <button type="button" onClick={reset} className={consoleBtn}>
                   Reset Demo
                 </button>
-                <a href="/api/signal/sample" className={consoleBtn}>
-                  Download Sample CSV
-                </a>
               </div>
             </header>
-            <input
-              ref={inputRef}
-              id="supply-csv"
-              type="file"
-              accept=".csv,text/csv,text/plain"
-              className="sr-only"
-              onChange={(event) => {
-                onFile(event.target.files?.[0]);
-                event.target.value = "";
-              }}
-            />
 
             {result ? (
               <div>
-                {isSample ? (
-                  <SampleDataCaption className="border-b border-[#d9d9d2] bg-[#fafaf7] px-4 py-2 md:px-5" />
-                ) : null}
+                <SampleDataCaption className="border-b border-[#d9d9d2] bg-[#fafaf7] px-4 py-2 md:px-5" />
                 <SignalResults result={result} />
               </div>
-            ) : null}
-
-            <div id="upload" className="border-t border-[#d9d9d2] px-4 py-6 md:px-5 md:py-8">
-              <aside className="border border-[#d9d9d2] bg-white px-4 py-4">
-                <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-stone">
-                  Demo environment
+            ) : (
+              <div className="px-4 py-6 md:px-5 md:py-8">
+                <p className="text-[15px] leading-7 text-graphite">
+                  This is a sample dataset. Running it against your open POs is
+                  what a LoopScan is.
                 </p>
-                <p className="mt-2 text-sm leading-6 text-graphite">
-                  LoopSupply is an early demonstration of the LoopSignal
-                  approach and is not intended to replace production planning,
-                  ERP, MRP, or purchasing systems.
-                </p>
-                <p className="mt-2 text-sm leading-6 text-graphite">
-                  Do not upload confidential, proprietary, export-controlled,
-                  personal, or sensitive company information to this public
-                  demo. Use the provided sample file or sanitized data.
-                </p>
-              </aside>
-
-              <div
-                onDragEnter={(event) => {
-                  event.preventDefault();
-                  setDragging(true);
-                }}
-                onDragOver={(event) => {
-                  event.preventDefault();
-                  setDragging(true);
-                }}
-                onDragLeave={() => setDragging(false)}
-                onDrop={(event) => {
-                  event.preventDefault();
-                  setDragging(false);
-                  onFile(event.dataTransfer.files[0]);
-                }}
-                className={`mt-4 border border-dashed px-4 py-10 text-center ${
-                  dragging
-                    ? "border-ink bg-white"
-                    : "border-[#c8c8c0] bg-white"
-                }`}
-              >
-                <p className="text-[15px] font-medium text-ink">
-                  Drop a CSV here, or choose a file
-                </p>
-                <p className="mt-2 text-sm text-stone">
-                  CSV only · 1 MB limit · processed in memory, then discarded
-                </p>
-                <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => inputRef.current?.click()}
-                    disabled={loading}
-                    className={consoleBtnSolid}
+                {error ? (
+                  <p
+                    role="alert"
+                    className="mt-4 border border-risk-critical bg-risk-critical-bg px-4 py-3 text-sm leading-6 text-ink"
                   >
-                    {loading && !isSample ? "Reading the report…" : "Upload CSV"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => void runAnalysis({ source: "sample" })}
-                    disabled={loading}
-                    className={consoleBtn}
-                  >
-                    Run it again
-                  </button>
-                </div>
+                    {error}
+                  </p>
+                ) : null}
               </div>
-
-              {error ? (
-                <p
-                  role="alert"
-                  className="mt-4 border border-risk-critical bg-risk-critical-bg px-4 py-3 text-sm leading-6 text-ink"
-                >
-                  {error}{" "}
-                  <a
-                    href="/api/signal/sample"
-                    className="font-medium underline"
-                  >
-                    Download the sample template
-                  </a>
-                  .
-                </p>
-              ) : null}
-
-              <div className="mt-6 grid gap-6 border-t border-[#d9d9d2] pt-5 md:grid-cols-2">
-                <p className="text-[13px] leading-6 text-graphite">
-                  <span className="block text-[10px] font-medium uppercase tracking-[0.16em] text-stone">
-                    Expected columns
-                  </span>
-                  <span className="mt-2 block">
-                    Required: PO number, supplier, due date, quantity ordered,
-                    quantity received. Optional: item, description, promised
-                    date, buyer, inventory on hand, daily usage, unit cost.
-                  </span>
-                </p>
-                <p className="text-[13px] leading-6 text-graphite">
-                  <span className="block text-[10px] font-medium uppercase tracking-[0.16em] text-stone">
-                    How orders are flagged
-                  </span>
-                  <span className="mt-2 block">
-                    Open quantity, days past the promised or due date, missing
-                    confirmations, inventory coverage, and open value when
-                    those fields are present. No AI is used in this version.
-                  </span>
-                </p>
-              </div>
-            </div>
+            )}
           </div>
         </Container>
       </section>
 
-      {result ? (
-        <section className="border-t border-line bg-cream py-16 md:py-20">
-          <Container>
-            <h2 className="max-w-2xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-              This report started with a CSV.
-            </h2>
-            <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-              LoopSignal can help connect this kind of decision support to the
-              systems, information, and workflows your team already uses.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-5">
-              <TrackedLink
-                href="/loopscan?source=loopsupply"
-                location="loopsupply"
-                ctaText="Find Your First Loop"
-                onClick={() =>
-                  trackSignalLoopScanClick({ cta_text: "Find Your First Loop" })
-                }
-                className={marketingPrimary}
-              >
-                Find Your First Loop
-              </TrackedLink>
-              <TrackedLink
-                href="/loopscan?source=loopsupply"
-                location="loopsupply"
-                ctaText="Start a LoopScan"
-                onClick={() =>
-                  trackSignalLoopScanClick({ cta_text: "Start a LoopScan" })
-                }
-                className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
-              >
-                Start a LoopScan →
-              </TrackedLink>
-            </div>
-          </Container>
-        </section>
-      ) : (
-        <section className="py-12 md:py-16">
-          <Container>
-            <p className="max-w-2xl text-[15px] leading-7 text-graphite">
-              LoopSupply demonstrates what’s possible. LoopScan finds where it
-              creates value in your operation.
-            </p>
-          </Container>
-        </section>
-      )}
+      <section className="border-t border-line bg-cream py-16 md:py-20">
+        <Container>
+          <h2 className="max-w-2xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
+            This report started with a CSV.
+          </h2>
+          <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
+            This is a sample dataset. Running it against your open POs is what
+            a LoopScan is.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-5">
+            <TrackedLink
+              href="/loopscan?source=loopsupply#intake"
+              location="loopsupply"
+              ctaText={cta.talkAboutProcess.label}
+              onClick={() =>
+                trackSignalLoopScanClick({
+                  cta_text: cta.talkAboutProcess.label,
+                })
+              }
+              className={marketingPrimary}
+            >
+              {cta.talkAboutProcess.label}
+            </TrackedLink>
+            <TrackedLink
+              href={cta.learnLoopScan.href}
+              location="loopsupply"
+              ctaText={cta.learnLoopScan.label}
+              className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
+            >
+              {cta.learnLoopScan.label} →
+            </TrackedLink>
+          </div>
+        </Container>
+      </section>
     </>
   );
 }

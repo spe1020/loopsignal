@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { TrackedLink } from "./TrackedLink";
-import { nav } from "@/lib/content";
+import { company } from "@/lib/company";
+import { cta, nav } from "@/lib/content";
 
 export function Footer() {
   return (
@@ -10,9 +11,15 @@ export function Footer() {
         <div className="lg:col-span-5">
           <Logo inverted showTagline />
           <p className="mt-5 max-w-sm text-sm leading-6 text-white/45">
-            LoopSignal helps manufacturers improve processes, connect
-            disconnected systems, and automate the work that should not
-            require manual effort.
+            Improve the process. Connect the systems.
+          </p>
+          <p className="mt-4 text-sm text-white/70">
+            <a
+              href={`mailto:${company.contactEmail}`}
+              className="transition-colors hover:text-cream"
+            >
+              {company.contactEmail}
+            </a>
           </p>
         </div>
 
@@ -40,11 +47,21 @@ export function Footer() {
             </p>
             <ul className="mt-4 space-y-2.5">
               <li>
-                <Link
-                  href="/demo"
+                <TrackedLink
+                  href={cta.nav.href}
+                  location="footer"
+                  ctaText={cta.nav.label}
                   className="text-sm text-white/70 transition-colors hover:text-cream"
                 >
-                  Demos
+                  {cta.nav.label}
+                </TrackedLink>
+              </li>
+              <li>
+                <Link
+                  href={cta.seeDemos.href}
+                  className="text-sm text-white/70 transition-colors hover:text-cream"
+                >
+                  {cta.seeDemos.label}
                 </Link>
               </li>
               <li>
@@ -79,34 +96,6 @@ export function Footer() {
                   LoopBrief
                 </Link>
               </li>
-              <li>
-                <TrackedLink
-                  href="/loopscan"
-                  location="footer"
-                  ctaText="Find Your First Loop"
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  Find Your First Loop
-                </TrackedLink>
-              </li>
-              <li>
-                <TrackedLink
-                  href="/loopscan"
-                  location="footer"
-                  ctaText="LoopScan"
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  LoopScan
-                </TrackedLink>
-              </li>
-              <li>
-                <Link
-                  href="/solutions"
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  Solutions
-                </Link>
-              </li>
             </ul>
           </div>
           <div>
@@ -124,8 +113,14 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-[1120px] px-6 py-6 text-xs text-white/35 lg:px-8">
+        <div className="mx-auto flex max-w-[1120px] flex-wrap items-center gap-x-6 gap-y-2 px-6 py-6 text-xs text-white/35 lg:px-8">
           <p>© {new Date().getFullYear()} LoopSignal. All rights reserved.</p>
+          <Link href="/privacy" className="transition-colors hover:text-white/60">
+            Privacy
+          </Link>
+          <Link href="/security" className="transition-colors hover:text-white/60">
+            Security
+          </Link>
         </div>
       </div>
     </footer>

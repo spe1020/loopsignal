@@ -44,7 +44,7 @@ The website can measure everything through `schedule_click`. Conversation and cl
 
 The longer commercial path is:
 
-Website visitor → Lead → Conversation → LoopScan → LoopBuild → LoopOps
+Website visitor → Lead → Conversation → LoopScan → LoopBuild
 
 ## Custom events
 
@@ -52,13 +52,14 @@ All events are categorical. Never send names, emails, company names, phone numbe
 
 ### `loopscan_cta_click`
 
-Fired when a visitor clicks a LoopScan call to action, including:
+Fired when a visitor clicks a LoopScan call to action. Labels in use:
 
-- Find Your First Loop
-- Start a LoopScan
-- Find My First Loop
-- Tell Us About the Process
-- Talk to Us / LoopScan nav and footer links
+- Talk to Us (navigation)
+- Talk About a Process (intake)
+- Start a LoopScan (ready buyer, `/loopscan`)
+- Learn About LoopScan
+
+Secondary demo label: "See the Demos" → `/demo`.
 
 Allowed metadata:
 

@@ -13,7 +13,7 @@ import {
   getRelatedArticles,
 } from "@/lib/articles";
 import { company } from "@/lib/company";
-import { founder } from "@/lib/content";
+import { founder, cta } from "@/lib/content";
 import {
   organizationJsonLd,
   pageMeta,
@@ -222,24 +222,18 @@ export default async function ArticlePage({ params }: Props) {
           </h2>
           <p className="mt-4 max-w-xl text-[16px] leading-7 text-graphite">
             If a process takes too long, requires repetitive work, depends on
-            scattered information, or repeatedly creates problems, it may be a
-            good place to start.
+            scattered information, or repeatedly creates problems, start there.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-5">
             <Button
-              href="/loopscan"
+              href={cta.talkAboutProcess.href}
               location="article"
               articleSlug={article.slug}
             >
-              Find Your First Loop
+              {cta.talkAboutProcess.label}
             </Button>
-            <Button
-              href="/loopscan"
-              variant="text"
-              location="article"
-              articleSlug={article.slug}
-            >
-              Learn about LoopScan
+            <Button href={cta.learnLoopScan.href} variant="text">
+              {cta.learnLoopScan.label}
             </Button>
           </div>
         </div>

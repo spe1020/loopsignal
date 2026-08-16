@@ -6,8 +6,8 @@ import { GoNoGoAid } from "@/components/know/GoNoGoAid";
 import { KnowConsole } from "@/components/know/KnowConsole";
 import { Container, Eyebrow } from "@/components/Reveal";
 import { TrackedLink } from "@/components/TrackedLink";
+import { cta, demos } from "@/lib/content";
 import { trackKnowLoopScanClick, trackKnowPageView } from "@/lib/analytics";
-import { demos } from "@/lib/content";
 import { shaftThreadGaugeAid } from "@/lib/know";
 
 const marketingPrimary =
@@ -94,31 +94,28 @@ export function KnowDemo() {
             Your team already has the knowledge.
           </h2>
           <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-            LoopSignal can help organize, connect, and make operational knowledge
+            LoopSignal organizes, connects, and makes operational knowledge
             usable across the systems and documents your team already relies on.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-5">
             <TrackedLink
-              href="/loopscan?source=loopknow"
+              href="/loopscan?source=loopknow#intake"
               location="loopknow"
-              ctaText="Find Your First Loop"
+              ctaText={cta.talkAboutProcess.label}
               onClick={() =>
-                trackKnowLoopScanClick({ cta_text: "Find Your First Loop" })
+                trackKnowLoopScanClick({ cta_text: cta.talkAboutProcess.label })
               }
               className={marketingPrimary}
             >
-              Find Your First Loop
+              {cta.talkAboutProcess.label}
             </TrackedLink>
             <TrackedLink
-              href="/loopscan?source=loopknow"
+              href={cta.learnLoopScan.href}
               location="loopknow"
-              ctaText="Start a LoopScan"
-              onClick={() =>
-                trackKnowLoopScanClick({ cta_text: "Start a LoopScan" })
-              }
+              ctaText={cta.learnLoopScan.label}
               className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
             >
-              Start a LoopScan →
+              {cta.learnLoopScan.label} →
             </TrackedLink>
           </div>
         </Container>

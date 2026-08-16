@@ -5,7 +5,7 @@ import { DemoFlow } from "@/components/DemoCards";
 import { Container, Eyebrow } from "@/components/Reveal";
 import { SourceConsole } from "@/components/source/SourceConsole";
 import { TrackedLink } from "@/components/TrackedLink";
-import { demos } from "@/lib/content";
+import { cta, demos } from "@/lib/content";
 import {
   trackSourceDualSourceToggle,
   trackSourceLoopScanClick,
@@ -138,32 +138,29 @@ export function SourceDemo() {
             Your quote comparison is only one sourcing loop.
           </h2>
           <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-            LoopSignal can help connect RFQs, supplier information,
-            specifications, commercial data, and sourcing decisions into a
-            workflow built around how your team actually works.
+            LoopSignal connects RFQs, supplier information, specifications,
+            commercial data, and sourcing decisions into a workflow built
+            around how your team actually works.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-5">
             <TrackedLink
-              href="/loopscan?source=loopsource"
+              href="/loopscan?source=loopsource#intake"
               location="loopsource"
-              ctaText="Find Your First Loop"
+              ctaText={cta.talkAboutProcess.label}
               onClick={() =>
-                trackSourceLoopScanClick({ cta_text: "Find Your First Loop" })
+                trackSourceLoopScanClick({ cta_text: cta.talkAboutProcess.label })
               }
               className={marketingPrimary}
             >
-              Find Your First Loop
+              {cta.talkAboutProcess.label}
             </TrackedLink>
             <TrackedLink
-              href="/loopscan?source=loopsource"
+              href={cta.learnLoopScan.href}
               location="loopsource"
-              ctaText="Start a LoopScan"
-              onClick={() =>
-                trackSourceLoopScanClick({ cta_text: "Start a LoopScan" })
-              }
+              ctaText={cta.learnLoopScan.label}
               className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
             >
-              Start a LoopScan →
+              {cta.learnLoopScan.label} →
             </TrackedLink>
           </div>
         </Container>

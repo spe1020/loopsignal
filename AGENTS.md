@@ -15,6 +15,6 @@ This is the LoopSignal marketing site.
 - **Brand:** LoopSignal. Use this name in copy, metadata, and generated files.
 - **Live site:** https://www.loopsignal.co (apex 308s to www)
 - **Canonical URL:** `NEXT_PUBLIC_SITE_URL` is the only definition. Fallback in `lib/site.ts` is `https://www.loopsignal.co`. Do not invent another domain.
-- **Products:** LoopScan (assessment), LoopBuild, LoopOps (service layers); LoopSupply, LoopKnow, LoopSource, LoopBrief (demos)
+- **Products:** LoopScan (assessment), LoopBuild (implementation), LoopOps (sustainment method installed with the work); LoopSupply, LoopKnow, LoopSource, LoopBrief (demos)
 - **GitHub:** spe1020/loopsignal
 - **Vercel project:** loopsignal

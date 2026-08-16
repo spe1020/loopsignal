@@ -5,7 +5,7 @@ import { BriefConsole } from "@/components/brief/BriefConsole";
 import { DemoFlow } from "@/components/DemoCards";
 import { Container, Eyebrow } from "@/components/Reveal";
 import { TrackedLink } from "@/components/TrackedLink";
-import { demos } from "@/lib/content";
+import { cta, demos } from "@/lib/content";
 import {
   trackBriefActionSelect,
   trackBriefActionStatusChange,
@@ -173,32 +173,29 @@ export function BriefDemo() {
             Your daily meeting already has the data.
           </h2>
           <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-            LoopSignal can help connect production, quality, supply, maintenance,
+            LoopSignal connects production, quality, supply, maintenance,
             and planning information into a daily operating system built around
             exceptions and action.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-5">
             <TrackedLink
-              href="/loopscan?source=loopbrief"
+              href="/loopscan?source=loopbrief#intake"
               location="loopbrief"
-              ctaText="Find Your First Loop"
+              ctaText={cta.talkAboutProcess.label}
               onClick={() =>
-                trackBriefLoopScanClick({ cta_text: "Find Your First Loop" })
+                trackBriefLoopScanClick({ cta_text: cta.talkAboutProcess.label })
               }
               className={marketingPrimary}
             >
-              Find Your First Loop
+              {cta.talkAboutProcess.label}
             </TrackedLink>
             <TrackedLink
-              href="/loopscan?source=loopbrief"
+              href={cta.learnLoopScan.href}
               location="loopbrief"
-              ctaText="Start a LoopScan"
-              onClick={() =>
-                trackBriefLoopScanClick({ cta_text: "Start a LoopScan" })
-              }
+              ctaText={cta.learnLoopScan.label}
               className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
             >
-              Start a LoopScan →
+              {cta.learnLoopScan.label} →
             </TrackedLink>
           </div>
         </Container>

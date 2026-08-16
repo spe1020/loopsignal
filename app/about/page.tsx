@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/Button";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
 import { company } from "@/lib/company";
-import { founder, trustPrinciples } from "@/lib/content";
+import { cta, founder, trustPrinciples } from "@/lib/content";
 import { routeMeta, routePageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = routePageMeta(routeMeta.about);
@@ -15,7 +15,7 @@ const beliefs = [
   },
   {
     title: "Improve before you automate",
-    text: "Complexity should be removed before it is automated. A cleaner process connected to a capable system beats a clever tool wrapped around waste.",
+    text: "Remove complexity before it is automated. A cleaner process connected to a capable system beats a clever tool wrapped around waste.",
   },
   {
     title: "Build working systems",
@@ -23,7 +23,7 @@ const beliefs = [
   },
   {
     title: "Keep people in the work",
-    text: "The people closest to the work often understand the problem best. Human judgment should remain where it adds value.",
+    text: "The people closest to the work understand the problem. Human judgment stays where it adds value.",
   },
 ];
 
@@ -41,9 +41,8 @@ export default function AboutPage() {
               {company.longDescription}
             </p>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-graphite">
-              We help manufacturers improve processes, connect disconnected
-              systems, and automate the work that should not require manual
-              effort.
+              We improve processes, connect disconnected systems, and automate
+              the work that does not require manual effort.
             </p>
           </Reveal>
         </Container>
@@ -207,8 +206,8 @@ export default function AboutPage() {
               Improve the process. Connect the systems.
             </p>
             <div className="mt-10">
-              <Button href="/loopscan" location="about">
-                Start a LoopScan
+              <Button href={cta.talkAboutProcess.href} location="about">
+                {cta.talkAboutProcess.label}
               </Button>
             </div>
           </Reveal>

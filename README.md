@@ -18,13 +18,15 @@ Open [http://localhost:3000](http://localhost:3000).
 ## Pages
 
 - `/` — Home
-- `/solutions` — Operational problems LoopSignal can help solve
+- `/solutions` — Work we take on
 - `/how-it-works` — See → Simplify → Connect → Automate → Measure → Improve
 - `/about` — Company
 - `/insights` — Articles
-- `/loopscan` — LoopScan intake
+- `/loopscan` — LoopScan offer and intake
 - `/demo` — Working examples (LoopSupply, LoopKnow, LoopSource, LoopBrief)
 - `/supply` — LoopSupply demo (`/signal` redirects here)
+- `/security` — How LoopScan handles data
+- `/privacy` — What this site collects
 
 ## LoopScan leads
 

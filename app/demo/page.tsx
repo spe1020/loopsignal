@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import { Button } from "@/components/Button";
 import { DemoCards } from "@/components/DemoCards";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
-import { demoNote, demoPhilosophy } from "@/lib/content";
+import { cta, demoNote, demoPhilosophy } from "@/lib/content";
 import { routeMeta, routePageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = routePageMeta(routeMeta.demo);
@@ -13,12 +14,12 @@ export default function DemoPage() {
         <Reveal>
           <Eyebrow>Demos</Eyebrow>
           <h1 className="mt-5 max-w-3xl text-4xl font-medium tracking-[-0.035em] text-ink md:text-6xl">
-            See what a better operational loop can look like.
+            See what a better operational loop looks like.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-graphite">
-            These demos are working examples of how process improvement,
-            connected information, automation, and decision support can be
-            applied to common manufacturing workflows.
+            These demos are working examples of process improvement, connected
+            information, automation, and decision support on common
+            manufacturing workflows.
           </p>
         </Reveal>
         <Reveal className="mt-12" delay={60}>
@@ -47,6 +48,11 @@ export default function DemoPage() {
           <p className="mt-4 max-w-3xl text-[16px] leading-7 text-graphite">
             {demoNote}
           </p>
+          <div className="mt-10">
+            <Button href={cta.talkAboutProcess.href} location="demo">
+              {cta.talkAboutProcess.label}
+            </Button>
+          </div>
         </Reveal>
       </Container>
     </section>

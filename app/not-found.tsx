@@ -1,6 +1,7 @@
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Reveal";
 import { TrackedLink } from "@/components/TrackedLink";
+import { cta } from "@/lib/content";
 import { routeMeta, routePageMeta } from "@/lib/seo";
 import type { Metadata } from "next";
 
@@ -23,12 +24,12 @@ export default function NotFound() {
         <div className="mt-10 flex flex-wrap gap-3">
           <Button href="/">Home</Button>
           <TrackedLink
-            href="/loopscan"
+            href={cta.nav.href}
             location="not_found"
-            ctaText="Talk to Us"
+            ctaText={cta.nav.label}
             className="inline-flex items-center px-5 py-3 text-[13px] font-medium text-ink"
           >
-            Talk to Us
+            {cta.nav.label}
           </TrackedLink>
         </div>
       </Container>
