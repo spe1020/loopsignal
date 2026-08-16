@@ -10,7 +10,6 @@ import {
 } from "@/lib/analytics";
 import { getLeadAttribution } from "@/lib/attribution";
 import { company } from "@/lib/company";
-import { loopScanOffer } from "@/lib/content";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xeajkpoy";
 const PROCESS_MIN_LENGTH = 20;
@@ -350,7 +349,8 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
               We recommend a next step
             </p>
             <p className="mt-1 text-sm leading-6 text-graphite">
-              {loopScanOffer.credibleNextStep}
+              Sometimes a process change. Sometimes a LoopScan. Sometimes no
+              technology at all.
             </p>
           </li>
         </ol>

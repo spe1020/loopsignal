@@ -206,8 +206,8 @@ export default function AboutPage() {
               Improve the process. Connect the systems.
             </p>
             <div className="mt-10">
-              <Button href={cta.primary.href} location="about">
-                {cta.primary.label}
+              <Button href={cta.talkAboutProcess.href} location="about">
+                {cta.talkAboutProcess.label}
               </Button>
             </div>
           </Reveal>

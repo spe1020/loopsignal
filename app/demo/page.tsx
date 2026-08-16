@@ -49,8 +49,8 @@ export default function DemoPage() {
             {demoNote}
           </p>
           <div className="mt-10">
-            <Button href={cta.primary.href} location="demo">
-              {cta.primary.label}
+            <Button href={cta.talkAboutProcess.href} location="demo">
+              {cta.talkAboutProcess.label}
             </Button>
           </div>
         </Reveal>

@@ -98,12 +98,12 @@ export default function SolutionsPage() {
                   See it in action → {solution.demoName}
                 </Link>
                 <SolutionInterestLink
-                  href={cta.primary.href}
+                  href={cta.talkAboutProcess.href}
                   solution={solution.interest}
                   interactionType="cta_click"
                   className="text-[13px] font-medium tracking-[0.02em] text-stone hover:text-ink"
                 >
-                  {cta.primary.label} →
+                  {cta.talkAboutProcess.label} →
                 </SolutionInterestLink>
               </div>
             </Reveal>
@@ -111,7 +111,7 @@ export default function SolutionsPage() {
         </section>
       ))}
 
-      <CommercialPath ctaLocation="solutions" showLoopBuildDetail={false} />
+      <CommercialPath />
     </>
   );
 }

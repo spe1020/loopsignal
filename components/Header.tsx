@@ -68,12 +68,12 @@ export function Header() {
 
         <div className="flex items-center gap-4">
           <TrackedLink
-            href={cta.primary.href}
+            href={cta.nav.href}
             location="navigation"
-            ctaText={cta.primary.label}
+            ctaText={cta.nav.label}
             className="hidden rounded-[2px] bg-copper px-4 py-2.5 text-[13px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark sm:inline-flex"
           >
-            {cta.primary.label}
+            {cta.nav.label}
           </TrackedLink>
           <button
             type="button"
@@ -112,13 +112,13 @@ export function Header() {
               </Link>
             ))}
             <TrackedLink
-              href={cta.primary.href}
+              href={cta.nav.href}
               location="navigation"
-              ctaText={cta.primary.label}
+              ctaText={cta.nav.label}
               onClick={() => setOpen(false)}
               className="mt-6 inline-flex items-center justify-center rounded-[2px] bg-copper px-4 py-3 text-[13px] font-medium text-white"
             >
-              {cta.primary.label}
+              {cta.nav.label}
             </TrackedLink>
           </nav>
         </div>

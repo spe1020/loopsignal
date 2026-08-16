@@ -24,12 +24,12 @@ export default function NotFound() {
         <div className="mt-10 flex flex-wrap gap-3">
           <Button href="/">Home</Button>
           <TrackedLink
-            href={cta.primary.href}
+            href={cta.nav.href}
             location="not_found"
-            ctaText={cta.primary.label}
+            ctaText={cta.nav.label}
             className="inline-flex items-center px-5 py-3 text-[13px] font-medium text-ink"
           >
-            {cta.primary.label}
+            {cta.nav.label}
           </TrackedLink>
         </div>
       </Container>

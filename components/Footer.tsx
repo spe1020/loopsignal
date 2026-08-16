@@ -11,8 +11,7 @@ export function Footer() {
         <div className="lg:col-span-5">
           <Logo inverted showTagline />
           <p className="mt-5 max-w-sm text-sm leading-6 text-white/45">
-            Manufacturing consulting and systems integration. We do not sell
-            software as a service.
+            Improve the process. Connect the systems.
           </p>
           <p className="mt-4 text-sm text-white/70">
             <a
@@ -49,20 +48,20 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5">
               <li>
                 <TrackedLink
-                  href={cta.primary.href}
+                  href={cta.nav.href}
                   location="footer"
-                  ctaText={cta.primary.label}
+                  ctaText={cta.nav.label}
                   className="text-sm text-white/70 transition-colors hover:text-cream"
                 >
-                  {cta.primary.label}
+                  {cta.nav.label}
                 </TrackedLink>
               </li>
               <li>
                 <Link
-                  href={cta.secondary.href}
+                  href={cta.seeDemos.href}
                   className="text-sm text-white/70 transition-colors hover:text-cream"
                 >
-                  {cta.secondary.label}
+                  {cta.seeDemos.label}
                 </Link>
               </li>
               <li>
@@ -104,9 +103,11 @@ export function Footer() {
               Approach
             </p>
             <p className="mt-4 text-sm leading-6 text-white/55">
-              LoopScan — $7,500.
+              LoopScan.
               <br />
               LoopBuild.
+              <br />
+              LoopOps.
             </p>
           </div>
         </div>

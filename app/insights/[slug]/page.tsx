@@ -226,14 +226,14 @@ export default async function ArticlePage({ params }: Props) {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-5">
             <Button
-              href={cta.primary.href}
+              href={cta.talkAboutProcess.href}
               location="article"
               articleSlug={article.slug}
             >
-              {cta.primary.label}
+              {cta.talkAboutProcess.label}
             </Button>
-            <Button href={cta.secondary.href} variant="text">
-              {cta.secondary.label}
+            <Button href={cta.learnLoopScan.href} variant="text">
+              {cta.learnLoopScan.label}
             </Button>
           </div>
         </div>

@@ -179,23 +179,23 @@ export function BriefDemo() {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-5">
             <TrackedLink
-              href="/loopscan?source=loopbrief"
+              href="/loopscan?source=loopbrief#intake"
               location="loopbrief"
-              ctaText={cta.primary.label}
+              ctaText={cta.talkAboutProcess.label}
               onClick={() =>
-                trackBriefLoopScanClick({ cta_text: cta.primary.label })
+                trackBriefLoopScanClick({ cta_text: cta.talkAboutProcess.label })
               }
               className={marketingPrimary}
             >
-              {cta.primary.label}
+              {cta.talkAboutProcess.label}
             </TrackedLink>
             <TrackedLink
-              href={cta.secondary.href}
+              href={cta.learnLoopScan.href}
               location="loopbrief"
-              ctaText={cta.secondary.label}
+              ctaText={cta.learnLoopScan.label}
               className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
             >
-              {cta.secondary.label} →
+              {cta.learnLoopScan.label} →
             </TrackedLink>
           </div>
         </Container>

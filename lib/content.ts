@@ -8,25 +8,54 @@ export const nav = [
 ] as const;
 
 export const cta = {
-  primary: { href: "/loopscan", label: "Start a LoopScan" },
-  secondary: { href: "/demo", label: "See the demos" },
+  nav: { href: "/loopscan", label: "Talk to Us" },
+  talkAboutProcess: {
+    href: "/loopscan#intake",
+    label: "Talk About a Process",
+  },
+  seeDemos: { href: "/demo", label: "See the Demos" },
+  startLoopScan: { href: "/loopscan", label: "Start a LoopScan" },
+  learnLoopScan: { href: "/loopscan", label: "Learn About LoopScan" },
+  talkThroughProcess: {
+    href: "/loopscan#intake",
+    label: "Talk Through a Process",
+  },
 } as const;
 
+export const painPoints = [
+  "Buyers chasing overdue POs by hand.",
+  "Managers rebuilding the same reports every morning.",
+  "Critical knowledge living with the one person who knows where everything is.",
+  "Teams moving information between systems by hand.",
+] as const;
+
 export const loopScanOffer = {
+  whatItIs:
+    "A two-day on-site review of how a process actually runs — the work, the information, the handoffs, and the friction.",
+  whatHappens:
+    "We walk the work with your team, map the current state, and return findings within 10 business days.",
+  reviewed: [
+    "Workflows",
+    "Systems",
+    "Reports",
+    "Spreadsheets",
+    "Handoffs",
+    "Manual tasks",
+  ],
   price: "$7,500",
   duration: "Two days on site",
-  findingsIn: "Findings in 10 business days",
-  priceLine: "$7,500 · two days on site · findings in 10 business days",
-  budgetLine:
-    "Consulting and systems integration. Opex. Your operations lead signs it. Not software, not a subscription, not an IT capital request.",
+  findingsIn: "Findings within 10 business days",
+  priceLine: "$7,500 · Two days on site · Findings within 10 business days",
   teamHoursTotal: "~11.5 hours",
-  guarantee: "7-day money-back guarantee. No conditions.",
+  guarantee:
+    "Unconditional. If the findings aren't worth what you paid, tell us within seven days and we refund it.",
   // TODO: name the origin city for the 2.5-hour radius.
   radius:
     "Within 2.5 hours' drive. Beyond that, quoted separately.",
+  whyFixed:
+    "A defined engagement. LoopScan is scoped as a fixed starting point rather than open-ended consulting. You know the cost, the time commitment, and the deliverable before the work begins.",
   firstClient:
-    "We have not completed a paid LoopScan. There is no prior engagement to point to. That is why the guarantee has no conditions.",
-  // TODO: retention window in days, if different from "delete when the engagement ends."
+    "LoopSignal is new. You would be among the first LoopScan clients, which is why the price is fixed, the deliverable is defined in advance, and the guarantee is unconditional.",
   dataHandling:
     "We pull read-only. The work runs in your environment. Nothing trains a model. When the engagement ends, we hand you the raw pull and the queries, then delete our copy.",
   // TODO: confirm these seven items against Dr. Sats' pricing work.
@@ -39,8 +68,6 @@ export const loopScanOffer = {
     "What to automate, and what not to",
     "Prioritized next step with business impact",
   ],
-  credibleNextStep:
-    "That may be a simple process change, a LoopScan, an automation opportunity, or no technology at all.",
 } as const;
 
 // TODO: hours by role from Dr. Sats' pricing work. Total stays ~11.5.
@@ -62,17 +89,17 @@ export const capabilities = [
   {
     name: "Process Improvement",
     summary:
-      "Understand the work, remove unnecessary complexity, reduce waste, clarify ownership, and improve flow.",
+      "Understand the work, remove unnecessary complexity, reduce waste, improve flow, clarify ownership.",
   },
   {
     name: "Systems Integration",
     summary:
-      "Connect the systems and information your teams already rely on, including ERP, email, spreadsheets, quality systems, supplier data, documents, and operational reporting.",
+      "Connect the systems and information your team already relies on so work moves across the organization.",
   },
   {
-    name: "Automation + AI",
+    name: "Automation + Practical AI",
     summary:
-      "Automate repetitive work, surface exceptions, make information easier to use, and support better decisions where technology creates real operational value.",
+      "Automate repetitive and information-heavy work where technology earns its place.",
   },
 ] as const;
 
@@ -213,7 +240,7 @@ export const demos = [
 ] as const;
 
 export const demoNote =
-  "They are not fixed systems we expect every manufacturer to adopt. They are examples of what we build around an operation.";
+  "Examples of capability, not fixed packages every manufacturer is expected to adopt.";
 
 export const demoPhilosophy = [
   {
@@ -238,8 +265,8 @@ export const services = [
   {
     slug: "loopscan",
     name: "LoopScan",
-    headline: "$7,500. Two days on site. Findings in 10 business days.",
-    summary: "Find the friction in the work.",
+    headline: "Understand the process.",
+    summary: "Understand the process.",
     detail:
       "LoopScan is a two-day on-site operational review. We map how the work happens today, name the friction, and hand you a seven-item findings pack within 10 business days.",
     deliverables: [
@@ -392,7 +419,7 @@ export const loopSignalOutcomes = [
 export const trustPrinciples = [
   {
     title: "Practical first",
-    text: "Start with a real operational problem.",
+    text: "Start with the work.",
   },
   {
     title: "Human in the loop",
@@ -404,7 +431,7 @@ export const trustPrinciples = [
   },
   {
     title: "Measure the result",
-    text: "Every implementation improves a real business outcome.",
+    text: "Every implementation improves a business outcome.",
   },
 ] as const;
 
@@ -495,14 +522,20 @@ export const commercialJourney = [
   {
     step: "01",
     name: "LoopScan",
-    headline: "$7,500. Two days on site.",
-    text: "Map how the work happens today, name the friction, and hand you findings within 10 business days.",
+    headline: "Understand the process.",
+    text: "Map how the work happens today and name the friction.",
   },
   {
     step: "02",
     name: "LoopBuild",
     headline: "Improve and implement it.",
-    text: "Turn a prioritized opportunity into a working solution — process redesign, systems integration, automation, AI, software, or a combination.",
+    text: "Turn a prioritized opportunity into a working solution — process redesign, systems integration, automation, software, AI, or a combination.",
+  },
+  {
+    step: "03",
+    name: "LoopOps",
+    headline: "Keep it working.",
+    text: "Improvements decay when nobody owns them. LoopOps is the daily management and standard work that keeps the process running after we're done — run by your team, not by us.",
   },
 ] as const;
 

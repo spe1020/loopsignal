@@ -52,11 +52,14 @@ All events are categorical. Never send names, emails, company names, phone numbe
 
 ### `loopscan_cta_click`
 
-Fired when a visitor clicks a LoopScan call to action. Sitewide primary label:
+Fired when a visitor clicks a LoopScan call to action. Labels in use:
 
-- Start a LoopScan
+- Talk to Us (navigation)
+- Talk About a Process (intake)
+- Start a LoopScan (ready buyer, `/loopscan`)
+- Learn About LoopScan
 
-The secondary sitewide label is "See the demos" and points at `/demo`, not `/loopscan`.
+Secondary demo label: "See the Demos" → `/demo`.
 
 Allowed metadata:
 
