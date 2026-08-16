@@ -504,11 +504,11 @@ Capture on first arrival and keep for 30 days. Do not overwrite first-touch attr
 ### Examples
 
 ```
-https://loopworks.xyz/insights/ai-is-not-your-manufacturing-strategy?utm_source=linkedin&utm_medium=social&utm_campaign=ai_strategy
+https://www.loopsignal.co/insights/ai-is-not-your-manufacturing-strategy?utm_source=linkedin&utm_medium=social&utm_campaign=ai_strategy
 
-https://loopworks.xyz/loopscan?utm_source=email&utm_medium=email&utm_campaign=procurement_follow_up
+https://www.loopsignal.co/loopscan?utm_source=email&utm_medium=email&utm_campaign=procurement_follow_up
 
-https://loopworks.xyz/?utm_source=linkedin&utm_medium=social&utm_campaign=procurement_ai
+https://www.loopsignal.co/?utm_source=linkedin&utm_medium=social&utm_campaign=procurement_ai
 ```
 
 ## Lead attribution

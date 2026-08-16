@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
 import { articles } from "@/lib/articles";
-import { siteUrl } from "@/lib/site";
+import { absoluteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages = [
-    "",
+    "/",
     "/solutions",
     "/how-it-works",
     "/about",
@@ -16,12 +16,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/brief",
     "/demo",
   ].map((path) => ({
-    url: `${siteUrl}${path || "/"}`,
+    url: absoluteUrl(path),
     lastModified: new Date(),
   }));
 
   const posts = articles.map((article) => ({
-    url: `${siteUrl}/insights/${article.slug}`,
+    url: absoluteUrl(`/insights/${article.slug}`),
     lastModified: new Date(article.date),
   }));
 

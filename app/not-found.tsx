@@ -1,6 +1,10 @@
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Reveal";
 import { TrackedLink } from "@/components/TrackedLink";
+import { routeMeta, routePageMeta } from "@/lib/seo";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = routePageMeta(routeMeta.notFound);
 
 export default function NotFound() {
   return (

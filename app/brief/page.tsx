@@ -1,18 +1,8 @@
 import type { Metadata } from "next";
 import { BriefDemo } from "@/components/brief/BriefDemo";
+import { routeMeta, routePageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "LoopBrief | Daily Operations Brief Demo",
-  description:
-    "Turn fictional production, quality, supply, and maintenance signals into a prioritized daily operating brief. A LoopSignal manufacturing operations demo.",
-  alternates: { canonical: "/brief" },
-  openGraph: {
-    title: "LoopBrief | Daily Operations Brief Demo",
-    description:
-      "Start the day with what matters. LoopBrief turns plant signals into exceptions, owners, and actions.",
-    url: "/brief",
-  },
-};
+export const metadata: Metadata = routePageMeta(routeMeta.brief);
 
 export default function BriefPage() {
   return <BriefDemo />;

@@ -12,8 +12,15 @@ import {
   getArticle,
   getRelatedArticles,
 } from "@/lib/articles";
+import { company } from "@/lib/company";
 import { founder } from "@/lib/content";
-import { siteUrl } from "@/lib/site";
+import {
+  organizationJsonLd,
+  pageMeta,
+  routeMeta,
+  routePageMeta,
+} from "@/lib/seo";
+import { absoluteUrl, siteUrl } from "@/lib/site";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -26,33 +33,22 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = getArticle(slug);
-  if (!article) return {};
+  if (!article) return routePageMeta(routeMeta.notFound);
 
-  const title =
-    article.seoTitle ?? `${article.title} | LoopSignal`;
   const description = article.seoDescription ?? article.dek;
-  const url = `/insights/${article.slug}`;
+  const path = `/insights/${article.slug}`;
 
   return {
-    title: { absolute: title },
-    description,
-    alternates: { canonical: url },
-    authors: [{ name: article.author ?? founder.name, url: founder.linkedin }],
-    openGraph: {
-      title,
+    ...pageMeta({
+      title: article.seoTitle ?? article.title,
       description,
-      url,
+      path,
       type: "article",
-      siteName: "LoopSignal",
-      locale: "en_US",
       publishedTime: `${article.date}T00:00:00.000Z`,
       authors: [article.author ?? founder.name],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-    },
+      imagePath: `${path}/opengraph-image`,
+    }),
+    authors: [{ name: article.author ?? founder.name, url: founder.linkedin }],
   };
 }
 
@@ -63,13 +59,14 @@ export default async function ArticlePage({ params }: Props) {
 
   const author = article.author ?? founder.name;
   const related = getRelatedArticles(article);
-  const canonical = `${siteUrl}/insights/${article.slug}`;
+  const canonical = absoluteUrl(`/insights/${article.slug}`);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: article.title,
     description: article.seoDescription ?? article.dek,
     datePublished: article.date,
+    image: absoluteUrl(`/insights/${article.slug}/opengraph-image`),
     author: {
       "@type": "Person",
       name: author,
@@ -77,10 +74,14 @@ export default async function ArticlePage({ params }: Props) {
     },
     publisher: {
       "@type": "Organization",
-      name: "LoopSignal",
+      name: company.name,
       url: siteUrl,
+      logo: organizationJsonLd.logo,
     },
-    mainEntityOfPage: canonical,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": canonical,
+    },
     url: canonical,
   };
 

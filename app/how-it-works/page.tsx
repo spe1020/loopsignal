@@ -4,19 +4,9 @@ import { Button } from "@/components/Button";
 import { ProcessLoop } from "@/components/Loops";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
 import { howItWorks, implementationSequence } from "@/lib/content";
+import { routeMeta, routePageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "How It Works",
-  description:
-    "See, simplify, connect, automate, measure, improve. LoopSignal starts with the work, then improves the process and connects the right systems around it.",
-  alternates: { canonical: "/how-it-works" },
-  openGraph: {
-    title: "How It Works",
-    description:
-      "See, simplify, connect, automate, measure, improve. LoopSignal starts with the work, then improves the process and connects the right systems around it.",
-    url: "/how-it-works",
-  },
-};
+export const metadata: Metadata = routePageMeta(routeMeta.howItWorks);
 
 export default function HowItWorksPage() {
   return (

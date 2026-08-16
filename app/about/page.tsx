@@ -4,17 +4,9 @@ import { Button } from "@/components/Button";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
 import { company } from "@/lib/company";
 import { founder, trustPrinciples } from "@/lib/content";
+import { routeMeta, routePageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: company.longDescription,
-  alternates: { canonical: "/about" },
-  openGraph: {
-    title: "About",
-    description: company.executiveDescription,
-    url: "/about",
-  },
-};
+export const metadata: Metadata = routePageMeta(routeMeta.about);
 
 const beliefs = [
   {
