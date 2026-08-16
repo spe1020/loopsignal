@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { SampleDataCaption } from "@/components/SampleDataCaption";
 import {
   AccountabilityView,
   ActionDrawer,
@@ -69,6 +70,8 @@ import { personaLabels } from "@/lib/brief/types";
 const consoleBtnSolid =
   "inline-flex min-h-9 items-center justify-center border border-ink bg-ink px-3 py-1.5 text-[12px] font-medium text-white hover:bg-graphite disabled:cursor-not-allowed disabled:opacity-60";
 
+const sampleBrief = runSampleBrief();
+
 type ShellView = "console" | "reports" | "my_actions" | "accountability";
 
 type BriefConsoleProps = {
@@ -106,11 +109,13 @@ export function BriefConsole({
   onActionSelect,
   onOutcome,
 }: BriefConsoleProps) {
-  const [brief, setBrief] = useState<BriefResult | null>(null);
+  const [brief, setBrief] = useState<BriefResult | null>(sampleBrief);
   const [generating, setGenerating] = useState(false);
   const [category, setCategory] = useState<Category | "all">("all");
   const [owner, setOwner] = useState<Owner | "all">("all");
-  const [selectedId, setSelectedId] = useState<string | undefined>();
+  const [selectedId, setSelectedId] = useState<string | undefined>(
+    sampleBrief.priorities[0]?.issue.id,
+  );
   const [meetingMode, setMeetingMode] = useState(false);
   const [meetingStep, setMeetingStep] = useState<MeetingStep>("production");
   const [overrides, setOverrides] = useState<Record<string, Partial<BriefAction>>>({});
@@ -157,11 +162,11 @@ export function BriefConsole({
   function reset() {
     window.clearTimeout(timer.current);
     window.clearTimeout(botTimer.current);
-    setBrief(null);
+    setBrief(sampleBrief);
     setGenerating(false);
     setCategory("all");
     setOwner("all");
-    setSelectedId(undefined);
+    setSelectedId(sampleBrief.priorities[0]?.issue.id);
     setMeetingMode(false);
     setMeetingStep("production");
     setOverrides({});
@@ -330,8 +335,9 @@ export function BriefConsole({
             <p className="text-[12px] text-graphite">Daily Operations Console</p>
           </div>
           <p className="mt-1 font-mono text-[10px] tracking-[0.08em] text-stone">
-            DEMO · FICTIONAL SAMPLE DATA
+            DEMO
           </p>
+          <SampleDataCaption className="mt-1" />
         </div>
         <div className="flex flex-wrap gap-2">
           <button
@@ -340,13 +346,13 @@ export function BriefConsole({
             disabled={generating}
             className={consoleBtnSolid}
           >
-            {generating ? "Assembling…" : "Run Brief"}
+            {generating ? "Assembling…" : "Run it again"}
           </button>
           <button type="button" onClick={reset} className={consoleBtn}>
             Reset Demo
           </button>
           <button type="button" onClick={generate} className={consoleBtn}>
-            Sample Data
+            Reset to sample
           </button>
           <button
             type="button"
@@ -452,8 +458,7 @@ export function BriefConsole({
           <span className="font-medium text-ink">Shift:</span> Day
         </p>
         <p>
-          <span className="font-medium text-ink">Brief Date:</span>{" "}
-          {brief?.briefDateLabel ?? "Run the brief to set the demo date"}
+          <span className="font-medium text-ink">Brief:</span> Sample day
         </p>
       </div>
 
@@ -466,7 +471,7 @@ export function BriefConsole({
       <div className="space-y-4 px-4 py-4 md:px-5 md:py-5">
         {!brief && !generating ? <EmptyState onRun={generate} /> : null}
 
-        {generating ? (
+        {generating && !brief ? (
           <div className="border border-[#d9d9d2] bg-white px-5 py-10 text-center">
             <p className="text-[13px] text-graphite">
               Assembling today&apos;s exceptions, owners, and actions…
@@ -474,7 +479,7 @@ export function BriefConsole({
           </div>
         ) : null}
 
-        {brief && !generating && shellView === "reports" && report && email ? (
+        {brief && shellView === "reports" && report && email ? (
           <>
             <button
               type="button"
@@ -525,7 +530,7 @@ export function BriefConsole({
           </>
         ) : null}
 
-        {brief && !generating && shellView === "my_actions" ? (
+        {brief && shellView === "my_actions" ? (
           <>
             <button
               type="button"
@@ -556,7 +561,7 @@ export function BriefConsole({
           </>
         ) : null}
 
-        {brief && !generating && shellView === "accountability" ? (
+        {brief && shellView === "accountability" ? (
           <>
             <button
               type="button"
@@ -575,7 +580,7 @@ export function BriefConsole({
           </>
         ) : null}
 
-        {brief && !generating && shellView === "console" ? (
+        {brief && shellView === "console" ? (
           <>
             <PlantStatusCard brief={brief} />
             <ExecutiveStrip

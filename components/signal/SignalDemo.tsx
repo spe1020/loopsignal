@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { DemoFlow } from "@/components/DemoCards";
 import { Container, Eyebrow } from "@/components/Reveal";
+import { SampleDataCaption } from "@/components/SampleDataCaption";
 import { SignalResults } from "@/components/signal/SignalResults";
 import { TrackedLink } from "@/components/TrackedLink";
 import {
@@ -13,6 +15,8 @@ import {
   trackSignalUploadStart,
   type SignalErrorCategory,
 } from "@/lib/analytics";
+import { demos } from "@/lib/content";
+import { analyzeSample } from "@/lib/signal";
 import { formatIsoDate } from "@/lib/signal/dates";
 import { SIGNAL_LIMITS, type SignalAnalysisResult } from "@/lib/signal/types";
 
@@ -24,6 +28,9 @@ const consoleBtn =
   "inline-flex min-h-9 items-center justify-center border border-[#c8c8c0] bg-white px-3 py-1.5 text-[12px] font-medium text-ink hover:border-ink disabled:cursor-not-allowed disabled:opacity-60";
 const consoleBtnSolid =
   "inline-flex min-h-9 items-center justify-center border border-ink bg-ink px-3 py-1.5 text-[12px] font-medium text-white hover:bg-graphite disabled:cursor-not-allowed disabled:opacity-60";
+
+const sampleResult = analyzeSample();
+const supplyDemo = demos.find((item) => item.href === "/supply")!;
 
 function classifyError(message: string, network: boolean): SignalErrorCategory {
   if (network) return "network";
@@ -58,7 +65,7 @@ async function readError(response: Response): Promise<string> {
 }
 
 export function SignalDemo() {
-  const [result, setResult] = useState<SignalAnalysisResult | null>(null);
+  const [result, setResult] = useState<SignalAnalysisResult | null>(sampleResult);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -144,45 +151,40 @@ export function SignalDemo() {
   }
 
   function reset() {
-    setResult(null);
+    setResult(sampleResult);
     setError("");
     if (inputRef.current) inputRef.current.value = "";
   }
 
-  const sampleLabel =
-    result?.meta.source === "sample"
-      ? "FICTIONAL SAMPLE DATA"
-      : result
-        ? "UPLOADED CSV"
-        : "DEMO";
+  function openUpload() {
+    demoRef.current?.scrollIntoView({ behavior: "smooth" });
+    inputRef.current?.click();
+  }
+
+  const isSample = result?.meta.source === "sample";
 
   return (
     <>
       <section className="relative overflow-hidden">
-        <Container className="relative pt-12 pb-10 md:pt-16 md:pb-12">
+        <Container className="relative pt-5 pb-4 md:pt-10 md:pb-8">
           <Eyebrow>LoopSupply</Eyebrow>
-          <h1 className="mt-4 max-w-3xl text-[36px] leading-[1.08] font-medium tracking-[-0.035em] text-ink sm:text-5xl md:text-[56px]">
+          <h1 className="mt-2 max-w-3xl text-[24px] leading-[1.12] font-medium tracking-[-0.035em] text-ink sm:text-4xl md:text-[56px] md:leading-[1.08]">
             Stop searching the report. Find what needs attention.
           </h1>
-          <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite md:text-[18px]">
-            LoopSupply turns an open purchase-order report into a prioritized
-            view of supplier and material risk so buyers can focus on the
-            orders that actually need action.
+          <p className="mt-3 max-w-2xl text-[15px] leading-6 text-graphite md:text-[18px] md:leading-7">
+            {supplyDemo.description}
           </p>
-          <p className="mt-3 max-w-2xl text-[14px] leading-6 text-graphite">
-            No ERP integration required for this demo. Upload a CSV and see the
-            signal inside the noise.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <DemoFlow steps={supplyDemo.flow} className="mt-3" />
+          <div className="mt-5 flex flex-wrap items-center gap-3">
             <a
-              href="#demo"
+              href="#upload"
               onClick={(event) => {
                 event.preventDefault();
-                demoRef.current?.scrollIntoView({ behavior: "smooth" });
+                openUpload();
               }}
               className={marketingPrimary}
             >
-              Open the Console
+              Upload your own file
             </a>
             <button
               type="button"
@@ -193,13 +195,13 @@ export function SignalDemo() {
               disabled={loading}
               className={marketingSecondary}
             >
-              {loading && !result ? "Reading the report…" : "Run Sample Data"}
+              {loading && isSample ? "Reading the report…" : "Run it again"}
             </button>
           </div>
         </Container>
       </section>
 
-      <section ref={demoRef} id="demo" className="bg-console py-8 md:py-10">
+      <section ref={demoRef} id="demo" className="bg-console py-3 md:py-8">
         <Container>
           <div className="border border-[#c8c8c0] bg-console-surface">
             <header className="sticky top-[72px] z-20 flex flex-col gap-3 border-b border-[#c8c8c0] bg-console-surface/95 px-4 py-3 backdrop-blur-md md:flex-row md:items-center md:justify-between md:px-5">
@@ -213,9 +215,9 @@ export function SignalDemo() {
                   </p>
                 </div>
                 <p className="mt-1 font-mono text-[10px] tracking-[0.08em] text-stone">
-                  DEMO · {sampleLabel}
-                  {result
-                    ? ` · Updated ${formatIsoDate(result.meta.asOfDate)}`
+                  DEMO
+                  {result && !isSample
+                    ? ` · UPLOADED CSV · Updated ${formatIsoDate(result.meta.asOfDate)}`
                     : ""}
                 </p>
               </div>
@@ -224,35 +226,29 @@ export function SignalDemo() {
                   type="button"
                   onClick={() => inputRef.current?.click()}
                   disabled={loading}
-                  className={consoleBtn}
+                  className={consoleBtnSolid}
                 >
-                  Upload CSV
+                  {loading && !isSample ? "Reading…" : "Upload CSV"}
                 </button>
                 <button
                   type="button"
                   onClick={() => void runAnalysis({ source: "sample" })}
                   disabled={loading}
-                  className={consoleBtnSolid}
+                  className={consoleBtn}
                 >
-                  {loading ? "Reading…" : "Run Sample Data"}
+                  {loading && isSample ? "Reading…" : "Run it again"}
                 </button>
-                {result ? (
-                  <button
-                    type="button"
-                    onClick={reset}
-                    className={consoleBtn}
-                  >
-                    Reset Demo
-                  </button>
-                ) : (
-                  <a href="/api/signal/sample" className={consoleBtn}>
-                    Download Sample CSV
-                  </a>
-                )}
+                <button type="button" onClick={reset} className={consoleBtn}>
+                  Reset Demo
+                </button>
+                <a href="/api/signal/sample" className={consoleBtn}>
+                  Download Sample CSV
+                </a>
               </div>
             </header>
             <input
               ref={inputRef}
+              id="supply-csv"
               type="file"
               accept=".csv,text/csv,text/plain"
               className="sr-only"
@@ -263,112 +259,117 @@ export function SignalDemo() {
             />
 
             {result ? (
-              <SignalResults result={result} />
-            ) : (
-              <div className="px-4 py-6 md:px-5 md:py-8">
-                <aside className="border border-[#d9d9d2] bg-white px-4 py-4">
-                  <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-stone">
-                    Demo environment
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-graphite">
-                    LoopSupply is an early demonstration of the LoopSignal
-                    approach and is not intended to replace production planning,
-                    ERP, MRP, or purchasing systems.
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-graphite">
-                    Do not upload confidential, proprietary, export-controlled,
-                    personal, or sensitive company information to this public
-                    demo. Use the provided sample file or sanitized data.
-                  </p>
-                </aside>
-
-                <div
-                  onDragEnter={(event) => {
-                    event.preventDefault();
-                    setDragging(true);
-                  }}
-                  onDragOver={(event) => {
-                    event.preventDefault();
-                    setDragging(true);
-                  }}
-                  onDragLeave={() => setDragging(false)}
-                  onDrop={(event) => {
-                    event.preventDefault();
-                    setDragging(false);
-                    onFile(event.dataTransfer.files[0]);
-                  }}
-                  className={`mt-4 border border-dashed px-4 py-10 text-center ${
-                    dragging
-                      ? "border-ink bg-white"
-                      : "border-[#c8c8c0] bg-white"
-                  }`}
-                >
-                  <p className="text-[15px] font-medium text-ink">
-                    Drop a CSV here, or choose a file
-                  </p>
-                  <p className="mt-2 text-sm text-stone">
-                    CSV only · 1 MB limit · processed in memory, then discarded
-                  </p>
-                  <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => inputRef.current?.click()}
-                      disabled={loading}
-                      className={consoleBtnSolid}
-                    >
-                      {loading ? "Reading the report…" : "Upload CSV"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => void runAnalysis({ source: "sample" })}
-                      disabled={loading}
-                      className={consoleBtn}
-                    >
-                      Run Sample Data
-                    </button>
-                  </div>
-                </div>
-
-                {error ? (
-                  <p
-                    role="alert"
-                    className="mt-4 border border-risk-critical bg-risk-critical-bg px-4 py-3 text-sm leading-6 text-ink"
-                  >
-                    {error}{" "}
-                    <a
-                      href="/api/signal/sample"
-                      className="font-medium underline"
-                    >
-                      Download the sample template
-                    </a>
-                    .
-                  </p>
+              <div>
+                {isSample ? (
+                  <SampleDataCaption className="border-b border-[#d9d9d2] bg-[#fafaf7] px-4 py-2 md:px-5" />
                 ) : null}
+                <SignalResults result={result} />
+              </div>
+            ) : null}
 
-                <div className="mt-6 grid gap-6 border-t border-[#d9d9d2] pt-5 md:grid-cols-2">
-                  <p className="text-[13px] leading-6 text-graphite">
-                    <span className="block text-[10px] font-medium uppercase tracking-[0.16em] text-stone">
-                      Expected columns
-                    </span>
-                    <span className="mt-2 block">
-                      Required: PO number, supplier, due date, quantity ordered,
-                      quantity received. Optional: item, description, promised
-                      date, buyer, inventory on hand, daily usage, unit cost.
-                    </span>
-                  </p>
-                  <p className="text-[13px] leading-6 text-graphite">
-                    <span className="block text-[10px] font-medium uppercase tracking-[0.16em] text-stone">
-                      How orders are flagged
-                    </span>
-                    <span className="mt-2 block">
-                      Open quantity, days past the promised or due date, missing
-                      confirmations, inventory coverage, and open value when
-                      those fields are present. No AI is used in this version.
-                    </span>
-                  </p>
+            <div id="upload" className="border-t border-[#d9d9d2] px-4 py-6 md:px-5 md:py-8">
+              <aside className="border border-[#d9d9d2] bg-white px-4 py-4">
+                <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-stone">
+                  Demo environment
+                </p>
+                <p className="mt-2 text-sm leading-6 text-graphite">
+                  LoopSupply is an early demonstration of the LoopSignal
+                  approach and is not intended to replace production planning,
+                  ERP, MRP, or purchasing systems.
+                </p>
+                <p className="mt-2 text-sm leading-6 text-graphite">
+                  Do not upload confidential, proprietary, export-controlled,
+                  personal, or sensitive company information to this public
+                  demo. Use the provided sample file or sanitized data.
+                </p>
+              </aside>
+
+              <div
+                onDragEnter={(event) => {
+                  event.preventDefault();
+                  setDragging(true);
+                }}
+                onDragOver={(event) => {
+                  event.preventDefault();
+                  setDragging(true);
+                }}
+                onDragLeave={() => setDragging(false)}
+                onDrop={(event) => {
+                  event.preventDefault();
+                  setDragging(false);
+                  onFile(event.dataTransfer.files[0]);
+                }}
+                className={`mt-4 border border-dashed px-4 py-10 text-center ${
+                  dragging
+                    ? "border-ink bg-white"
+                    : "border-[#c8c8c0] bg-white"
+                }`}
+              >
+                <p className="text-[15px] font-medium text-ink">
+                  Drop a CSV here, or choose a file
+                </p>
+                <p className="mt-2 text-sm text-stone">
+                  CSV only · 1 MB limit · processed in memory, then discarded
+                </p>
+                <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => inputRef.current?.click()}
+                    disabled={loading}
+                    className={consoleBtnSolid}
+                  >
+                    {loading && !isSample ? "Reading the report…" : "Upload CSV"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void runAnalysis({ source: "sample" })}
+                    disabled={loading}
+                    className={consoleBtn}
+                  >
+                    Run it again
+                  </button>
                 </div>
               </div>
-            )}
+
+              {error ? (
+                <p
+                  role="alert"
+                  className="mt-4 border border-risk-critical bg-risk-critical-bg px-4 py-3 text-sm leading-6 text-ink"
+                >
+                  {error}{" "}
+                  <a
+                    href="/api/signal/sample"
+                    className="font-medium underline"
+                  >
+                    Download the sample template
+                  </a>
+                  .
+                </p>
+              ) : null}
+
+              <div className="mt-6 grid gap-6 border-t border-[#d9d9d2] pt-5 md:grid-cols-2">
+                <p className="text-[13px] leading-6 text-graphite">
+                  <span className="block text-[10px] font-medium uppercase tracking-[0.16em] text-stone">
+                    Expected columns
+                  </span>
+                  <span className="mt-2 block">
+                    Required: PO number, supplier, due date, quantity ordered,
+                    quantity received. Optional: item, description, promised
+                    date, buyer, inventory on hand, daily usage, unit cost.
+                  </span>
+                </p>
+                <p className="text-[13px] leading-6 text-graphite">
+                  <span className="block text-[10px] font-medium uppercase tracking-[0.16em] text-stone">
+                    How orders are flagged
+                  </span>
+                  <span className="mt-2 block">
+                    Open quantity, days past the promised or due date, missing
+                    confirmations, inventory coverage, and open value when
+                    those fields are present. No AI is used in this version.
+                  </span>
+                </p>
+              </div>
+            </div>
           </div>
         </Container>
       </section>
