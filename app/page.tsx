@@ -5,13 +5,17 @@ import { Button } from "@/components/Button";
 import { CommercialPath } from "@/components/CommercialPath";
 import { DemoCards } from "@/components/DemoCards";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
+import { SampleDataCaption } from "@/components/SampleDataCaption";
 import { articles } from "@/lib/articles";
 import {
   capabilities,
   cta,
   demoNote,
   featuredArticleSlugs,
+  fitCheckNote,
   founder,
+  homepageFinding,
+  loopScanOffer,
   painPoints,
   trustPrinciples,
 } from "@/lib/content";
@@ -56,14 +60,57 @@ export default function HomePage() {
               automate only what earns it.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-5">
-              <Button href={cta.talkAboutProcess.href} location="hero">
-                {cta.talkAboutProcess.label}
-              </Button>
+              <div>
+                <Button href={cta.fitCheck.href} location="hero">
+                  {cta.fitCheck.label}
+                </Button>
+                <p className="mt-2 text-[13px] leading-5 text-graphite">
+                  {fitCheckNote}
+                </p>
+              </div>
               <Button href={cta.seeDemos.href} variant="text">
                 {cta.seeDemos.label} →
               </Button>
             </div>
+            <div className="mt-12 max-w-2xl border border-dashed border-line bg-cream px-5 py-5 md:px-6 md:py-6">
+              <SampleDataCaption />
+              <p className="mt-3 text-[16px] leading-7 text-ink md:text-[17px]">
+                {homepageFinding.text}
+              </p>
+              <p className="mt-3 text-sm leading-6 text-graphite">
+                {homepageFinding.source}
+              </p>
+              <a
+                href={loopScanOffer.samplePdf.href}
+                download={loopScanOffer.samplePdf.filename}
+                className="mt-3 inline-block text-sm font-medium text-copper hover:text-copper-dark"
+              >
+                {loopScanOffer.samplePdf.cta} →
+              </a>
+            </div>
           </Reveal>
+        </Container>
+      </section>
+
+      <section className="border-t border-line bg-paper py-8 md:py-10">
+        <Container>
+          <Eyebrow>LoopScan</Eyebrow>
+          <p className="mt-3 text-[18px] font-medium leading-7 tracking-tight text-ink md:text-[20px]">
+            {loopScanOffer.priceLine}
+          </p>
+          <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
+            <div>
+              <Button href={cta.fitCheck.href} location="loopscan_section">
+                {cta.fitCheck.label}
+              </Button>
+              <p className="mt-2 text-[13px] leading-5 text-graphite">
+                {fitCheckNote}
+              </p>
+            </div>
+            <Button href={cta.startLoopScan.href} variant="text">
+              {cta.startLoopScan.label} →
+            </Button>
+          </div>
         </Container>
       </section>
 
@@ -304,15 +351,20 @@ export default function HomePage() {
               there.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-5">
-              <Button
-                href={cta.talkAboutProcess.href}
-                variant="dark"
-                location="final_cta"
-              >
-                {cta.talkAboutProcess.label}
-              </Button>
-              <Button href={cta.learnLoopScan.href} variant="light">
-                {cta.learnLoopScan.label}
+              <div>
+                <Button
+                  href={cta.fitCheck.href}
+                  variant="dark"
+                  location="final_cta"
+                >
+                  {cta.fitCheck.label}
+                </Button>
+                <p className="mt-2 text-[13px] leading-5 text-white/50">
+                  {fitCheckNote}
+                </p>
+              </div>
+              <Button href={cta.startLoopScan.href} variant="light">
+                {cta.startLoopScan.label}
               </Button>
             </div>
           </Reveal>

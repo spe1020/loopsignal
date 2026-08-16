@@ -12,6 +12,7 @@ import { getLeadAttribution } from "@/lib/attribution";
 import { company } from "@/lib/company";
 import {
   cta,
+  fitCheckNote,
   loopScanIntents,
   type LoopScanIntent,
 } from "@/lib/content";
@@ -74,7 +75,10 @@ function parseIntent(value: string | null | undefined): LoopScanIntent {
 }
 
 function intentLabel(intent: LoopScanIntent) {
-  return loopScanIntents.find((item) => item.value === intent)?.label ?? "Want to talk through a process";
+  return (
+    loopScanIntents.find((item) => item.value === intent)?.label ??
+    "A 30-minute fit check — no charge, no obligation"
+  );
 }
 
 function writeIntentToUrl(intent: LoopScanIntent, hash?: string) {
@@ -696,27 +700,34 @@ export function LoopScanCtas() {
   }
 
   return (
-    <div className="mt-6 flex flex-wrap items-center gap-4">
-      <a
-        href="/loopscan?intent=book#intake"
-        onClick={(event) => {
-          event.preventDefault();
-          selectIntent("book");
-        }}
-        className="inline-flex items-center justify-center rounded-[2px] bg-copper px-5 py-3 text-[13px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark"
-      >
-        {cta.startLoopScan.label}
-      </a>
-      <a
-        href="/loopscan?intent=talk#intake"
-        onClick={(event) => {
-          event.preventDefault();
-          selectIntent("talk");
-        }}
-        className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
-      >
-        {cta.talkThroughProcess.label} →
-      </a>
+    <div className="mt-6">
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+        <div>
+          <a
+            href="/loopscan?intent=talk#intake"
+            onClick={(event) => {
+              event.preventDefault();
+              selectIntent("talk");
+            }}
+            className="inline-flex items-center justify-center rounded-[2px] bg-copper px-5 py-3 text-[13px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark"
+          >
+            {cta.fitCheck.label}
+          </a>
+          <p className="mt-2 text-[13px] leading-5 text-graphite">
+            {fitCheckNote}
+          </p>
+        </div>
+        <a
+          href="/loopscan?intent=book#intake"
+          onClick={(event) => {
+            event.preventDefault();
+            selectIntent("book");
+          }}
+          className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
+        >
+          {cta.startLoopScan.label} →
+        </a>
+      </div>
     </div>
   );
 }

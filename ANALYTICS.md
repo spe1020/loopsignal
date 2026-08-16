@@ -54,9 +54,10 @@ All events are categorical. Never send names, emails, company names, phone numbe
 
 Fired when a visitor clicks a LoopScan call to action. Labels in use:
 
-- Talk to Us (navigation)
-- Talk About a Process (intake)
-- Start a LoopScan (ready buyer, `/loopscan`)
+- Fit check (navigation)
+- Book a 30-minute fit check (homepage and `/loopscan`)
+- Book a LoopScan (ready buyer, `/loopscan`)
+- Talk About a Process (other pages)
 - Learn About LoopScan
 
 Secondary demo label: "See the Demos" → `/demo`.

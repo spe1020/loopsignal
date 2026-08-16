@@ -1,5 +1,5 @@
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
-import { commercialJourney } from "@/lib/content";
+import { commercialJourney, loopScanOffer } from "@/lib/content";
 
 export function CommercialPath() {
   return (
@@ -31,6 +31,11 @@ export function CommercialPath() {
               <p className="mt-3 text-[15px] leading-6 text-graphite">
                 {item.text}
               </p>
+              {item.name === "LoopScan" ? (
+                <p className="mt-4 text-[16px] font-medium text-ink">
+                  {loopScanOffer.priceLine}
+                </p>
+              ) : null}
             </Reveal>
           ))}
         </div>
