@@ -44,20 +44,6 @@ export default function LoopScanPage() {
                 </li>
               ))}
             </ol>
-            <p className="mt-4 text-[13px] font-medium text-ink">
-              What’s reviewed
-            </p>
-            <p className="mt-1 text-sm leading-5 text-graphite">
-              {loopScanOffer.reviewed.join(" · ")}
-            </p>
-            <p className="mt-4 text-[13px] font-medium text-ink">
-              What you receive
-            </p>
-            <ol className="mt-1 list-decimal space-y-0.5 pl-5 text-sm leading-5 text-ink">
-              {loopScanOffer.deliverables.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ol>
             <p className="mt-5 text-[16px] leading-6 font-medium text-ink">
               {loopScanOffer.priceLine}
             </p>
@@ -82,7 +68,21 @@ export default function LoopScanPage() {
                 .map((row) => `${row.role} ${row.hours}`)
                 .join(" · ")}
             </p>
-            <p className="mt-2 text-[15px] leading-6 text-ink">
+            <p className="mt-4 text-[13px] font-medium text-ink">
+              What’s reviewed
+            </p>
+            <p className="mt-1 text-sm leading-5 text-graphite">
+              {loopScanOffer.reviewed.join(" · ")}
+            </p>
+            <p className="mt-4 text-[13px] font-medium text-ink">
+              What you receive
+            </p>
+            <ol className="mt-1 list-decimal space-y-0.5 pl-5 text-sm leading-5 text-ink">
+              {loopScanOffer.deliverables.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ol>
+            <p className="mt-5 text-[15px] leading-6 text-ink">
               {loopScanOffer.radius}
             </p>
             <p className="mt-3 text-[14px] leading-6 text-graphite">

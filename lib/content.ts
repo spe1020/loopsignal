@@ -47,11 +47,11 @@ export const loopScanOffer = {
   findingsIn: "Findings within 10 business days",
   priceLine: "$7,500 · Two days on site · Findings within 10 business days",
   samplePdf: {
-    href: "/loopscan-sample-northfield.pdf",
+    href: "/LoopScan-sample-Northfield.pdf",
     filename: "LoopScan-sample-Northfield.pdf",
     eyebrow: "Sample LoopScan",
-    body: "A complete sample LoopScan, start to finish. Built on fictional data. Nothing gated.",
-    cta: "Download the Northfield sample",
+    body: "A complete sample LoopScan, start to finish — six pages, built on the same fictional Northfield dataset behind the demos. Current-state map, friction, information gaps, system connections, repetitive work, what to automate and what not to, and one prioritized next step with the arithmetic shown. Nothing gated.",
+    cta: "Download the sample (PDF, 6 pages)",
   },
   guarantee:
     "Unconditional. If the findings aren't worth what you paid, tell us within seven days and we refund it.",
@@ -120,7 +120,7 @@ export const loopScanFit = {
     items: [
       "You need an ERP replacement or upgrade.",
       "You already run a mature continuous improvement program with dedicated CI staff.",
-      "You’re looking for staff augmentation rather than a defined engagement.",
+      "You want staff augmentation rather than a defined engagement.",
     ],
   },
 } as const;
