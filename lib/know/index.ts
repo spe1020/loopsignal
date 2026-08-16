@@ -1,5 +1,5 @@
 import { interpret } from "@/lib/know/interpret";
-import { retrieve } from "@/lib/know/retrieve";
+import { retrieve, sampleQuestions } from "@/lib/know/retrieve";
 import type { KnowAnswer } from "@/lib/know/types";
 
 export {
@@ -39,4 +39,15 @@ export type {
 
 export function answerQuestion(question: string): KnowAnswer {
   return interpret(retrieve(question));
+}
+
+const firstSampleQuestion = sampleQuestions[0];
+if (!firstSampleQuestion) {
+  throw new Error("LoopKnow sample questions are missing");
+}
+
+export const defaultSampleQuestion = firstSampleQuestion;
+
+export function getSampleAnswer(): KnowAnswer {
+  return answerQuestion(defaultSampleQuestion.label);
 }

@@ -3,6 +3,7 @@ import { interpretOrder } from "@/lib/signal/interpret";
 import { parsePoCsv, rowCountBucket } from "@/lib/signal/parse";
 import { buildSampleRows } from "@/lib/signal/sample";
 import { todayStamp } from "@/lib/signal/dates";
+import { SAMPLE_AS_OF_DATE } from "@/lib/sample-as-of";
 import { buildDashboard } from "@/lib/signal/view";
 import type {
   RawPoRow,
@@ -13,6 +14,7 @@ import type {
 export { SIGNAL_LIMITS, SignalClientError } from "@/lib/signal/types";
 export { buildSampleCsv } from "@/lib/signal/sample";
 export { todayStamp } from "@/lib/signal/dates";
+export { SAMPLE_AS_OF_DATE, formatSampleAsOf } from "@/lib/sample-as-of";
 export type { SignalInterpretationRequest } from "@/lib/signal/ai";
 
 function runAnalysis(
@@ -43,7 +45,7 @@ function runAnalysis(
 }
 
 export function analyzeSample(): SignalAnalysisResult {
-  const asOfDate = todayStamp();
+  const asOfDate = SAMPLE_AS_OF_DATE;
   const rows = buildSampleRows(asOfDate);
   return runAnalysis(rows, {
     source: "sample",

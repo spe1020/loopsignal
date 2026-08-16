@@ -1,9 +1,17 @@
 import { Button } from "@/components/Button";
 import { demos } from "@/lib/content";
 
-function Flow({ steps }: { steps: readonly string[] }) {
+export function DemoFlow({
+  steps,
+  className = "mt-4",
+}: {
+  steps: readonly string[];
+  className?: string;
+}) {
   return (
-    <p className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[11px] leading-5 tracking-[0.04em] text-stone uppercase">
+    <p
+      className={`${className} flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[11px] leading-5 tracking-[0.04em] text-stone uppercase`}
+    >
       {steps.map((step, index) => (
         <span key={step} className="inline-flex items-center gap-2">
           {index > 0 ? (
@@ -44,7 +52,7 @@ export function DemoCards({
               <h3 className="mt-3 text-2xl font-medium tracking-tight text-ink">
                 {demo.headline}
               </h3>
-              <Flow steps={demo.flow} />
+              <DemoFlow steps={demo.flow} />
               <p className="mt-4 max-w-md text-[15px] leading-7 text-graphite">
                 {demo.description}
               </p>
