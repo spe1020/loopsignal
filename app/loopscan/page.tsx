@@ -76,6 +76,16 @@ export default function LoopScanPage() {
             <p className="mt-3 text-[14px] leading-6 text-graphite">
               {loopScanOffer.firstClient}
             </p>
+            <p className="mt-4 text-[13px] font-medium text-ink">Your data</p>
+            <p className="mt-1 text-[14px] leading-6 text-graphite">
+              {loopScanOffer.dataHandling}{" "}
+              <Link
+                href="/security"
+                className="text-copper hover:text-copper-dark"
+              >
+                How we handle your data →
+              </Link>
+            </p>
             <div className="mt-4 border border-dashed border-line px-4 py-3">
               <p className="text-[11px] font-medium tracking-[0.14em] text-stone uppercase">
                 Sample findings
@@ -119,23 +129,6 @@ export default function LoopScanPage() {
               information.
             </p>
           </div>
-        </Container>
-      </section>
-
-      <section className="border-t border-line py-16 md:py-24">
-        <Container>
-          <h2 className="text-3xl font-medium tracking-[-0.03em] text-ink">
-            Data
-          </h2>
-          <p className="mt-5 max-w-2xl text-[16px] leading-8 text-graphite">
-            {loopScanOffer.dataHandling}{" "}
-            <Link
-              href="/security"
-              className="text-copper hover:text-copper-dark"
-            >
-              How we handle data →
-            </Link>
-          </p>
         </Container>
       </section>
 

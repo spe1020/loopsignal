@@ -57,7 +57,7 @@ export const loopScanOffer = {
   firstClient:
     "LoopSignal is new. You would be among the first LoopScan clients, which is why the price is fixed, the deliverable is defined in advance, and the guarantee is unconditional.",
   dataHandling:
-    "We pull read-only. The work runs in your environment. Nothing trains a model. When the engagement ends, we hand you the raw pull and the queries, then delete our copy.",
+    "We’re hired to look at your process — the data is yours. If sizing the problem needs a pull, it is read-only, we ask before anything is exported, we take the smallest set that answers the question, and you can decline and still get the scan. One person does this work. We delete our copy when the analysis is done, and no later than 30 days after your readout.",
   // TODO: confirm these seven items against Dr. Sats' pricing work.
   deliverables: [
     "Current-state workflow map",
