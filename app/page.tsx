@@ -8,12 +8,13 @@ import { MethodLoop } from "@/components/Loops";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
 import { SolutionInterestLink } from "@/components/SolutionInterestLink";
 import { articles } from "@/lib/articles";
-import { company } from "@/lib/company";
 import {
+  cta,
   capabilities,
   demoNote,
   featuredArticleSlugs,
   informationSources,
+  loopScanOffer,
   solutions,
   trustPrinciples,
 } from "@/lib/content";
@@ -42,27 +43,36 @@ export default function HomePage() {
         />
         <Container className="relative pt-20 pb-16 md:pt-28 md:pb-20">
           <Reveal>
-            <Eyebrow>{company.name}</Eyebrow>
+            <Eyebrow>Consulting. Not software.</Eyebrow>
             <h1 className="mt-6 max-w-4xl text-[44px] leading-[1.05] font-medium tracking-[-0.035em] text-ink sm:text-6xl md:text-[84px]">
-              Improve the process.
+              Buyers chasing overdue POs by hand.
               <br />
-              Connect the systems.
+              Critical work living with one person who knows where everything
+              is.
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-8 text-graphite md:text-[19px]">
-              LoopSignal helps manufacturers improve how work, information, and
-              decisions move through the organization.
+              This is for you if your buyers work out of Excel exports from an
+              ERP older than they are. It is not for you if you need a software
+              platform, a subscription, or another dashboard.
             </p>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-graphite md:text-[19px]">
-              We combine process improvement, systems integration, automation,
-              and practical AI to build solutions around the way your operation
-              actually works.
+              {loopScanOffer.budgetLine}
+            </p>
+            <p className="mt-8 max-w-2xl text-lg leading-8 text-ink md:text-[19px]">
+              {loopScanOffer.priceLine}.
+            </p>
+            <p className="mt-3 max-w-2xl text-[16px] leading-7 text-graphite">
+              {loopScanOffer.firstClient}
+            </p>
+            <p className="mt-5 max-w-2xl font-serif text-2xl leading-snug text-ink md:text-[28px]">
+              {loopScanOffer.credibleNextStep}
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-5">
-              <Button href="/loopscan" location="hero">
-                Find Your First Loop
+              <Button href={cta.primary.href} location="hero">
+                {cta.primary.label}
               </Button>
-              <Button href="/demo" variant="text">
-                See It in Action →
+              <Button href={cta.secondary.href} variant="text">
+                {cta.secondary.label} →
               </Button>
             </div>
           </Reveal>
@@ -92,23 +102,19 @@ export default function HomePage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <Reveal className="lg:col-span-5">
-              <Eyebrow>The problem</Eyebrow>
+              <Eyebrow>The work</Eyebrow>
               <h2 className="mt-5 text-3xl leading-tight font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-                Your operation already has the information. The challenge is
-                connecting it to the work.
+                Your operation already has the information. Connecting it to
+                the work is the job.
               </h2>
               <p className="mt-5 text-[16px] leading-7 text-graphite">
                 ERP systems, email, spreadsheets, quality records, supplier
                 updates, production reports, specifications, shared drives, and
-                institutional knowledge already contain valuable information.
+                institutional knowledge already contain the record.
               </p>
               <p className="mt-4 text-[16px] leading-7 text-graphite">
-                The problem is often how that information moves between people,
+                The problem is how that information moves between people,
                 systems, and decisions.
-              </p>
-              <p className="mt-4 text-[16px] leading-7 text-graphite">
-                LoopSignal improves the process first, connects what should be
-                connected, and automates what makes sense.
               </p>
             </Reveal>
             <Reveal className="lg:col-span-7" delay={80}>
@@ -135,14 +141,14 @@ export default function HomePage() {
               Start with the work.
             </h2>
             <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-              We do not begin by asking where AI can be used. We begin by
+              We do not begin by asking where AI belongs. We begin by
               understanding how the process works today, where the friction
               exists, and what outcome needs to improve.
             </p>
             <p className="mt-4 max-w-2xl text-[16px] leading-7 text-graphite">
               Sometimes the answer is process redesign. Sometimes it is systems
-              integration. Sometimes it is automation or AI. Often it is a
-              combination.
+              integration. Sometimes it is automation or AI. Sometimes it is
+              all three.
             </p>
           </Reveal>
           <div className="mt-12 grid gap-px border border-line bg-line md:grid-cols-3">
@@ -170,19 +176,19 @@ export default function HomePage() {
             <div>
               <Eyebrow>Working demos</Eyebrow>
               <h2 className="mt-5 max-w-3xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-                See what a better operational loop can look like.
+                See what a better operational loop looks like.
               </h2>
               <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-                These demos are working examples of how process improvement,
-                connected information, automation, and decision support can be
-                applied to common manufacturing workflows.
+                These demos are working examples of process improvement,
+                connected information, automation, and decision support on
+                common manufacturing workflows.
               </p>
             </div>
             <Link
               href="/demo"
               className="shrink-0 text-[13px] font-medium tracking-[0.02em] text-copper hover:text-copper-dark"
             >
-              All demos →
+              {cta.secondary.label} →
             </Link>
           </Reveal>
           <Reveal className="mt-10" delay={60}>
@@ -200,7 +206,7 @@ export default function HomePage() {
             <div>
               <Eyebrow>Solutions</Eyebrow>
               <h2 className="mt-5 max-w-xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-                Operational problems LoopSignal can help solve.
+                Work we take on.
               </h2>
             </div>
             <Link
@@ -273,12 +279,12 @@ export default function HomePage() {
                 possible.
               </p>
               <p className="mt-4 text-[16px] leading-7 text-graphite">
-                The goal is not to add another platform simply because one can
-                be built. The goal is to improve the process and make your
-                people, information, and systems work better together.
+                The goal is not to add another platform because one is
+                available. The goal is to improve the process and make your
+                people, information, and systems work together.
               </p>
               <p className="mt-8 font-serif text-2xl leading-snug text-ink">
-                Technology should support judgment, not replace it blindly.
+                Technology supports judgment. It does not replace it.
               </p>
             </Reveal>
           </div>
@@ -341,22 +347,20 @@ export default function HomePage() {
         <Container>
           <Reveal>
             <h2 className="max-w-3xl text-4xl font-medium tracking-[-0.035em] md:text-6xl">
-              Find your first loop.
+              {loopScanOffer.priceLine}.
             </h2>
             <p className="mt-8 max-w-xl text-[17px] leading-8 text-white/60">
-              Every operation has work that takes too long, information that is
-              difficult to connect, and decisions that happen later than they
-              should.
+              {loopScanOffer.guarantee}
             </p>
             <p className="mt-4 max-w-xl text-[17px] leading-8 text-white/60">
-              Start with one process. We’ll help you make it better.
+              Start with one process.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-5">
-              <Button href="/loopscan" variant="dark" location="final_cta">
-                Start a LoopScan
+              <Button href={cta.primary.href} variant="dark" location="final_cta">
+                {cta.primary.label}
               </Button>
-              <Button href="/demo" variant="light">
-                Explore the Demos
+              <Button href={cta.secondary.href} variant="light">
+                {cta.secondary.label}
               </Button>
             </div>
           </Reveal>

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { BriefConsole } from "@/components/brief/BriefConsole";
 import { Container, Eyebrow } from "@/components/Reveal";
 import { TrackedLink } from "@/components/TrackedLink";
+import { cta } from "@/lib/content";
 import {
   trackBriefActionSelect,
   trackBriefActionStatusChange,
@@ -172,7 +173,7 @@ export function BriefDemo() {
             Your daily meeting already has the data.
           </h2>
           <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-            LoopSignal can help connect production, quality, supply, maintenance,
+            LoopSignal connects production, quality, supply, maintenance,
             and planning information into a daily operating system built around
             exceptions and action.
           </p>
@@ -180,24 +181,21 @@ export function BriefDemo() {
             <TrackedLink
               href="/loopscan?source=loopbrief"
               location="loopbrief"
-              ctaText="Find Your First Loop"
+              ctaText={cta.primary.label}
               onClick={() =>
-                trackBriefLoopScanClick({ cta_text: "Find Your First Loop" })
+                trackBriefLoopScanClick({ cta_text: cta.primary.label })
               }
               className={marketingPrimary}
             >
-              Find Your First Loop
+              {cta.primary.label}
             </TrackedLink>
             <TrackedLink
-              href="/loopscan?source=loopbrief"
+              href={cta.secondary.href}
               location="loopbrief"
-              ctaText="Start a LoopScan"
-              onClick={() =>
-                trackBriefLoopScanClick({ cta_text: "Start a LoopScan" })
-              }
+              ctaText={cta.secondary.label}
               className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
             >
-              Start a LoopScan →
+              {cta.secondary.label} →
             </TrackedLink>
           </div>
         </Container>

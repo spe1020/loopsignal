@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { LoopScanForm } from "@/components/LoopScanForm";
 import { Container, Eyebrow } from "@/components/Reveal";
-import { loopScanIntakeExamples } from "@/lib/content";
+import { company } from "@/lib/company";
+import { loopScanIntakeExamples, loopScanOffer, loopScanTeamHoursByRole } from "@/lib/content";
 import { routeMeta, routePageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = routePageMeta(routeMeta.loopscan);
@@ -15,12 +17,12 @@ const nextSteps = [
   {
     step: "2",
     title: "We understand the work",
-    text: "If there is a potential fit, we talk through how the process works today, where the friction is, and what systems are involved.",
+    text: "If there is a fit, we talk through how the process works today, where the friction is, and what systems are involved.",
   },
   {
     step: "3",
     title: "We recommend the next step",
-    text: "That may be a simple process change, a LoopScan, an automation opportunity, or no technology at all.",
+    text: loopScanOffer.credibleNextStep,
   },
 ];
 
@@ -32,19 +34,52 @@ export default function LoopScanPage() {
       <section className="py-16 md:py-24">
         <Container className="grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
-            <Eyebrow>LoopScan</Eyebrow>
+            <Eyebrow>On-site operational review</Eyebrow>
             <h1 className="mt-5 text-4xl font-medium tracking-[-0.035em] text-ink md:text-5xl">
-              Review the process. Find the friction.
+              {loopScanOffer.price}
             </h1>
-            <p className="mt-6 text-[16px] leading-8 text-graphite">
-              LoopScan is a focused operational review designed to understand
-              how the work happens today, where information or decisions break
-              down, and where improvement could create measurable value.
+            <p className="mt-3 text-[16px] leading-7 text-ink">
+              {loopScanOffer.duration}. {loopScanOffer.findingsIn}.
             </p>
-            <p className="mt-4 text-[16px] leading-8 text-graphite">
-              Tell us about a process that takes too long, requires too much
-              manual work, depends on disconnected information, or repeatedly
-              creates problems.
+            <p className="mt-4 text-[15px] leading-7 text-graphite">
+              {loopScanOffer.budgetLine}
+            </p>
+            <p className="mt-4 text-[15px] font-medium leading-7 text-ink">
+              You get seven items:
+            </p>
+            <ol className="mt-2 list-decimal space-y-0.5 pl-5 text-sm leading-5 text-ink">
+              {loopScanOffer.deliverables.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ol>
+            <p className="mt-4 text-[15px] leading-7 text-ink">
+              Your team: {loopScanOffer.teamHoursTotal}.
+            </p>
+            {loopScanTeamHoursByRole.length > 0 ? (
+              <ul className="mt-1 space-y-1 text-[15px] leading-6 text-ink">
+                {loopScanTeamHoursByRole.map((row) => (
+                  <li key={row.role}>
+                    {row.role}: {row.hours} hours
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            <p className="mt-3 text-[15px] leading-7 text-ink">
+              {loopScanOffer.guarantee}
+            </p>
+            <p className="mt-3 text-[15px] leading-7 text-ink">
+              {loopScanOffer.radius}
+            </p>
+            <p className="mt-3 text-[15px] leading-6 text-graphite">
+              {loopScanOffer.firstClient}
+            </p>
+            <p className="mt-3 text-[15px] leading-6 text-graphite">
+              <a
+                href={`mailto:${company.contactEmail}`}
+                className="text-copper hover:text-copper-dark"
+              >
+                {company.contactEmail}
+              </a>
             </p>
             <div className="mt-12 hidden lg:block">
               <h2 className="text-xl font-medium tracking-tight text-ink">
@@ -74,10 +109,10 @@ export default function LoopScanPage() {
           <div className="lg:col-span-7">
             <LoopScanForm calendarUrl={calendarUrl} />
             <p className="mt-6 text-[12px] leading-6 text-stone">
-              Please do not include confidential drawings, proprietary formulas,
+              Do not include confidential drawings, proprietary formulas,
               customer data, passwords, or other sensitive information in this
-              initial form. We can establish the appropriate confidentiality
-              protections before reviewing detailed information.
+              form. We put confidentiality in place before reviewing detailed
+              information.
             </p>
           </div>
         </Container>
@@ -113,6 +148,23 @@ export default function LoopScanPage() {
       <section className="border-t border-line py-16 md:py-24">
         <Container>
           <h2 className="text-3xl font-medium tracking-[-0.03em] text-ink">
+            Data
+          </h2>
+          <p className="mt-5 max-w-2xl text-[16px] leading-8 text-graphite">
+            {loopScanOffer.dataHandling}{" "}
+            <Link
+              href="/security"
+              className="text-copper hover:text-copper-dark"
+            >
+              How we handle data →
+            </Link>
+          </p>
+        </Container>
+      </section>
+
+      <section className="border-t border-line py-16 md:py-24">
+        <Container>
+          <h2 className="text-3xl font-medium tracking-[-0.03em] text-ink">
             Not sure what to submit?
           </h2>
           <div className="mt-10 grid gap-px border border-line bg-line md:grid-cols-2">
@@ -129,7 +181,7 @@ export default function LoopScanPage() {
           </div>
           <p className="mt-8 font-serif text-xl text-ink md:text-2xl">
             If your team regularly says “there has to be a better way,” it is
-            probably worth looking at.
+            worth looking at.
           </p>
         </Container>
       </section>

@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/Button";
 import { ProcessLoop } from "@/components/Loops";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
-import { howItWorks, implementationSequence } from "@/lib/content";
+import { cta, howItWorks, implementationSequence } from "@/lib/content";
 import { routeMeta, routePageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = routePageMeta(routeMeta.howItWorks);
@@ -108,16 +108,16 @@ export default function HowItWorksPage() {
           <Reveal className="lg:col-span-7" delay={80}>
             <p className="text-[16px] leading-8 text-graphite">
               Some work requires experience and judgment. Some work is
-              repetitive, rules-based, or information-heavy. LoopSignal helps
-              define the difference.
+              repetitive, rules-based, or information-heavy. LoopSignal names
+              the difference.
             </p>
             <p className="mt-5 text-[16px] leading-8 text-graphite">
-              The solution may route work to people, automated workflows,
-              software, or intelligent agents while keeping human control where
-              decisions carry meaningful risk.
+              The solution routes work to people, automated workflows,
+              software, or agents, and keeps human control where decisions
+              carry risk.
             </p>
             <p className="mt-8 font-serif text-2xl leading-snug text-ink">
-              Technology should support judgment, not replace it blindly.
+              Technology supports judgment. It does not replace it.
             </p>
           </Reveal>
         </Container>
@@ -139,8 +139,8 @@ export default function HowItWorksPage() {
               next constraint. Improve again.
             </p>
             <div className="mt-8">
-              <Button href="/loopscan" variant="dark" location="how_it_works">
-                Find Your First Loop
+              <Button href={cta.primary.href} variant="dark" location="how_it_works">
+                {cta.primary.label}
               </Button>
             </div>
           </Container>

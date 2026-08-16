@@ -10,6 +10,7 @@ import {
 } from "@/lib/analytics";
 import { getLeadAttribution } from "@/lib/attribution";
 import { company } from "@/lib/company";
+import { loopScanOffer } from "@/lib/content";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xeajkpoy";
 const PROCESS_MIN_LENGTH = 20;
@@ -77,7 +78,7 @@ function validateField(name: FieldName, value: string): string | undefined {
   switch (name) {
     case "process":
       if (trimmed.length === 0) {
-        return "Please describe the process we should look at.";
+        return "Please describe the process.";
       }
       if (trimmed.length < PROCESS_MIN_LENGTH) {
         return `Please add a bit more detail (at least ${PROCESS_MIN_LENGTH} characters).`;
@@ -118,7 +119,7 @@ function validateForm(form: FormState): FieldErrors {
 
 function formatLeadMessage(form: FormState, extra?: string[]) {
   const lines = [
-    "What process should we look at?",
+    "What process are we looking at?",
     form.process.trim(),
     "",
     `Name: ${form.name.trim()}`,
@@ -314,7 +315,7 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
           follow up with a few initial thoughts.
         </p>
         <p className="mt-4 max-w-md text-[15px] leading-7 text-graphite">
-          We typically reply within two business days.
+          We reply within two business days.
         </p>
         <ol className="mt-8 divide-y divide-line border-y border-line">
           <li className="py-4">
@@ -337,7 +338,7 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
               We follow up
             </p>
             <p className="mt-1 text-sm leading-6 text-graphite">
-              If there is a potential fit, we’ll ask a few clarifying questions
+              If there is a fit, we’ll ask a few clarifying questions
               about how the work happens today.
             </p>
           </li>
@@ -349,8 +350,7 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
               We recommend a next step
             </p>
             <p className="mt-1 text-sm leading-6 text-graphite">
-              That may be a simple process change, a LoopScan, an automation
-              opportunity, or no technology at all.
+              {loopScanOffer.credibleNextStep}
             </p>
           </li>
         </ol>
@@ -429,7 +429,7 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
           htmlFor={fieldId("process")}
           className="text-[12px] font-medium text-graphite"
         >
-          What process should we look at?
+          What process are we looking at?
         </label>
         <textarea
           id={fieldId("process")}
@@ -601,7 +601,7 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
             Sending
           </>
         ) : (
-          "Find My First Loop"
+          "Send this process"
         )}
       </button>
       <p className="mt-4 text-[13px] leading-6 text-stone">

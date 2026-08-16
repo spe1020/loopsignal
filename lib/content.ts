@@ -7,6 +7,45 @@ export const nav = [
   { href: "/insights", label: "Insights" },
 ] as const;
 
+export const cta = {
+  primary: { href: "/loopscan", label: "Start a LoopScan" },
+  secondary: { href: "/demo", label: "See the demos" },
+} as const;
+
+export const loopScanOffer = {
+  price: "$7,500",
+  duration: "Two days on site",
+  findingsIn: "Findings in 10 business days",
+  priceLine: "$7,500 · two days on site · findings in 10 business days",
+  budgetLine:
+    "Consulting and systems integration. Opex. Your operations lead signs it. Not software, not a subscription, not an IT capital request.",
+  teamHoursTotal: "~11.5 hours",
+  guarantee: "7-day money-back guarantee. No conditions.",
+  // TODO: name the origin city for the 2.5-hour radius.
+  radius:
+    "Within 2.5 hours' drive. Beyond that, quoted separately.",
+  firstClient:
+    "We have not completed a paid LoopScan. There is no prior engagement to point to. That is why the guarantee has no conditions.",
+  // TODO: retention window in days, if different from "delete when the engagement ends."
+  dataHandling:
+    "We pull read-only. The work runs in your environment. Nothing trains a model. When the engagement ends, we hand you the raw pull and the queries, then delete our copy.",
+  // TODO: confirm these seven items against Dr. Sats' pricing work.
+  deliverables: [
+    "Current-state workflow map",
+    "Friction points",
+    "Information gaps",
+    "System connections",
+    "Repetitive work",
+    "What to automate, and what not to",
+    "Prioritized next step with business impact",
+  ],
+  credibleNextStep:
+    "That may be a simple process change, a LoopScan, an automation opportunity, or no technology at all.",
+} as const;
+
+// TODO: hours by role from Dr. Sats' pricing work. Total stays ~11.5.
+export const loopScanTeamHoursByRole: { role: string; hours: number }[] = [];
+
 export const informationSources = [
   "ERP systems",
   "Email",
@@ -174,7 +213,7 @@ export const demos = [
 ] as const;
 
 export const demoNote =
-  "They are not fixed systems we expect every manufacturer to adopt. They are examples of what can be built around your operation.";
+  "They are not fixed systems we expect every manufacturer to adopt. They are examples of what we build around an operation.";
 
 export const demoPhilosophy = [
   {
@@ -199,20 +238,18 @@ export const services = [
   {
     slug: "loopscan",
     name: "LoopScan",
-    headline: "Review the process. Find the friction.",
-    summary:
-      "Understand the process.",
+    headline: "$7,500. Two days on site. Findings in 10 business days.",
+    summary: "Find the friction in the work.",
     detail:
-      "LoopScan is a focused operational review designed to understand how the work happens today, where information or decisions break down, and where improvement could create measurable value.",
+      "LoopScan is a two-day on-site operational review. We map how the work happens today, name the friction, and hand you a seven-item findings pack within 10 business days.",
     deliverables: [
-      "Workflow map",
+      "Current-state workflow map",
       "Friction points",
       "Information gaps",
       "System connections",
       "Repetitive work",
-      "Automation opportunities",
-      "Business impact",
-      "Prioritized roadmap",
+      "What to automate, and what not to",
+      "Prioritized next step with business impact",
     ],
     cta: "Start a LoopScan",
   },
@@ -220,10 +257,9 @@ export const services = [
     slug: "loopbuild",
     name: "LoopBuild",
     headline: "Improve the process. Build the right system around it.",
-    summary:
-      "Improve and implement it.",
+    summary: "Improve and implement it.",
     detail:
-      "LoopBuild turns a prioritized opportunity into a working solution. That may involve process redesign, systems integration, workflow automation, AI, custom software, or a combination of approaches.",
+      "LoopBuild turns a prioritized opportunity into a working solution: process redesign, systems integration, workflow automation, AI, custom software, or a combination.",
     deliverables: [
       "Purchasing exception workflow",
       "Supplier follow-up process",
@@ -233,28 +269,7 @@ export const services = [
       "Operations management process",
       "System-to-system integration",
     ],
-    cta: "Build Your First Loop",
-  },
-  {
-    slug: "loopops",
-    name: "LoopOps",
-    headline: "Operate it. Improve it. Expand what works.",
-    summary:
-      "Run and continuously improve it.",
-    detail:
-      "Once the new process or system is live, LoopOps supports ongoing operation, integration, monitoring, automation, and continuous improvement.",
-    deliverables: [
-      "Workflow support",
-      "System integration",
-      "Reporting",
-      "Automation",
-      "Agent workflows",
-      "Process refinement",
-      "Training",
-      "Governance",
-      "New use cases",
-    ],
-    cta: "Keep Improving",
+    cta: "Start a LoopScan",
   },
 ] as const;
 
@@ -309,7 +324,7 @@ export const howItWorks = [
       "Information gathering",
       "Exception routing",
       "Workflow automation",
-      "AI where it helps",
+      "AI where it belongs",
       "Human approval where it matters",
     ],
   },
@@ -389,7 +404,7 @@ export const trustPrinciples = [
   },
   {
     title: "Measure the result",
-    text: "Every implementation should improve a real business outcome.",
+    text: "Every implementation improves a real business outcome.",
   },
 ] as const;
 
@@ -442,7 +457,7 @@ export const loopScanSteps = [
     points: [
       "What to improve",
       "What to automate",
-      "Where AI could help",
+      "Where AI belongs",
       "What not to automate",
       "Where to begin",
     ],
@@ -480,20 +495,14 @@ export const commercialJourney = [
   {
     step: "01",
     name: "LoopScan",
-    headline: "Understand the process.",
-    text: "Review how the work happens today, where information or decisions break down, and where improvement could create measurable value.",
+    headline: "$7,500. Two days on site.",
+    text: "Map how the work happens today, name the friction, and hand you findings within 10 business days.",
   },
   {
     step: "02",
     name: "LoopBuild",
     headline: "Improve and implement it.",
     text: "Turn a prioritized opportunity into a working solution — process redesign, systems integration, automation, AI, software, or a combination.",
-  },
-  {
-    step: "03",
-    name: "LoopOps",
-    headline: "Run and continuously improve it.",
-    text: "Support ongoing operation, integration, monitoring, automation, and continuous improvement after the solution is live.",
   },
 ] as const;
 
@@ -543,7 +552,7 @@ export const implementationSequence = [
   },
   {
     name: "Define ownership",
-    summary: "Clarify what people, workflows, software, or agents should own.",
+    summary: "Clarify what people, workflows, software, or agents own.",
   },
   {
     name: "Measure the result",

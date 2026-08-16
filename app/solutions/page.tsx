@@ -4,7 +4,7 @@ import Link from "next/link";
 import { CommercialPath } from "@/components/CommercialPath";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
 import { SolutionInterestLink } from "@/components/SolutionInterestLink";
-import { solutions } from "@/lib/content";
+import { cta, solutions } from "@/lib/content";
 import { routeMeta, routePageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = routePageMeta(routeMeta.solutions);
@@ -36,12 +36,12 @@ export default function SolutionsPage() {
           <Reveal>
             <Eyebrow>Solutions</Eyebrow>
             <h1 className="mt-5 max-w-3xl text-4xl font-medium tracking-[-0.035em] text-ink md:text-6xl">
-              Operational problems LoopSignal can help solve.
+              Work we take on.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-graphite">
               We start with the work: shortages, purchasing, plant operations,
               and knowledge. Each area has a working demo that shows what a
-              better loop can look like — not a fixed product every manufacturer
+              better loop looks like — not a fixed product every manufacturer
               is expected to adopt.
             </p>
           </Reveal>
@@ -98,12 +98,12 @@ export default function SolutionsPage() {
                   See it in action → {solution.demoName}
                 </Link>
                 <SolutionInterestLink
-                  href="/loopscan"
+                  href={cta.primary.href}
                   solution={solution.interest}
                   interactionType="cta_click"
                   className="text-[13px] font-medium tracking-[0.02em] text-stone hover:text-ink"
                 >
-                  Find a loop in this area →
+                  {cta.primary.label} →
                 </SolutionInterestLink>
               </div>
             </Reveal>

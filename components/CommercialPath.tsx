@@ -1,6 +1,6 @@
 import { Button } from "@/components/Button";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
-import { commercialJourney, services } from "@/lib/content";
+import { commercialJourney, cta, services } from "@/lib/content";
 import type { CtaLocation } from "@/lib/analytics";
 
 const loopBuild = services[1];
@@ -18,11 +18,11 @@ export function CommercialPath({
         <Reveal>
           <Eyebrow>How we work with you</Eyebrow>
           <h2 className="mt-5 max-w-2xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
-            Start with the work. Build what is needed. Improve what works.
+            Start with the work. Build what is needed.
           </h2>
         </Reveal>
 
-        <div className="mt-12 grid gap-px border border-line bg-line md:grid-cols-3">
+        <div className="mt-12 grid gap-px border border-line bg-line md:grid-cols-2">
           {commercialJourney.map((item, index) => (
             <Reveal
               key={item.name}
@@ -45,7 +45,7 @@ export function CommercialPath({
           ))}
         </div>
         <p className="mt-6 text-center text-[12px] tracking-[0.16em] text-stone uppercase">
-          LoopScan → LoopBuild → LoopOps
+          LoopScan → LoopBuild
         </p>
 
         {showLoopBuildDetail ? (
@@ -61,8 +61,8 @@ export function CommercialPath({
                 {loopBuild.detail}
               </p>
               <div className="mt-8">
-                <Button href="/loopscan" location={ctaLocation}>
-                  {loopBuild.cta}
+                <Button href={cta.primary.href} location={ctaLocation}>
+                  {cta.primary.label}
                 </Button>
               </div>
             </Reveal>
@@ -81,8 +81,8 @@ export function CommercialPath({
           </div>
         ) : (
           <Reveal className="mt-10">
-            <Button href="/loopscan" location={ctaLocation}>
-              Start a LoopScan
+            <Button href={cta.primary.href} location={ctaLocation}>
+              {cta.primary.label}
             </Button>
           </Reveal>
         )}
