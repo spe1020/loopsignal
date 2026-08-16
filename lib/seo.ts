@@ -58,9 +58,9 @@ export const routeMeta = {
   },
   about: {
     path: "/about",
-    title: "About",
+    title: "From the bench",
     description:
-      "LoopSignal is a manufacturing consulting and systems integration company. We start with how the work actually happens.",
+      "I started on the bench in defense electronics. Two decades across manufacturing, planning, purchasing, and sourcing — work I still do.",
   },
   insights: {
     path: "/insights",

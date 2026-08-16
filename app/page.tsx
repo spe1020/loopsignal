@@ -229,6 +229,12 @@ export default function HomePage() {
               <p className="mt-8 font-serif text-2xl leading-snug text-ink">
                 Technology follows the problem.
               </p>
+              <Link
+                href="/about"
+                className="mt-8 inline-flex text-[13px] font-medium text-copper hover:text-copper-dark"
+              >
+                About →
+              </Link>
             </Reveal>
           </div>
           <div className="mt-16 grid gap-px border border-line bg-line md:grid-cols-4">
