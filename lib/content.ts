@@ -1,6 +1,7 @@
 export const nav = [
   { href: "/", label: "Home" },
   { href: "/solutions", label: "Solutions" },
+  { href: "/loopscan", label: "LoopScan" },
   { href: "/demo", label: "Demo" },
   { href: "/how-it-works", label: "How It Works" },
   { href: "/about", label: "About" },
@@ -8,19 +9,21 @@ export const nav = [
 ] as const;
 
 export const cta = {
-  nav: { href: "/loopscan", label: "Talk to Us" },
+  nav: { href: "/loopscan?intent=talk#intake", label: "Fit check" },
   talkAboutProcess: {
     href: "/loopscan#intake",
     label: "Talk About a Process",
   },
   seeDemos: { href: "/demo", label: "See the Demos" },
-  startLoopScan: { href: "/loopscan", label: "Start a LoopScan" },
+  startLoopScan: { href: "/loopscan?intent=book#intake", label: "Book a LoopScan" },
   learnLoopScan: { href: "/loopscan", label: "Learn About LoopScan" },
-  talkThroughProcess: {
-    href: "/loopscan#intake",
-    label: "Talk Through a Process",
+  fitCheck: {
+    href: "/loopscan?intent=talk#intake",
+    label: "Book a 30-minute fit check",
   },
 } as const;
+
+export const fitCheckNote = "No charge. No obligation.";
 
 export const painPoints = [
   "Buyers chasing overdue POs by hand.",
@@ -28,6 +31,11 @@ export const painPoints = [
   "Critical knowledge living with the one person who knows where everything is.",
   "Teams moving information between systems by hand.",
 ] as const;
+
+export const homepageFinding = {
+  text: "Supplier mail for the same past-due rows until a date is pasted into Excel — then the next morning's export does not have that date, so the row looks late again.",
+  source: "From the sample LoopScan, Section 05.",
+} as const;
 
 export const loopScanOffer = {
   whatItIs:
@@ -55,15 +63,22 @@ export const loopScanOffer = {
   },
   guarantee:
     "Unconditional. If the findings aren't worth what you paid, tell us within seven days and we refund it.",
-  // TODO: name the origin city for the 2.5-hour radius.
-  radius:
-    "Within 2.5 hours' drive. Beyond that, quoted separately.",
+  travel:
+    "Based in central Pennsylvania. On-site anywhere — travel within the region is included, and quoted separately beyond it.",
+  declineThePull:
+    "A LoopScan needs no access to your systems. If you’d rather not export anything, we still do the scan.",
+  afterLoopScan: {
+    beforeLink:
+      "What comes after depends on what we find. Some LoopBuilds are a process change and a report — days, not weeks, and nothing to approve. Others are a real integration project with a real budget. We tell you which at the readout, before you commit to anything, and sometimes the answer is that ",
+    link: "the process change is enough on its own",
+    afterLink: ".",
+  },
   whyFixed:
     "A defined engagement. LoopScan is scoped as a fixed starting point rather than open-ended consulting. You know the cost, the time commitment, and the deliverable before the work begins.",
   firstClient:
     "LoopSignal is new. You would be among the first LoopScan clients, which is why the price is fixed, the deliverable is defined in advance, and the guarantee is unconditional.",
   dataHandling:
-    "We’re hired to look at your process — the data is yours. If sizing the problem needs a pull, it is read-only, we ask before anything is exported, we take the smallest set that answers the question, and you can decline and still get the scan. One person does this work. We delete our copy when the analysis is done, and no later than 30 days after your readout.",
+    "We’re hired to look at your process — the data is yours. If sizing the problem needs a pull, it is read-only, we ask before anything is exported, and we take the smallest set that answers the question. One person does this work. We delete our copy when the analysis is done, and no later than 30 days after your readout.",
   // TODO: confirm these seven items against Dr. Sats' pricing work.
   deliverables: [
     "Current-state workflow map",
@@ -94,12 +109,12 @@ export const loopScanEngagementSteps = [
 
 export const loopScanIntents = [
   {
-    value: "book",
-    label: "Ready to book a LoopScan",
+    value: "talk",
+    label: "A 30-minute fit check — no charge, no obligation",
   },
   {
-    value: "talk",
-    label: "Want to talk through a process",
+    value: "book",
+    label: "Book a LoopScan",
   },
 ] as const;
 

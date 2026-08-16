@@ -37,7 +37,7 @@ export function Header() {
       <div className="mx-auto flex h-[72px] max-w-[1120px] items-center justify-between px-6 lg:px-8">
         <Logo />
 
-        <nav className="hidden items-center gap-6 xl:gap-8 lg:flex">
+        <nav className="hidden items-center gap-5 xl:gap-7 lg:flex">
           {nav.map((item) => {
             const active =
               item.href === "/"

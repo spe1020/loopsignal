@@ -3,6 +3,9 @@
 export const company = {
   name: "LoopSignal",
   contactEmail: "hello@loopsignal.co",
+  location: "Central Pennsylvania",
+  // TODO: phone number undecided. Do not publish a number until confirmed.
+  phone: "TODO: phone",
   tagline: "Improve the process. Connect the systems.",
   supportingTagline: "Find the signal. Close the loop.",
   description:

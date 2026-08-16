@@ -32,7 +32,10 @@ export default function LoopScanPage() {
             <p className="mt-3 text-[15px] leading-6 text-graphite">
               {loopScanOffer.whatHappens}
             </p>
-            <ol className="mt-3 flex flex-wrap items-baseline gap-x-1.5 gap-y-1 text-sm leading-5 text-ink">
+            <p className="mt-5 border border-line bg-paper px-4 py-3 text-[15px] leading-6 text-ink">
+              {loopScanOffer.declineThePull}
+            </p>
+            <ol className="mt-5 flex flex-wrap items-baseline gap-x-1.5 gap-y-1 text-sm leading-5 text-ink">
               {loopScanEngagementSteps.map((step, index) => (
                 <li key={step} className="flex items-baseline gap-1.5">
                   {index > 0 ? (
@@ -47,7 +50,8 @@ export default function LoopScanPage() {
             <p className="mt-5 text-[16px] leading-6 font-medium text-ink">
               {loopScanOffer.priceLine}
             </p>
-            <div className="mt-3 border border-dashed border-line px-4 py-3">
+            <LoopScanCtas />
+            <div className="mt-6 border border-dashed border-line px-4 py-3">
               <p className="text-[11px] font-medium tracking-[0.14em] text-stone uppercase">
                 {loopScanOffer.samplePdf.eyebrow}
               </p>
@@ -82,8 +86,19 @@ export default function LoopScanPage() {
                 <li key={item}>{item}</li>
               ))}
             </ol>
+            <p className="mt-5 text-[15px] leading-6 text-graphite">
+              {loopScanOffer.afterLoopScan.beforeLink}
+              <a
+                href={loopScanOffer.samplePdf.href}
+                download={loopScanOffer.samplePdf.filename}
+                className="font-medium text-copper hover:text-copper-dark"
+              >
+                {loopScanOffer.afterLoopScan.link}
+              </a>
+              {loopScanOffer.afterLoopScan.afterLink}
+            </p>
             <p className="mt-5 text-[15px] leading-6 text-ink">
-              {loopScanOffer.radius}
+              {loopScanOffer.travel}
             </p>
             <p className="mt-3 text-[14px] leading-6 text-graphite">
               {loopScanOffer.whyFixed}
@@ -126,9 +141,12 @@ export default function LoopScanPage() {
                 </ul>
               </div>
             </div>
-            <LoopScanCtas />
             <p className="mt-4 text-[15px] leading-6 text-graphite">
               {company.contactEmail}
+            </p>
+            {/* TODO: phone number undecided. Do not publish a number until confirmed. */}
+            <p className="mt-1 text-[15px] leading-6 text-graphite">
+              {company.phone}
             </p>
           </div>
           <div id="intake" className="lg:col-span-7">
