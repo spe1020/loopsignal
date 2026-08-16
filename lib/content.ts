@@ -46,7 +46,13 @@ export const loopScanOffer = {
   duration: "Two days on site",
   findingsIn: "Findings within 10 business days",
   priceLine: "$7,500 · Two days on site · Findings within 10 business days",
-  teamHoursTotal: "~11.5 hours",
+  samplePdf: {
+    href: "/LoopScan-sample-Northfield.pdf",
+    filename: "LoopScan-sample-Northfield.pdf",
+    eyebrow: "Sample LoopScan",
+    body: "A complete sample LoopScan, start to finish — six pages, built on the same fictional Northfield dataset behind the demos. Current-state map, friction, information gaps, system connections, repetitive work, what to automate and what not to, and one prioritized next step with the arithmetic shown. Nothing gated.",
+    cta: "Download the sample (PDF, 6 pages)",
+  },
   guarantee:
     "Unconditional. If the findings aren't worth what you paid, tell us within seven days and we refund it.",
   // TODO: name the origin city for the 2.5-hour radius.
@@ -70,8 +76,54 @@ export const loopScanOffer = {
   ],
 } as const;
 
-// TODO: hours by role from Dr. Sats' pricing work. Total stays ~11.5.
-export const loopScanTeamHoursByRole: { role: string; hours: number }[] = [];
+export const loopScanTeamHoursByRole = [
+  { role: "Sponsor", hours: "~3 hrs" },
+  { role: "Buyer or planner", hours: "~5 hrs" },
+  { role: "One operator", hours: "~2 hrs" },
+  { role: "IT", hours: "~1 hr" },
+] as const;
+
+export const loopScanEngagementSteps = [
+  "Fit check (30-min call)",
+  "Intake and data request",
+  "Remote pre-work",
+  "Two days on site",
+  "Analysis",
+  "Findings and readout within 10 business days",
+] as const;
+
+export const loopScanIntents = [
+  {
+    value: "book",
+    label: "Ready to book a LoopScan",
+  },
+  {
+    value: "talk",
+    label: "Want to talk through a process",
+  },
+] as const;
+
+export type LoopScanIntent = (typeof loopScanIntents)[number]["value"];
+
+export const loopScanFit = {
+  good: {
+    title: "A good fit if",
+    items: [
+      "Your buyers work out of spreadsheet exports from an ERP older than they are.",
+      "The same report gets rebuilt every morning.",
+      "One person is the only one who knows how something works.",
+      "Information moves between systems by hand.",
+    ],
+  },
+  not: {
+    title: "Not a fit if",
+    items: [
+      "You need an ERP replacement or upgrade.",
+      "You already run a mature continuous improvement program with dedicated CI staff.",
+      "You want staff augmentation rather than a defined engagement.",
+    ],
+  },
+} as const;
 
 export const informationSources = [
   "ERP systems",

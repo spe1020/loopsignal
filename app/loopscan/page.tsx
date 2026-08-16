@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LoopScanForm } from "@/components/LoopScanForm";
+import { LoopScanCtas, LoopScanForm } from "@/components/LoopScanForm";
 import { Container, Eyebrow } from "@/components/Reveal";
 import { company } from "@/lib/company";
 import {
-  cta,
+  loopScanEngagementSteps,
+  loopScanFit,
   loopScanIntakeExamples,
   loopScanOffer,
   loopScanTeamHoursByRole,
@@ -15,9 +16,6 @@ export const metadata: Metadata = routePageMeta(routeMeta.loopscan);
 
 export default function LoopScanPage() {
   const calendarUrl = process.env.CALENDAR_URL?.trim() || undefined;
-  const startHref =
-    calendarUrl ||
-    `mailto:${company.contactEmail}?subject=${encodeURIComponent("Start a LoopScan")}`;
 
   return (
     <>
@@ -34,6 +32,42 @@ export default function LoopScanPage() {
             <p className="mt-3 text-[15px] leading-6 text-graphite">
               {loopScanOffer.whatHappens}
             </p>
+            <ol className="mt-3 flex flex-wrap items-baseline gap-x-1.5 gap-y-1 text-sm leading-5 text-ink">
+              {loopScanEngagementSteps.map((step, index) => (
+                <li key={step} className="flex items-baseline gap-1.5">
+                  {index > 0 ? (
+                    <span className="text-stone" aria-hidden="true">
+                      →
+                    </span>
+                  ) : null}
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-5 text-[16px] leading-6 font-medium text-ink">
+              {loopScanOffer.priceLine}
+            </p>
+            <div className="mt-3 border border-dashed border-line px-4 py-3">
+              <p className="text-[11px] font-medium tracking-[0.14em] text-stone uppercase">
+                {loopScanOffer.samplePdf.eyebrow}
+              </p>
+              <p className="mt-1 text-sm leading-5 text-graphite">
+                {loopScanOffer.samplePdf.body}
+              </p>
+              <a
+                href={loopScanOffer.samplePdf.href}
+                download={loopScanOffer.samplePdf.filename}
+                className="mt-2 inline-block text-sm font-medium text-copper hover:text-copper-dark"
+              >
+                {loopScanOffer.samplePdf.cta} →
+              </a>
+            </div>
+            <p className="mt-4 text-[15px] leading-6 text-ink">
+              Your team:{" "}
+              {loopScanTeamHoursByRole
+                .map((row) => `${row.role} ${row.hours}`)
+                .join(" · ")}
+            </p>
             <p className="mt-4 text-[13px] font-medium text-ink">
               What’s reviewed
             </p>
@@ -48,23 +82,7 @@ export default function LoopScanPage() {
                 <li key={item}>{item}</li>
               ))}
             </ol>
-            <p className="mt-5 text-[16px] leading-6 font-medium text-ink">
-              {loopScanOffer.priceLine}
-            </p>
-            <p className="mt-2 text-[15px] leading-6 text-ink">
-              Your team: {loopScanOffer.teamHoursTotal}
-              {loopScanTeamHoursByRole.length > 0 ? "," : "."}
-            </p>
-            {loopScanTeamHoursByRole.length > 0 ? (
-              <ul className="mt-1 space-y-0.5 text-sm leading-5 text-ink">
-                {loopScanTeamHoursByRole.map((row) => (
-                  <li key={row.role}>
-                    {row.role}: {row.hours} hours
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-            <p className="mt-2 text-[15px] leading-6 text-ink">
+            <p className="mt-5 text-[15px] leading-6 text-ink">
               {loopScanOffer.radius}
             </p>
             <p className="mt-3 text-[14px] leading-6 text-graphite">
@@ -86,41 +104,34 @@ export default function LoopScanPage() {
                 How we handle your data →
               </Link>
             </p>
-            <div className="mt-4 border border-dashed border-line px-4 py-3">
-              <p className="text-[11px] font-medium tracking-[0.14em] text-stone uppercase">
-                Sample findings
-              </p>
-              <p className="mt-1 text-sm leading-5 text-graphite">
-                Ungated sample PDF — slot reserved. File forthcoming.
-              </p>
+            <div className="mt-8 grid gap-6 sm:grid-cols-2">
+              <div>
+                <p className="text-[13px] font-medium text-ink">
+                  {loopScanFit.good.title}
+                </p>
+                <ul className="mt-2 list-disc space-y-1.5 pl-4 text-sm leading-5 text-graphite">
+                  {loopScanFit.good.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="text-[13px] font-medium text-ink">
+                  {loopScanFit.not.title}
+                </p>
+                <ul className="mt-2 list-disc space-y-1.5 pl-4 text-sm leading-5 text-graphite">
+                  {loopScanFit.not.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            <div className="mt-6 flex flex-wrap items-center gap-4">
-              <a
-                href={startHref}
-                className="inline-flex items-center justify-center rounded-[2px] bg-copper px-5 py-3 text-[13px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark"
-              >
-                {cta.startLoopScan.label}
-              </a>
-              <a
-                href="#intake"
-                className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
-              >
-                {cta.talkThroughProcess.label} →
-              </a>
-            </div>
+            <LoopScanCtas />
             <p className="mt-4 text-[15px] leading-6 text-graphite">
-              <a
-                href={`mailto:${company.contactEmail}`}
-                className="text-copper hover:text-copper-dark"
-              >
-                {company.contactEmail}
-              </a>
+              {company.contactEmail}
             </p>
           </div>
           <div id="intake" className="lg:col-span-7">
-            <p className="mb-4 text-[12px] font-medium tracking-[0.04em] text-copper uppercase">
-              Talk through a process
-            </p>
             <LoopScanForm calendarUrl={calendarUrl} />
             <p className="mt-6 text-[12px] leading-6 text-stone">
               Do not include confidential drawings, proprietary formulas,

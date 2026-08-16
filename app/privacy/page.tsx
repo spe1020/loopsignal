@@ -35,14 +35,7 @@ export default function PrivacyPage() {
             file from you.
           </p>
           <p>
-            To ask a question or request deletion:{" "}
-            <a
-              href={`mailto:${company.contactEmail}`}
-              className="text-copper hover:text-copper-dark"
-            >
-              {company.contactEmail}
-            </a>
-            .
+            To ask a question or request deletion: {company.contactEmail}.
           </p>
         </div>
       </Container>

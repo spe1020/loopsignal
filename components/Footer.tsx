@@ -13,14 +13,7 @@ export function Footer() {
           <p className="mt-5 max-w-sm text-sm leading-6 text-white/45">
             Improve the process. Connect the systems.
           </p>
-          <p className="mt-4 text-sm text-white/70">
-            <a
-              href={`mailto:${company.contactEmail}`}
-              className="transition-colors hover:text-cream"
-            >
-              {company.contactEmail}
-            </a>
-          </p>
+          <p className="mt-4 text-sm text-white/70">{company.contactEmail}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-7 lg:grid-cols-3">
