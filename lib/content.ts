@@ -650,7 +650,7 @@ export const founder = {
   role: "Founder",
   linkedin: "https://www.linkedin.com/in/seth-sager-a381781a",
   background:
-    "Seth has worked from the shop floor through manufacturing engineering, production planning, purchasing, and supply chain — with a focus on lean methods, supplier development, and practical process improvement.",
+    "I started on the bench, then as a technician, then manufacturing engineering, then planning and purchasing. I still do that work. This isn't a practice I left the floor to build.",
 };
 
 export const loopScanAreas = [
