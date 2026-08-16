@@ -1,18 +1,26 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { CalBooking } from "@/components/CalBooking";
 import {
+  trackLoopScanCTA,
   trackLoopScanFormError,
   trackLoopScanFormStart,
   trackLoopScanFormSubmit,
   trackLoopScanPageView,
-  trackScheduleClick,
 } from "@/lib/analytics";
 import { getLeadAttribution } from "@/lib/attribution";
+import {
+  CAL_PREFILL_EVENT,
+  FIT_CHECK_SECTION_ID,
+  scrollToFitCheck,
+  type CalBookingPrefill,
+} from "@/lib/cal";
 import { company } from "@/lib/company";
 import {
   cta,
   fitCheckNote,
+  loopScanFitCheck,
   loopScanIntents,
   type LoopScanIntent,
 } from "@/lib/content";
@@ -77,7 +85,7 @@ function parseIntent(value: string | null | undefined): LoopScanIntent {
 function intentLabel(intent: LoopScanIntent) {
   return (
     loopScanIntents.find((item) => item.value === intent)?.label ??
-    "A 30-minute fit check — no charge, no obligation"
+    "I want to talk through a process"
   );
 }
 
@@ -193,7 +201,7 @@ function FieldError({ name, message }: { name: FieldName; message?: string }) {
   );
 }
 
-export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
+export function LoopScanForm({ bookingUrl }: { bookingUrl?: string }) {
   const [form, setForm] = useState(emptyForm);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState("");
@@ -339,6 +347,16 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
       }
 
       trackLoopScanFormSubmit();
+      window.dispatchEvent(
+        new CustomEvent<CalBookingPrefill>(CAL_PREFILL_EVENT, {
+          detail: {
+            name: form.name.trim(),
+            email: form.email.trim(),
+            intent: form.intent,
+            intakeSubmitted: true,
+          },
+        }),
+      );
       setSubmitted(true);
     } catch {
       setFormError(
@@ -364,76 +382,28 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
           tabIndex={-1}
           className="mt-4 text-3xl font-medium tracking-tight text-ink outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
         >
-          We’ve got it.
+          {loopScanFitCheck.successHeadline}
         </h2>
-        <p className="mt-4 max-w-md text-[15px] leading-7 text-graphite">
-          Thanks for sharing the process. We’ll review what you described and
-          follow up with a few initial thoughts.
+        <p className="mt-4 max-w-xl text-[15px] leading-7 text-graphite">
+          {loopScanFitCheck.successBody}
         </p>
-        <p className="mt-4 max-w-md text-[15px] leading-7 text-graphite">
-          We reply within two business days.
-        </p>
-        <ol className="mt-8 divide-y divide-line border-y border-line">
-          <li className="py-4">
-            <p className="font-mono text-[11px] tracking-[0.16em] text-copper">
-              1
-            </p>
-            <p className="mt-1 text-[15px] font-medium text-ink">
-              We review the process
-            </p>
-            <p className="mt-1 text-sm leading-6 text-graphite">
-              We look at what you described and identify the questions worth
-              exploring.
-            </p>
-          </li>
-          <li className="py-4">
-            <p className="font-mono text-[11px] tracking-[0.16em] text-copper">
-              2
-            </p>
-            <p className="mt-1 text-[15px] font-medium text-ink">
-              We follow up
-            </p>
-            <p className="mt-1 text-sm leading-6 text-graphite">
-              If there is a fit, we’ll ask a few clarifying questions
-              about how the work happens today.
-            </p>
-          </li>
-          <li className="py-4">
-            <p className="font-mono text-[11px] tracking-[0.16em] text-copper">
-              3
-            </p>
-            <p className="mt-1 text-[15px] font-medium text-ink">
-              We recommend a next step
-            </p>
-            <p className="mt-1 text-sm leading-6 text-graphite">
-              Sometimes a process change. Sometimes a LoopScan. Sometimes no
-              technology at all.
-            </p>
-          </li>
-        </ol>
-        {calendarUrl ? (
-          <div className="mt-10 border-t border-line pt-8">
-            <h3 className="text-lg font-medium tracking-tight text-ink">
-              Want to talk it through?
-            </h3>
-            <p className="mt-3 text-[15px] leading-7 text-graphite">
-              If you’d rather walk through the process together, schedule a
-              short conversation.
-            </p>
-            <a
-              href={calendarUrl}
-              onClick={() => trackScheduleClick()}
-              className="mt-6 inline-flex items-center justify-center rounded-[2px] bg-copper px-6 py-3.5 text-[14px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
-            >
-              Schedule a 20-Minute Conversation
-            </a>
-          </div>
-        ) : null}
+        <div className="mt-10 border-t border-line pt-8">
+          <CalBooking
+            namespace="loopscan-intake"
+            bookingUrl={bookingUrl ?? ""}
+            name={form.name.trim()}
+            email={form.email.trim()}
+            intent={form.intent}
+            intakeSubmitted
+            heading={loopScanFitCheck.scheduleHeadline}
+          />
+        </div>
       </div>
     );
   }
 
   return (
+    <>
     <form
       ref={formRef}
       onSubmit={onSubmit}
@@ -496,7 +466,12 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
                 }}
                 className="mt-0.5 accent-copper"
               />
-              <span>{item.label}</span>
+              <span>
+                <span className="block font-medium">{item.label}</span>
+                <span className="mt-1 block text-[13px] leading-5 text-graphite">
+                  {item.description}
+                </span>
+              </span>
             </label>
           ))}
         </div>
@@ -687,6 +662,17 @@ export function LoopScanForm({ calendarUrl }: { calendarUrl?: string }) {
         Start with the problem. We’ll figure out the technology later.
       </p>
     </form>
+    <a
+      href={`#${FIT_CHECK_SECTION_ID}`}
+      onClick={(event) => {
+        event.preventDefault();
+        scrollToFitCheck();
+      }}
+      className="mt-6 inline-flex text-[13px] leading-6 text-stone transition-colors hover:text-ink"
+    >
+      {loopScanFitCheck.skipLink}
+    </a>
+    </>
   );
 }
 
@@ -704,28 +690,38 @@ export function LoopScanCtas() {
       <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
         <div>
           <a
-            href="/loopscan?intent=talk#intake"
+            href={cta.startLoopScan.href}
             onClick={(event) => {
               event.preventDefault();
-              selectIntent("talk");
+              trackLoopScanCTA({
+                location: "loopscan_section",
+                page: "/loopscan",
+                cta_text: cta.startLoopScan.label,
+              });
+              selectIntent("book");
             }}
             className="inline-flex items-center justify-center rounded-[2px] bg-copper px-5 py-3 text-[13px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark"
           >
-            {cta.fitCheck.label}
+            {cta.startLoopScan.label}
           </a>
           <p className="mt-2 text-[13px] leading-5 text-graphite">
             {fitCheckNote}
           </p>
         </div>
         <a
-          href="/loopscan?intent=book#intake"
+          href={cta.talkAboutProcess.href}
           onClick={(event) => {
             event.preventDefault();
-            selectIntent("book");
+            trackLoopScanCTA({
+              location: "loopscan_section",
+              page: "/loopscan",
+              cta_text: cta.talkAboutProcess.label,
+            });
+            selectIntent("talk");
           }}
           className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
         >
-          {cta.startLoopScan.label} →
+          {cta.talkAboutProcess.label} →
         </a>
       </div>
     </div>

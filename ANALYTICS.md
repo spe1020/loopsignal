@@ -36,11 +36,13 @@ Website visit
 → LoopScan page visit
 → Form start
 → Form submit
-→ Schedule click
+→ Booking view
+→ Booking start
+→ Booking success
 → Discovery conversation *(manual)*
 → LoopScan sold *(manual)*
 
-The website can measure everything through `schedule_click`. Conversation and closed-won stages are recorded by hand until a CRM is in place.
+The website can measure everything through `loopscan_booking_success`. Conversation and closed-won stages are recorded by hand until a CRM is in place.
 
 The longer commercial path is:
 
@@ -55,9 +57,9 @@ All events are categorical. Never send names, emails, company names, phone numbe
 Fired when a visitor clicks a LoopScan call to action. Labels in use:
 
 - Fit check (navigation)
-- Book a 30-minute fit check (homepage and `/loopscan`)
-- Book a LoopScan (ready buyer, `/loopscan`)
-- Talk About a Process (other pages)
+- Book a 30-minute fit check (homepage)
+- Start a LoopScan (ready buyer, `/loopscan`)
+- Talk Through a Process (`/loopscan` and other pages)
 - Learn About LoopScan
 
 Secondary demo label: "See the Demos" → `/demo`.
@@ -112,13 +114,39 @@ Allowed metadata:
 
 Do not send raw error messages.
 
-### `schedule_click`
+### `loopscan_booking_view`
 
-Fired when the visitor clicks the post-submit scheduling link.
+Fired when the Cal.com fit-check embed becomes visible. Once per page session.
 
 Allowed metadata:
 
-- `source`: `loopscan_confirmation`
+- `source`: `loopscan`
+- `intent`: `discuss_loopscan` or `talk_process`
+- `intake_submitted`: `true` if the LoopScan form succeeded first, otherwise `false`
+
+Do not send name, email, company, process description, or booking notes.
+
+### `loopscan_booking_start`
+
+Fired when the visitor begins interacting with the booking flow (`navigatedToBooker`). Once per page session.
+
+Allowed metadata: same as `loopscan_booking_view`.
+
+### `loopscan_booking_success`
+
+Fired after Cal.com confirms a booking (`bookingSuccessfulV2`). Once per page session.
+
+Allowed metadata: same as `loopscan_booking_view`.
+
+Do not send the raw booking payload, attendee fields, or calendar notes.
+
+### `schedule_click`
+
+Fired when the visitor opens the external Cal.com page from the embed fallback.
+
+Allowed metadata:
+
+- `source`: `loopscan_embed_fallback` or `loopscan_confirmation`
 - `utm_source`
 - `utm_campaign`
 
@@ -562,7 +590,9 @@ Avoid optimizing vanity metrics until there is enough traffic to learn from.
 | CTA click rate | LoopScan CTA clicks / relevant website visits |
 | Form start rate | Form starts / LoopScan page views |
 | Form completion rate | Successful submissions / form starts |
-| Schedule rate | Schedule clicks / successful submissions |
+| Booking view rate | Booking views / LoopScan page views |
+| Booking start rate | Booking starts / booking views |
+| Booking success rate | Confirmed bookings / booking starts |
 
 Drop-off between these steps is the LoopScan funnel diagnosis.
 
@@ -588,7 +618,9 @@ Drop-off between these steps is the LoopScan funnel diagnosis.
 - LoopScan page views
 - Form starts
 - Form submissions
-- Schedule clicks
+- Booking views
+- Booking starts
+- Confirmed bookings
 
 ## Manual business outcomes
 
