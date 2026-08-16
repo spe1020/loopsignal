@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CalBooking } from "@/components/CalBooking";
 import { LoopScanCtas, LoopScanForm } from "@/components/LoopScanForm";
 import { Container, Eyebrow } from "@/components/Reveal";
+import { FIT_CHECK_SECTION_ID, getCalLoopScanUrl } from "@/lib/cal";
 import { company } from "@/lib/company";
 import {
   loopScanEngagementSteps,
   loopScanFit,
+  loopScanFitCheck,
   loopScanIntakeExamples,
   loopScanOffer,
   loopScanTeamHoursByRole,
@@ -15,7 +18,7 @@ import { routeMeta, routePageMeta } from "@/lib/seo";
 export const metadata: Metadata = routePageMeta(routeMeta.loopscan);
 
 export default function LoopScanPage() {
-  const calendarUrl = process.env.CALENDAR_URL?.trim() || undefined;
+  const bookingUrl = getCalLoopScanUrl();
 
   return (
     <>
@@ -49,6 +52,12 @@ export default function LoopScanPage() {
             </ol>
             <p className="mt-5 text-[16px] leading-6 font-medium text-ink">
               {loopScanOffer.priceLine}
+            </p>
+            <p className="mt-3 text-[15px] font-medium leading-6 text-ink">
+              {loopScanOffer.whyFixedTitle}
+            </p>
+            <p className="mt-1 text-[14px] leading-6 text-graphite">
+              {loopScanOffer.whyFixed}
             </p>
             <LoopScanCtas />
             <div className="mt-6 border border-dashed border-line px-4 py-3">
@@ -100,9 +109,6 @@ export default function LoopScanPage() {
             <p className="mt-5 text-[15px] leading-6 text-ink">
               {loopScanOffer.travel}
             </p>
-            <p className="mt-3 text-[14px] leading-6 text-graphite">
-              {loopScanOffer.whyFixed}
-            </p>
             <p className="mt-3 text-[15px] leading-6 text-ink">
               {loopScanOffer.guarantee}
             </p>
@@ -144,19 +150,50 @@ export default function LoopScanPage() {
             <p className="mt-4 text-[15px] leading-6 text-graphite">
               {company.contactEmail}
             </p>
-            {/* TODO: phone number undecided. Do not publish a number until confirmed. */}
-            <p className="mt-1 text-[15px] leading-6 text-graphite">
-              {company.phone}
-            </p>
+            {company.phone ? (
+              <p className="mt-1 text-[15px] leading-6 text-graphite">
+                {company.phone}
+              </p>
+            ) : null}
           </div>
-          <div id="intake" className="lg:col-span-7">
-            <LoopScanForm calendarUrl={calendarUrl} />
+          <div id="intake" className="scroll-mt-24 lg:col-span-7">
+            <LoopScanForm bookingUrl={bookingUrl} />
             <p className="mt-6 text-[12px] leading-6 text-stone">
               Do not include confidential drawings, proprietary formulas,
               customer data, passwords, or other sensitive information in this
               form. We put confidentiality in place before reviewing detailed
               information.
             </p>
+          </div>
+        </Container>
+      </section>
+
+      <section
+        id={FIT_CHECK_SECTION_ID}
+        className="scroll-mt-24 border-t border-line bg-paper py-16 md:py-24"
+      >
+        <Container>
+          <Eyebrow>{loopScanFitCheck.eyebrow}</Eyebrow>
+          <h2 className="mt-5 max-w-3xl text-3xl font-medium tracking-[-0.03em] text-ink md:text-[40px]">
+            {loopScanFitCheck.headline}
+          </h2>
+          <p className="mt-5 max-w-2xl text-[16px] leading-8 text-graphite">
+            {loopScanFitCheck.body}
+          </p>
+          <div className="mt-10 grid gap-px border border-line bg-line md:grid-cols-3">
+            {loopScanFitCheck.expectations.map((item) => (
+              <div key={item.title} className="bg-cream p-6 md:p-7">
+                <h3 className="text-[16px] font-medium tracking-tight text-ink">
+                  {item.title}
+                </h3>
+                <p className="mt-3 text-[15px] leading-7 text-graphite">
+                  {item.text}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-12 min-w-0">
+            <CalBooking namespace="loopscan" bookingUrl={bookingUrl} />
           </div>
         </Container>
       </section>

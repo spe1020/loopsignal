@@ -14,8 +14,9 @@ export function Footer() {
             Improve the process. Connect the systems.
           </p>
           <p className="mt-4 text-sm text-white/70">{company.contactEmail}</p>
-          {/* TODO: phone number undecided. Do not publish a number until confirmed. */}
-          <p className="mt-1 text-sm text-white/70">{company.phone}</p>
+          {company.phone ? (
+            <p className="mt-1 text-sm text-white/70">{company.phone}</p>
+          ) : null}
           <p className="mt-3 text-sm text-white/55">{company.location}</p>
         </div>
 

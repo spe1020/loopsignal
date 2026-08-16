@@ -32,7 +32,8 @@ Open [http://localhost:3000](http://localhost:3000).
 
 The `/loopscan` form submits to Formspree and keeps the on-site confirmation state. Copy `.env.example` to `.env.local` and set:
 
-- `CALENDAR_URL` — optional scheduling link shown after submission
+- `NEXT_PUBLIC_CAL_LOOPSCAN_URL` — public Cal.com event URL for the 30-minute LoopScan fit check (`https://cal.com/loopsignal/30min`). Used by the embedded scheduler. No private Cal.com API key is required. The same URL is the code default if the env var is unset.
+- `CALENDAR_URL` — optional fallback if `NEXT_PUBLIC_CAL_LOOPSCAN_URL` is unset
 - `NEXT_PUBLIC_SITE_URL` — canonical site URL for metadata, sitemap, and structured data (required in production; local fallback is `https://www.loopsignal.co`)
 
 ## Stack

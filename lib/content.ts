@@ -11,11 +11,11 @@ export const nav = [
 export const cta = {
   nav: { href: "/loopscan?intent=talk#intake", label: "Fit check" },
   talkAboutProcess: {
-    href: "/loopscan#intake",
-    label: "Talk About a Process",
+    href: "/loopscan?intent=talk#intake",
+    label: "Talk Through a Process",
   },
   seeDemos: { href: "/demo", label: "See the Demos" },
-  startLoopScan: { href: "/loopscan?intent=book#intake", label: "Book a LoopScan" },
+  startLoopScan: { href: "/loopscan?intent=book#intake", label: "Start a LoopScan" },
   learnLoopScan: { href: "/loopscan", label: "Learn About LoopScan" },
   fitCheck: {
     href: "/loopscan?intent=talk#intake",
@@ -73,8 +73,9 @@ export const loopScanOffer = {
     link: "the process change is enough on its own",
     afterLink: ".",
   },
+  whyFixedTitle: "A defined engagement.",
   whyFixed:
-    "A defined engagement. LoopScan is scoped as a fixed starting point rather than open-ended consulting. You know the cost, the time commitment, and the deliverable before the work begins.",
+    "The fit check is simply a conversation. If LoopScan is appropriate, the scope, price, timing, and deliverable are already defined.",
   firstClient:
     "LoopSignal is new. You would be among the first LoopScan clients, which is why the price is fixed, the deliverable is defined in advance, and the guarantee is unconditional.",
   dataHandling:
@@ -109,16 +110,51 @@ export const loopScanEngagementSteps = [
 
 export const loopScanIntents = [
   {
-    value: "talk",
-    label: "A 30-minute fit check — no charge, no obligation",
+    value: "book",
+    label: "I want to discuss a LoopScan",
+    description:
+      "You understand the offer and want to see whether this process is a good fit.",
   },
   {
-    value: "book",
-    label: "Book a LoopScan",
+    value: "talk",
+    label: "I want to talk through a process",
+    description:
+      "You have an operational problem and aren’t sure yet whether LoopScan is the right next step.",
   },
 ] as const;
 
 export type LoopScanIntent = (typeof loopScanIntents)[number]["value"];
+
+export const loopScanFitCheck = {
+  eyebrow: "Fit check",
+  headline: "Let’s talk through the process.",
+  body: "The first conversation is 30 minutes. We’ll look at the process you are trying to improve, the systems involved, and whether LoopScan is the right next step.",
+  expectations: [
+    {
+      title: "Bring the problem",
+      text: "No presentation or preparation required.",
+    },
+    {
+      title: "We’ll map the situation",
+      text: "How the work happens today, where it gets stuck, and who is involved.",
+    },
+    {
+      title: "Decide the next step",
+      text: "LoopScan may make sense. A simpler process change may make sense. Sometimes the answer is no engagement at all.",
+    },
+  ],
+  skipLink: "Prefer to talk first? Schedule a 30-minute fit check →",
+  successHeadline: "Thanks. I’ve got the process.",
+  successBody:
+    "The next step is a 30-minute fit check. We’ll walk through how the process works today, where the friction is, and whether LoopScan makes sense as the next step.",
+  scheduleHeadline: "Schedule Your 30-Minute Fit Check",
+  bookedHeadline: "You’re booked.",
+  bookedBody:
+    "Thanks. I’ll review anything you submitted before the call so we can spend the time on the process rather than introductions.",
+  calendarInvite: "Cal.com will send the calendar invitation.",
+  fallbackHeadline: "Having trouble loading the calendar?",
+  fallbackCta: "Open Scheduling Page →",
+} as const;
 
 export const loopScanFit = {
   good: {

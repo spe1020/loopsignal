@@ -180,19 +180,6 @@ export default function AboutPage() {
               automation, or software built to your specification. Usually
               it&apos;s a combination, in that order.
             </p>
-            <aside
-              className="mt-8 border border-dashed border-line px-5 py-4"
-              aria-label="Placeholder for a career result to be supplied"
-            >
-              <p className="text-[11px] font-medium tracking-[0.14em] text-stone uppercase">
-                TODO — Seth to supply
-              </p>
-              <p className="mt-2 text-[15px] leading-7 text-graphite">
-                One concrete number from my own career, placed here. Shape:
-                &quot;When I ran production control, X took Y. We got it to
-                Z.&quot; Do not invent one.
-              </p>
-            </aside>
             <p className="mt-8 text-[16px] leading-8 text-graphite">
               I also build. I&apos;ve shipped a consumer platform across web,
               Android, and iOS — product, payments, AI, the whole stack. When

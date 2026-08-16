@@ -13,6 +13,9 @@ export const analyticsEvents = [
   "loopscan_area_selected",
   "loopscan_form_submit",
   "loopscan_form_error",
+  "loopscan_booking_view",
+  "loopscan_booking_start",
+  "loopscan_booking_success",
   "schedule_click",
   "solution_interest",
   "insight_view",
@@ -100,6 +103,18 @@ export type OperationalArea =
   | "other";
 
 export type FormErrorCategory = "server" | "network";
+
+export type LoopScanBookingIntent = "discuss_loopscan" | "talk_process";
+
+export type LoopScanBookingMeta = {
+  source: "loopscan";
+  intent: LoopScanBookingIntent;
+  intake_submitted: boolean;
+};
+
+export type ScheduleClickSource =
+  | "loopscan_confirmation"
+  | "loopscan_embed_fallback";
 
 export type SignalErrorCategory =
   | "validation"
@@ -196,10 +211,44 @@ export function trackLoopScanFormError(input: {
   });
 }
 
-export function trackScheduleClick() {
+const sentBookingEvents = new Set<
+  "loopscan_booking_view" | "loopscan_booking_start" | "loopscan_booking_success"
+>();
+
+function trackBookingEventOnce(
+  event:
+    | "loopscan_booking_view"
+    | "loopscan_booking_start"
+    | "loopscan_booking_success",
+  meta: LoopScanBookingMeta,
+) {
+  if (sentBookingEvents.has(event)) return;
+  sentBookingEvents.add(event);
+  trackEvent(event, {
+    source: meta.source,
+    intent: meta.intent,
+    intake_submitted: meta.intake_submitted,
+  });
+}
+
+export function trackLoopScanBookingView(meta: LoopScanBookingMeta) {
+  trackBookingEventOnce("loopscan_booking_view", meta);
+}
+
+export function trackLoopScanBookingStart(meta: LoopScanBookingMeta) {
+  trackBookingEventOnce("loopscan_booking_start", meta);
+}
+
+export function trackLoopScanBookingSuccess(meta: LoopScanBookingMeta) {
+  trackBookingEventOnce("loopscan_booking_success", meta);
+}
+
+export function trackScheduleClick(
+  input: { source?: ScheduleClickSource } = {},
+) {
   const utm = getUtmParams();
   trackEvent("schedule_click", {
-    source: "loopscan_confirmation",
+    source: input.source ?? "loopscan_confirmation",
     utm_source: utm.utm_source,
     utm_campaign: utm.utm_campaign,
   });

@@ -26,6 +26,11 @@ export default function PrivacyPage() {
             do not sell it.
           </p>
           <p>
+            If you schedule a 30-minute fit check, Cal.com collects your name
+            and email so it can send the calendar invitation. We do not send
+            your process description or other form details to Cal.com.
+          </p>
+          <p>
             This site uses Vercel Analytics for page views and button clicks.
             Those events do not include names, email addresses, or the text you
             type into the form. We do not use Google Analytics.
