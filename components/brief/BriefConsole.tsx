@@ -335,9 +335,9 @@ export function BriefConsole({
             <p className="text-[12px] text-graphite">Daily Operations Console</p>
           </div>
           <p className="mt-1 font-mono text-[10px] tracking-[0.08em] text-stone">
-            DEMO · FICTIONAL SAMPLE DATA
+            DEMO
           </p>
-          <SampleDataCaption asOf={brief?.briefDate} className="mt-1" />
+          <SampleDataCaption className="mt-1" />
         </div>
         <div className="flex flex-wrap gap-2">
           <button
@@ -458,8 +458,7 @@ export function BriefConsole({
           <span className="font-medium text-ink">Shift:</span> Day
         </p>
         <p>
-          <span className="font-medium text-ink">Brief Date:</span>{" "}
-          {brief?.briefDateLabel ?? sampleBrief.briefDateLabel}
+          <span className="font-medium text-ink">Brief:</span> Sample day
         </p>
       </div>
 

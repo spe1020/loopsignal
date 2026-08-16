@@ -156,7 +156,7 @@ export function KnowConsole() {
             </p>
           </div>
           <p className="mt-1 font-mono text-[10px] tracking-[0.08em] text-stone">
-            DEMO · FICTIONAL SAMPLE DOCUMENTS
+            DEMO
           </p>
           <SampleDataCaption className="mt-1" />
         </div>

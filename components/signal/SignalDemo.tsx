@@ -162,11 +162,6 @@ export function SignalDemo() {
   }
 
   const isSample = result?.meta.source === "sample";
-  const sampleLabel = isSample
-    ? "FICTIONAL SAMPLE DATA"
-    : result
-      ? "UPLOADED CSV"
-      : "DEMO";
 
   return (
     <>
@@ -220,9 +215,9 @@ export function SignalDemo() {
                   </p>
                 </div>
                 <p className="mt-1 font-mono text-[10px] tracking-[0.08em] text-stone">
-                  DEMO · {sampleLabel}
-                  {result
-                    ? ` · Updated ${formatIsoDate(result.meta.asOfDate)}`
+                  DEMO
+                  {result && !isSample
+                    ? ` · UPLOADED CSV · Updated ${formatIsoDate(result.meta.asOfDate)}`
                     : ""}
                 </p>
               </div>
@@ -266,10 +261,7 @@ export function SignalDemo() {
             {result ? (
               <div>
                 {isSample ? (
-                  <SampleDataCaption
-                    asOf={result.meta.asOfDate}
-                    className="border-b border-[#d9d9d2] bg-[#fafaf7] px-4 py-2 md:px-5"
-                  />
+                  <SampleDataCaption className="border-b border-[#d9d9d2] bg-[#fafaf7] px-4 py-2 md:px-5" />
                 ) : null}
                 <SignalResults result={result} />
               </div>
