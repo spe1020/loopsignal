@@ -5,19 +5,9 @@ import { CommercialPath } from "@/components/CommercialPath";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
 import { SolutionInterestLink } from "@/components/SolutionInterestLink";
 import { solutions } from "@/lib/content";
+import { routeMeta, routePageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Solutions",
-  description:
-    "Process improvement, systems integration, and practical automation for supply chain, procurement, plant operations, and manufacturing knowledge — plus LoopScan, LoopBuild, and LoopOps.",
-  alternates: { canonical: "/solutions" },
-  openGraph: {
-    title: "Solutions",
-    description:
-      "Process improvement, systems integration, and practical automation for supply chain, procurement, plant operations, and manufacturing knowledge — plus LoopScan, LoopBuild, and LoopOps.",
-    url: "/solutions",
-  },
-};
+export const metadata: Metadata = routePageMeta(routeMeta.solutions);
 
 const solutionImages = [
   {

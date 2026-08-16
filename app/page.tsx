@@ -17,15 +17,13 @@ import {
   solutions,
   trustPrinciples,
 } from "@/lib/content";
+import { routeMeta, routePageMeta } from "@/lib/seo";
 
 const featuredArticles = featuredArticleSlugs
   .map((slug) => articles.find((article) => article.slug === slug))
   .filter((article) => article != null);
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-  description: company.longDescription,
-};
+export const metadata: Metadata = routePageMeta(routeMeta.home);
 
 export default function HomePage() {
   return (

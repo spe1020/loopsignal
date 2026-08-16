@@ -2,19 +2,9 @@ import type { Metadata } from "next";
 import { DemoCards } from "@/components/DemoCards";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
 import { demoNote, demoPhilosophy } from "@/lib/content";
+import { routeMeta, routePageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Demos",
-  description:
-    "Working examples of how LoopSignal applies process improvement, connected information, automation, and decision support to manufacturing workflows — LoopSupply, LoopKnow, LoopSource, and LoopBrief.",
-  alternates: { canonical: "/demo" },
-  openGraph: {
-    title: "Demos",
-    description:
-      "Examples of what can be built around your operation — not fixed systems every manufacturer is expected to adopt.",
-    url: "/demo",
-  },
-};
+export const metadata: Metadata = routePageMeta(routeMeta.demo);
 
 export default function DemoPage() {
   return (

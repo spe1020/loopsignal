@@ -3,7 +3,12 @@ import { IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { SiteAnalytics } from "@/components/SiteAnalytics";
-import { company } from "@/lib/company";
+import {
+  organizationJsonLd,
+  routeMeta,
+  routePageMeta,
+  TITLE_TEMPLATE,
+} from "@/lib/seo";
 import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -20,21 +25,15 @@ const ibmSerif = IBM_Plex_Serif({
   variable: "--font-ibm-serif",
 });
 
+const home = routePageMeta(routeMeta.home);
+
 export const metadata: Metadata = {
+  ...home,
   title: {
-    default: `${company.name} — ${company.tagline}`,
-    template: `%s — ${company.name}`,
+    default: routeMeta.home.title,
+    template: TITLE_TEMPLATE,
   },
-  description: company.executiveDescription,
   metadataBase: new URL(siteUrl),
-  openGraph: {
-    title: `${company.name} — ${company.tagline}`,
-    description: company.description,
-    url: "/",
-    siteName: company.name,
-    locale: "en_US",
-    type: "website",
-  },
   robots: {
     index: true,
     follow: true,
@@ -42,15 +41,6 @@ export const metadata: Metadata = {
   ...(process.env.NEXT_PUBLIC_GSC_VERIFICATION
     ? { verification: { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } }
     : {}),
-};
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: company.name,
-  url: siteUrl,
-  description: company.executiveDescription,
-  slogan: company.tagline,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -62,7 +52,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col bg-cream font-sans text-ink">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd),
+          }}
         />
         <Header />
         <main className="flex-1">{children}</main>

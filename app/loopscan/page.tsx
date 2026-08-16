@@ -2,24 +2,9 @@ import type { Metadata } from "next";
 import { LoopScanForm } from "@/components/LoopScanForm";
 import { Container, Eyebrow } from "@/components/Reveal";
 import { loopScanIntakeExamples } from "@/lib/content";
+import { routeMeta, routePageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: {
-    absolute:
-      "LoopScan | Find Your First Loop | LoopSignal",
-  },
-  description:
-    "Tell LoopSignal about a manufacturing process that takes too long, requires repetitive work, or depends on disconnected information. Start with the work and find your first improvement opportunity.",
-  openGraph: {
-    title:
-      "LoopScan | Find Your First Loop | LoopSignal",
-    description:
-      "Tell LoopSignal about a manufacturing process that takes too long, requires repetitive work, or depends on disconnected information. Start with the work and find your first improvement opportunity.",
-    type: "website",
-    url: "/loopscan",
-  },
-  alternates: { canonical: "/loopscan" },
-};
+export const metadata: Metadata = routePageMeta(routeMeta.loopscan);
 
 const nextSteps = [
   {

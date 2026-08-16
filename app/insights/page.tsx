@@ -2,19 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Container, Eyebrow, Reveal } from "@/components/Reveal";
 import { articles, formatArticleDate, insightTopics } from "@/lib/articles";
+import { routeMeta, routePageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Insights",
-  description:
-    "Writing on manufacturing operations, process improvement, procurement, supply chain, and practical use of AI in the plant.",
-  alternates: { canonical: "/insights" },
-  openGraph: {
-    title: "Insights",
-    description:
-      "Writing on manufacturing operations, process improvement, procurement, supply chain, and practical use of AI in the plant.",
-    url: "/insights",
-  },
-};
+export const metadata: Metadata = routePageMeta(routeMeta.insights);
 
 export default function InsightsPage() {
   return (
