@@ -57,6 +57,22 @@ export const analyticsEvents = [
   "loopbrief_bot_run",
   "loopbrief_action_select",
   "loopbrief_outcome",
+  "loopsolve_new",
+  "loopsolve_sample_open",
+  "loopsolve_why_added",
+  "loopsolve_branch_added",
+  "loopsolve_fishbone_cause_added",
+  "loopsolve_evidence_added",
+  "loopsolve_root_cause_selected",
+  "loopsolve_action_created",
+  "loopsolve_verification_complete",
+  "loopsolve_closed",
+  "loopsolve_reopened",
+  "loopsolve_export",
+  "loopsolve_import",
+  "loopsolve_shopfloor_toggle",
+  "loopsolve_facilitation_enter",
+  "loopsolve_print",
 ] as const;
 
 export type AnalyticsEvent = (typeof analyticsEvents)[number];

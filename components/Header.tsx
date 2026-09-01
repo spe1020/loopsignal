@@ -48,7 +48,8 @@ export function Header() {
                     pathname.startsWith("/signal") ||
                     pathname.startsWith("/know") ||
                     pathname.startsWith("/source") ||
-                    pathname.startsWith("/brief")
+                    pathname.startsWith("/brief") ||
+                    pathname.startsWith("/solve")
                   : pathname.startsWith(item.href);
             return (
               <Link

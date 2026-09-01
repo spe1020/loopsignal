@@ -93,6 +93,14 @@ export function Footer() {
                   LoopBrief
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/solve"
+                  className="text-sm text-white/70 transition-colors hover:text-cream"
+                >
+                  LoopSolve
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

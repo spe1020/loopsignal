@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/know",
     "/source",
     "/brief",
+    "/solve",
     "/demo",
     "/security",
     "/privacy",

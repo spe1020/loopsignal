@@ -104,6 +104,12 @@ export const routeMeta = {
     description:
       "Turn production, quality, supply, and maintenance signals into a prioritized daily operating brief.",
   },
+  solve: {
+    path: "/solve",
+    title: "LoopSolve",
+    description:
+      "Structured problem solving for real work: Five Whys, Fishbone, evidence, corrective actions, and effectiveness verification. Free, in your browser.",
+  },
   firstLoop: {
     path: "/first-loop",
     title: "Find Your First Loop",
