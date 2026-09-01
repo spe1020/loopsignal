@@ -342,6 +342,19 @@ export const demos = [
   },
 ] as const;
 
+/** Real tools (not demos): free, browser-based, nothing leaves the device. */
+export const tools = [
+  {
+    href: "/solve",
+    name: "LoopSolve",
+    headline: "Solve the problem. Prove the cause. Verify the fix.",
+    description:
+      "Use Five Whys, Fishbone, evidence, corrective actions, and effectiveness verification in one structured workspace. Free, runs in your browser, nothing leaves your device.",
+    cta: "Try LoopSolve",
+    badge: "Free tool",
+  },
+] as const;
+
 export const demoNote =
   "Examples of capability, not fixed packages every manufacturer is expected to adopt.";
 
