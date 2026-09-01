@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
-import { hardFindings, softFindings } from "@/lib/solve/rules";
+import { softFindings } from "@/lib/solve/rules";
 import { useInvestigation } from "../InvestigationProvider";
 import { IconBranch, IconClock, IconGrid, IconNote, IconPresent, IconPlus } from "../icons";
 import { Chip, Note, SectionTitle, Segmented, SolveButton } from "../ui";
@@ -26,7 +26,6 @@ export function InvestigateStage() {
   const mode: InvestigateMode = modeParam === "fishbone" || modeParam === "evidence" || modeParam === "timeline" ? modeParam : "whys";
   const findings = useMemo(() => softFindings(inv), [inv]);
   const needs = findings.filter((f) => f.code === "needs_investigation");
-  void hardFindings;
 
   function setMode(m: InvestigateMode) {
     const q = new URLSearchParams(params.toString());

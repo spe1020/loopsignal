@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { IconClose } from "./icons";
 import { IconButton } from "./ui";
+import { useMediaQuery } from "./useMediaQuery";
 
 /** What the right panel is showing. Stages render content from this descriptor with fresh data. */
 export type PanelState =
@@ -57,6 +58,11 @@ export function ContextPanel({
 }) {
   const { close } = usePanel();
   const ref = useRef<HTMLDivElement>(null);
+  // Below the desktop breakpoint (or full-screen) the panel is a sheet with a
+  // blocking backdrop, so it is modal for assistive tech. On desktop it is a
+  // side column and the page stays interactive.
+  const desktop = useMediaQuery("(min-width: 1024px)");
+  const modal = fullScreen || !desktop;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -88,7 +94,7 @@ export function ContextPanel({
         ref={ref}
         role="dialog"
         aria-label={title}
-        aria-modal="false"
+        aria-modal={modal}
         className={`solve-panel solve-chrome z-[60] flex flex-col overflow-hidden border-line bg-cream shadow-2xl ${mobileClasses} ${desktopClasses}`}
       >
         <header className="flex shrink-0 items-center justify-between gap-3 border-b border-line px-4 py-2.5">

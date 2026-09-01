@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { stamp } from "@/lib/solve/reducer";
 import type { TimelineEvent, TimelineTag } from "@/lib/solve/schema";
-import { formatDateTime, formatGap, fromLocalInput, toLocalInput } from "@/lib/solve/format";
+import { formatDateTime, formatGap, fromLocalInput } from "@/lib/solve/format";
 import { truncate } from "@/lib/solve/text";
 import { timelineTagMeta } from "../causeMeta";
 import { usePanel } from "../ContextPanel";
@@ -95,7 +95,7 @@ export function TimelineView() {
           })}
         </ol>
       )}
-      <p className="solve-secondary mt-3 text-[12px] text-stone">Times are shown in your local time zone.{" "}{toLocalInput(inv.problem.whenIso) ? "" : ""}</p>
+      <p className="solve-secondary mt-3 text-[12px] text-stone">Times are shown in your local time zone.</p>
     </div>
   );
 }

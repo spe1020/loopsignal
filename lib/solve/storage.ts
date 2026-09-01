@@ -25,7 +25,12 @@ function localBackend(): Backend {
     kind: "localstorage",
     async get(id) {
       const raw = window.localStorage.getItem(LS_PREFIX + id);
-      return raw ? parse(JSON.parse(raw)) : undefined;
+      if (!raw) return undefined;
+      try {
+        return parse(JSON.parse(raw));
+      } catch {
+        return undefined; // corrupt entry
+      }
     },
     async set(inv) {
       window.localStorage.setItem(LS_PREFIX + inv.id, JSON.stringify(inv));
