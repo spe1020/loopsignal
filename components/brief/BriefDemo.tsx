@@ -177,25 +177,17 @@ export function BriefDemo() {
             and planning information into a daily operating system built around
             exceptions and action.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-5">
+          <div className="mt-8">
             <TrackedLink
-              href="/loopscan?source=loopbrief#intake"
+              href={cta.startLoopScan.href}
               location="loopbrief"
-              ctaText={cta.talkAboutProcess.label}
+              ctaText={cta.startLoopScan.label}
               onClick={() =>
-                trackBriefLoopScanClick({ cta_text: cta.talkAboutProcess.label })
+                trackBriefLoopScanClick({ cta_text: cta.startLoopScan.label })
               }
               className={marketingPrimary}
             >
-              {cta.talkAboutProcess.label}
-            </TrackedLink>
-            <TrackedLink
-              href={cta.learnLoopScan.href}
-              location="loopbrief"
-              ctaText={cta.learnLoopScan.label}
-              className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
-            >
-              {cta.learnLoopScan.label} →
+              {cta.startLoopScan.label}
             </TrackedLink>
           </div>
         </Container>

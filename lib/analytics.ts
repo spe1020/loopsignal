@@ -10,13 +10,8 @@ export const analyticsEvents = [
   "loopscan_cta_click",
   "loopscan_page_view",
   "loopscan_form_start",
-  "loopscan_area_selected",
   "loopscan_form_submit",
   "loopscan_form_error",
-  "loopscan_booking_view",
-  "loopscan_booking_start",
-  "loopscan_booking_success",
-  "schedule_click",
   "solution_interest",
   "insight_view",
   "insight_cta_click",
@@ -110,7 +105,8 @@ export type CtaLocation =
   | "loopknow"
   | "loopsource"
   | "loopbrief"
-  | "demo";
+  | "demo"
+  | "services";
 
 export type SolutionInterest =
   | "supply_chain"
@@ -120,29 +116,7 @@ export type SolutionInterest =
 
 export type SolutionInteraction = "card_click" | "learn_more" | "cta_click";
 
-export type OperationalArea =
-  | "procurement"
-  | "supply_chain"
-  | "operations"
-  | "quality"
-  | "engineering"
-  | "planning"
-  | "knowledge"
-  | "other";
-
 export type FormErrorCategory = "server" | "network";
-
-export type LoopScanBookingIntent = "discuss_loopscan" | "talk_process";
-
-export type LoopScanBookingMeta = {
-  source: "loopscan";
-  intent: LoopScanBookingIntent;
-  intake_submitted: boolean;
-};
-
-export type ScheduleClickSource =
-  | "loopscan_confirmation"
-  | "loopscan_embed_fallback";
 
 export type SignalErrorCategory =
   | "validation"
@@ -156,21 +130,6 @@ export type SignalAnalysisMeta = {
   row_count_bucket: string;
   inventory_fields: boolean;
 };
-
-const areaSlugs: Record<string, OperationalArea> = {
-  Procurement: "procurement",
-  "Supply Chain": "supply_chain",
-  Operations: "operations",
-  Quality: "quality",
-  Engineering: "engineering",
-  Planning: "planning",
-  "Knowledge / Documentation": "knowledge",
-  Other: "other",
-};
-
-export function toAreaSlug(area: string): OperationalArea {
-  return areaSlugs[area] ?? "other";
-}
 
 function compact(
   props?: AnalyticsProps,
@@ -217,68 +176,18 @@ export function trackLoopScanFormStart() {
   trackEvent("loopscan_form_start");
 }
 
-export function trackLoopScanAreaSelected(area: string) {
-  trackEvent("loopscan_area_selected", { area: toAreaSlug(area) });
-}
-
-export function trackLoopScanFormSubmit(area?: string) {
+export function trackLoopScanFormSubmit() {
   trackEvent("loopscan_form_submit", {
-    area: area ? toAreaSlug(area) : undefined,
     ...getUtmParams(),
   });
 }
 
 export function trackLoopScanFormError(input: {
   category: FormErrorCategory;
-  area?: string;
 }) {
   trackEvent("loopscan_form_error", {
     error_category: input.category,
     page: "/loopscan",
-    area: input.area ? toAreaSlug(input.area) : undefined,
-  });
-}
-
-const sentBookingEvents = new Set<
-  "loopscan_booking_view" | "loopscan_booking_start" | "loopscan_booking_success"
->();
-
-function trackBookingEventOnce(
-  event:
-    | "loopscan_booking_view"
-    | "loopscan_booking_start"
-    | "loopscan_booking_success",
-  meta: LoopScanBookingMeta,
-) {
-  if (sentBookingEvents.has(event)) return;
-  sentBookingEvents.add(event);
-  trackEvent(event, {
-    source: meta.source,
-    intent: meta.intent,
-    intake_submitted: meta.intake_submitted,
-  });
-}
-
-export function trackLoopScanBookingView(meta: LoopScanBookingMeta) {
-  trackBookingEventOnce("loopscan_booking_view", meta);
-}
-
-export function trackLoopScanBookingStart(meta: LoopScanBookingMeta) {
-  trackBookingEventOnce("loopscan_booking_start", meta);
-}
-
-export function trackLoopScanBookingSuccess(meta: LoopScanBookingMeta) {
-  trackBookingEventOnce("loopscan_booking_success", meta);
-}
-
-export function trackScheduleClick(
-  input: { source?: ScheduleClickSource } = {},
-) {
-  const utm = getUtmParams();
-  trackEvent("schedule_click", {
-    source: input.source ?? "loopscan_confirmation",
-    utm_source: utm.utm_source,
-    utm_campaign: utm.utm_campaign,
   });
 }
 

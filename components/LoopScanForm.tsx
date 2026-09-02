@@ -1,109 +1,47 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CalBooking } from "@/components/CalBooking";
 import {
-  trackLoopScanCTA,
   trackLoopScanFormError,
   trackLoopScanFormStart,
   trackLoopScanFormSubmit,
   trackLoopScanPageView,
 } from "@/lib/analytics";
 import { getLeadAttribution } from "@/lib/attribution";
-import {
-  CAL_PREFILL_EVENT,
-  FIT_CHECK_SECTION_ID,
-  scrollToFitCheck,
-  type CalBookingPrefill,
-} from "@/lib/cal";
 import { company } from "@/lib/company";
-import {
-  cta,
-  fitCheckNote,
-  loopScanFitCheck,
-  loopScanIntents,
-  type LoopScanIntent,
-} from "@/lib/content";
+import { loopScanForm } from "@/lib/content";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xeajkpoy";
-const PROCESS_MIN_LENGTH = 20;
 
-const timelines = ["Exploring", "Next quarter", "Active project"] as const;
+type FieldName = "name" | "company" | "role" | "contact" | "slowing";
 
-type Timeline = (typeof timelines)[number];
-type FieldName =
-  | "intent"
-  | "process"
-  | "name"
-  | "role"
-  | "email"
-  | "company"
-  | "systems"
-  | "timeline";
-
-type FormState = {
-  intent: LoopScanIntent;
-  process: string;
-  name: string;
-  role: string;
-  email: string;
-  company: string;
-  systems: string;
-  timeline: Timeline | "";
-};
+type FormState = Record<FieldName, string>;
 
 type FieldErrors = Partial<Record<FieldName, string>>;
 
 const emptyForm: FormState = {
-  intent: "talk",
-  process: "",
   name: "",
-  role: "",
-  email: "",
   company: "",
-  systems: "",
-  timeline: "",
+  role: "",
+  contact: "",
+  slowing: "",
 };
 
-const fieldOrder: FieldName[] = [
-  "intent",
-  "process",
-  "name",
-  "role",
-  "email",
-  "company",
-  "systems",
-  "timeline",
-];
-
-const INTENT_EVENT = "loopsignal:loopscan-intent";
-
-function parseIntent(value: string | null | undefined): LoopScanIntent {
-  return value === "book" ? "book" : "talk";
-}
-
-function intentLabel(intent: LoopScanIntent) {
-  return (
-    loopScanIntents.find((item) => item.value === intent)?.label ??
-    "I want to talk through a process"
-  );
-}
-
-function writeIntentToUrl(intent: LoopScanIntent, hash?: string) {
-  const url = new URL(window.location.href);
-  url.searchParams.set("intent", intent);
-  if (hash) url.hash = hash;
-  window.history.replaceState(
-    {},
-    "",
-    `${url.pathname}${url.search}${url.hash}`,
-  );
-}
+const fieldOrder: FieldName[] = ["name", "company", "role", "contact", "slowing"];
 
 const fieldClass =
   "w-full border bg-cream px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-stone/70 focus:border-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function isEmail(value: string) {
+  return emailPattern.test(value.trim());
+}
+
+function isPhone(value: string) {
+  const digits = value.replace(/\D/g, "");
+  return digits.length >= 7 && digits.length <= 15 && /^[\d\s()+.\-]+$/.test(value.trim());
+}
 
 function fieldId(name: FieldName) {
   return `loopscan-${name}`;
@@ -117,39 +55,21 @@ function validateField(name: FieldName, value: string): string | undefined {
   const trimmed = value.trim();
 
   switch (name) {
-    case "process":
-      if (trimmed.length === 0) {
-        return "Please describe the process.";
-      }
-      if (trimmed.length < PROCESS_MIN_LENGTH) {
-        return `Please add a bit more detail (at least ${PROCESS_MIN_LENGTH} characters).`;
-      }
-      return undefined;
     case "name":
       if (trimmed.length < 2) return "Please enter your name.";
-      return undefined;
-    case "role":
-      if (trimmed.length < 2) return "Please enter your role or title.";
-      return undefined;
-    case "email":
-      if (!emailPattern.test(trimmed)) {
-        return "Please enter a valid work email.";
-      }
       return undefined;
     case "company":
       if (trimmed.length < 2) return "Please enter your company.";
       return undefined;
-    case "intent":
-      if (trimmed !== "book" && trimmed !== "talk") {
-        return "Please choose what brings you here.";
+    case "role":
+      if (trimmed.length < 2) return "Please enter your role.";
+      return undefined;
+    case "contact":
+      if (!isEmail(trimmed) && !isPhone(trimmed)) {
+        return "Please enter an email address or phone number.";
       }
       return undefined;
-    case "systems":
-      return undefined;
-    case "timeline":
-      if (trimmed && !timelines.includes(trimmed as Timeline)) {
-        return "Please choose a timeline.";
-      }
+    case "slowing":
       return undefined;
   }
 }
@@ -165,17 +85,13 @@ function validateForm(form: FormState): FieldErrors {
 
 function formatLeadMessage(form: FormState, extra?: string[]) {
   const lines = [
-    `Intent: ${intentLabel(form.intent)}`,
-    "",
-    "What process are we looking at?",
-    form.process.trim(),
-    "",
     `Name: ${form.name.trim()}`,
-    `Role / title: ${form.role.trim()}`,
-    `Email: ${form.email.trim()}`,
     `Company: ${form.company.trim()}`,
-    `Primary systems in use: ${form.systems.trim() || "Not provided"}`,
-    `Timeline: ${form.timeline || "Not provided"}`,
+    `Role: ${form.role.trim()}`,
+    `Email or phone: ${form.contact.trim()}`,
+    "",
+    `${loopScanForm.fields.slowing}`,
+    form.slowing.trim() || "Not provided",
   ];
 
   if (extra && extra.length > 0) {
@@ -186,7 +102,7 @@ function formatLeadMessage(form: FormState, extra?: string[]) {
 }
 
 function leadSubject(form: FormState) {
-  return `LoopScan — ${intentLabel(form.intent)} — ${form.company.trim()}`;
+  return `LoopScan — ${form.company.trim()}`;
 }
 
 function FieldError({ name, message }: { name: FieldName; message?: string }) {
@@ -201,39 +117,18 @@ function FieldError({ name, message }: { name: FieldName; message?: string }) {
   );
 }
 
-export function LoopScanForm({ bookingUrl }: { bookingUrl?: string }) {
+export function LoopScanForm() {
   const [form, setForm] = useState(emptyForm);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const started = useRef(false);
-  const formRef = useRef<HTMLFormElement>(null);
   const confirmHeadingRef = useRef<HTMLHeadingElement>(null);
   const failureHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     trackLoopScanPageView();
-  }, []);
-
-  useEffect(() => {
-    function applyIntent(next: LoopScanIntent) {
-      setForm((current) =>
-        current.intent === next ? current : { ...current, intent: next },
-      );
-    }
-
-    applyIntent(
-      parseIntent(new URLSearchParams(window.location.search).get("intent")),
-    );
-
-    function onIntentEvent(event: Event) {
-      const detail = (event as CustomEvent<LoopScanIntent>).detail;
-      applyIntent(parseIntent(detail));
-    }
-
-    window.addEventListener(INTENT_EVENT, onIntentEvent);
-    return () => window.removeEventListener(INTENT_EVENT, onIntentEvent);
   }, []);
 
   useEffect(() => {
@@ -254,14 +149,13 @@ export function LoopScanForm({ bookingUrl }: { bookingUrl?: string }) {
     trackLoopScanFormStart();
   }
 
-  function update<K extends keyof FormState>(key: K, value: FormState[K]) {
+  function update(key: FieldName, value: string) {
     markStarted();
     setForm((current) => ({ ...current, [key]: value }));
     setFormError("");
     setErrors((current) => {
       if (!current[key]) return current;
-      const nextError = validateField(key, value);
-      return { ...current, [key]: nextError };
+      return { ...current, [key]: validateField(key, value) };
     });
   }
 
@@ -317,6 +211,9 @@ export function LoopScanForm({ bookingUrl }: { bookingUrl?: string }) {
         : "",
     ].filter(Boolean);
 
+    const contact = form.contact.trim();
+    const contactIsEmail = isEmail(contact);
+
     try {
       const response = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
@@ -326,10 +223,10 @@ export function LoopScanForm({ bookingUrl }: { bookingUrl?: string }) {
         },
         body: JSON.stringify({
           _subject: leadSubject(form),
-          _replyto: form.email.trim(),
-          email: form.email.trim(),
+          ...(contactIsEmail ? { _replyto: contact, email: contact } : { phone: contact }),
           name: form.name.trim(),
-          intent: intentLabel(form.intent),
+          company: form.company.trim(),
+          role: form.role.trim(),
           message: formatLeadMessage(form, attributionLines),
         }),
       });
@@ -347,16 +244,6 @@ export function LoopScanForm({ bookingUrl }: { bookingUrl?: string }) {
       }
 
       trackLoopScanFormSubmit();
-      window.dispatchEvent(
-        new CustomEvent<CalBookingPrefill>(CAL_PREFILL_EVENT, {
-          detail: {
-            name: form.name.trim(),
-            email: form.email.trim(),
-            intent: form.intent,
-            intakeSubmitted: true,
-          },
-        }),
-      );
       setSubmitted(true);
     } catch {
       setFormError(
@@ -380,32 +267,16 @@ export function LoopScanForm({ bookingUrl }: { bookingUrl?: string }) {
         <h2
           ref={confirmHeadingRef}
           tabIndex={-1}
-          className="mt-4 text-3xl font-medium tracking-tight text-ink outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className="mt-4 text-2xl font-medium tracking-tight text-ink outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink md:text-3xl"
         >
-          {loopScanFitCheck.successHeadline}
+          {loopScanForm.successHeadline}
         </h2>
-        <p className="mt-4 max-w-xl text-[15px] leading-7 text-graphite">
-          {loopScanFitCheck.successBody}
-        </p>
-        <div className="mt-10 border-t border-line pt-8">
-          <CalBooking
-            namespace="loopscan-intake"
-            bookingUrl={bookingUrl ?? ""}
-            name={form.name.trim()}
-            email={form.email.trim()}
-            intent={form.intent}
-            intakeSubmitted
-            heading={loopScanFitCheck.scheduleHeadline}
-          />
-        </div>
       </div>
     );
   }
 
   return (
-    <>
     <form
-      ref={formRef}
       onSubmit={onSubmit}
       noValidate
       className="relative grid gap-1"
@@ -420,18 +291,25 @@ export function LoopScanForm({ bookingUrl }: { bookingUrl?: string }) {
         className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
       />
 
+      <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-copper">
+        {loopScanForm.eyebrow}
+      </p>
+      <h2 className="mt-2 mb-5 text-2xl font-medium tracking-tight text-ink">
+        {loopScanForm.heading}
+      </h2>
+
       {formError ? (
         <div
           role="alert"
           className="mb-4 border border-copper bg-copper-soft px-5 py-5"
         >
-          <h2
+          <h3
             ref={failureHeadingRef}
             tabIndex={-1}
             className="text-lg font-medium tracking-tight text-ink outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
           >
             We couldn’t send this.
-          </h2>
+          </h3>
           <p className="mt-2 text-sm leading-6 text-graphite">{formError}</p>
           <div className="mt-4 flex flex-wrap gap-3">
             <button
@@ -445,68 +323,12 @@ export function LoopScanForm({ bookingUrl }: { bookingUrl?: string }) {
         </div>
       ) : null}
 
-      <fieldset className="grid gap-2">
-        <legend className="text-[12px] font-medium text-graphite">
-          What brings you here?
-        </legend>
-        <div className="grid gap-2">
-          {loopScanIntents.map((item) => (
-            <label
-              key={item.value}
-              className="flex cursor-pointer items-start gap-3 border border-line bg-cream px-4 py-3 text-sm text-ink"
-            >
-              <input
-                type="radio"
-                name="intent"
-                value={item.value}
-                checked={form.intent === item.value}
-                onChange={() => {
-                  update("intent", item.value);
-                  writeIntentToUrl(item.value);
-                }}
-                className="mt-0.5 accent-copper"
-              />
-              <span>
-                <span className="block font-medium">{item.label}</span>
-                <span className="mt-1 block text-[13px] leading-5 text-graphite">
-                  {item.description}
-                </span>
-              </span>
-            </label>
-          ))}
-        </div>
-        <FieldError name="intent" message={errors.intent} />
-      </fieldset>
-
-      <div className="grid gap-2">
-        <label
-          htmlFor={fieldId("process")}
-          className="text-[12px] font-medium text-graphite"
-        >
-          What process are we looking at?
-        </label>
-        <textarea
-          id={fieldId("process")}
-          name="process"
-          rows={6}
-          value={form.process}
-          onChange={(event) => update("process", event.target.value)}
-          onBlur={() => onBlur("process")}
-          placeholder="e.g. a workflow that takes too long, information that’s hard to find, or decisions that happen too late"
-          required
-          aria-invalid={Boolean(errors.process)}
-          aria-describedby={errors.process ? errorId("process") : undefined}
-          className={`${fieldClass} min-h-[140px] resize-y ${errors.process ? "border-copper" : "border-line"}`}
-        />
-        <FieldError name="process" message={errors.process} />
-      </div>
-
       <div className="grid gap-2">
         <label
           htmlFor={fieldId("name")}
           className="text-[12px] font-medium text-graphite"
         >
-          Name
+          {loopScanForm.fields.name}
         </label>
         <input
           id={fieldId("name")}
@@ -525,57 +347,10 @@ export function LoopScanForm({ bookingUrl }: { bookingUrl?: string }) {
 
       <div className="grid gap-2">
         <label
-          htmlFor={fieldId("role")}
-          className="text-[12px] font-medium text-graphite"
-        >
-          Role / title
-        </label>
-        <input
-          id={fieldId("role")}
-          name="role"
-          value={form.role}
-          onChange={(event) => update("role", event.target.value)}
-          onBlur={() => onBlur("role")}
-          autoComplete="organization-title"
-          required
-          aria-invalid={Boolean(errors.role)}
-          aria-describedby={errors.role ? errorId("role") : undefined}
-          className={`${fieldClass} ${errors.role ? "border-copper" : "border-line"}`}
-          placeholder="e.g. Procurement Manager"
-        />
-        <FieldError name="role" message={errors.role} />
-      </div>
-
-      <div className="grid gap-2">
-        <label
-          htmlFor={fieldId("email")}
-          className="text-[12px] font-medium text-graphite"
-        >
-          Work Email
-        </label>
-        <input
-          id={fieldId("email")}
-          type="email"
-          name="email"
-          value={form.email}
-          onChange={(event) => update("email", event.target.value)}
-          onBlur={() => onBlur("email")}
-          autoComplete="email"
-          inputMode="email"
-          required
-          aria-invalid={Boolean(errors.email)}
-          aria-describedby={errors.email ? errorId("email") : undefined}
-          className={`${fieldClass} ${errors.email ? "border-copper" : "border-line"}`}
-        />
-        <FieldError name="email" message={errors.email} />
-      </div>
-
-      <div className="grid gap-2">
-        <label
           htmlFor={fieldId("company")}
           className="text-[12px] font-medium text-graphite"
         >
-          Company
+          {loopScanForm.fields.company}
         </label>
         <input
           id={fieldId("company")}
@@ -594,51 +369,67 @@ export function LoopScanForm({ bookingUrl }: { bookingUrl?: string }) {
 
       <div className="grid gap-2">
         <label
-          htmlFor={fieldId("systems")}
+          htmlFor={fieldId("role")}
           className="text-[12px] font-medium text-graphite"
         >
-          Primary systems in use{" "}
-          <span className="font-normal text-stone">(optional)</span>
+          {loopScanForm.fields.role}
         </label>
         <input
-          id={fieldId("systems")}
-          name="systems"
-          value={form.systems}
-          onChange={(event) => update("systems", event.target.value)}
-          onBlur={() => onBlur("systems")}
-          placeholder="e.g. Epicor, Excel, shared drives"
-          aria-invalid={Boolean(errors.systems)}
-          aria-describedby={errors.systems ? errorId("systems") : undefined}
-          className={`${fieldClass} ${errors.systems ? "border-copper" : "border-line"}`}
+          id={fieldId("role")}
+          name="role"
+          value={form.role}
+          onChange={(event) => update("role", event.target.value)}
+          onBlur={() => onBlur("role")}
+          autoComplete="organization-title"
+          required
+          aria-invalid={Boolean(errors.role)}
+          aria-describedby={errors.role ? errorId("role") : undefined}
+          className={`${fieldClass} ${errors.role ? "border-copper" : "border-line"}`}
+          placeholder="e.g. Plant Manager"
         />
+        <FieldError name="role" message={errors.role} />
       </div>
 
       <div className="grid gap-2">
         <label
-          htmlFor={fieldId("timeline")}
+          htmlFor={fieldId("contact")}
           className="text-[12px] font-medium text-graphite"
         >
-          Timeline <span className="font-normal text-stone">(optional)</span>
+          {loopScanForm.fields.contact}
         </label>
-        <select
-          id={fieldId("timeline")}
-          name="timeline"
-          value={form.timeline}
-          onChange={(event) =>
-            update("timeline", event.target.value as FormState["timeline"])
-          }
-          onBlur={() => onBlur("timeline")}
-          aria-invalid={Boolean(errors.timeline)}
-          aria-describedby={errors.timeline ? errorId("timeline") : undefined}
-          className={`${fieldClass} ${form.timeline ? "text-ink" : "text-stone/70"} ${errors.timeline ? "border-copper" : "border-line"}`}
+        <input
+          id={fieldId("contact")}
+          name="contact"
+          value={form.contact}
+          onChange={(event) => update("contact", event.target.value)}
+          onBlur={() => onBlur("contact")}
+          autoComplete="email"
+          inputMode="email"
+          required
+          aria-invalid={Boolean(errors.contact)}
+          aria-describedby={errors.contact ? errorId("contact") : undefined}
+          className={`${fieldClass} ${errors.contact ? "border-copper" : "border-line"}`}
+        />
+        <FieldError name="contact" message={errors.contact} />
+      </div>
+
+      <div className="grid gap-2">
+        <label
+          htmlFor={fieldId("slowing")}
+          className="text-[12px] font-medium text-graphite"
         >
-          <option value="">Select a timeline</option>
-          {timelines.map((timeline) => (
-            <option key={timeline} value={timeline}>
-              {timeline}
-            </option>
-          ))}
-        </select>
+          {loopScanForm.fields.slowing}{" "}
+          <span className="font-normal text-stone">(optional)</span>
+        </label>
+        <textarea
+          id={fieldId("slowing")}
+          name="slowing"
+          rows={4}
+          value={form.slowing}
+          onChange={(event) => update("slowing", event.target.value)}
+          placeholder={loopScanForm.slowingPlaceholder}
+          className={`${fieldClass} min-h-[110px] resize-y border-line`}
+        />
       </div>
 
       <button
@@ -655,75 +446,9 @@ export function LoopScanForm({ bookingUrl }: { bookingUrl?: string }) {
             Sending
           </>
         ) : (
-          "Send this process"
+          loopScanForm.submit
         )}
       </button>
-      <p className="mt-4 text-[13px] leading-6 text-stone">
-        Start with the problem. We’ll figure out the technology later.
-      </p>
     </form>
-    <a
-      href={`#${FIT_CHECK_SECTION_ID}`}
-      onClick={(event) => {
-        event.preventDefault();
-        scrollToFitCheck();
-      }}
-      className="mt-6 inline-flex text-[13px] leading-6 text-stone transition-colors hover:text-ink"
-    >
-      {loopScanFitCheck.skipLink}
-    </a>
-    </>
-  );
-}
-
-export function LoopScanCtas() {
-  function selectIntent(intent: LoopScanIntent) {
-    writeIntentToUrl(intent, "intake");
-    window.dispatchEvent(
-      new CustomEvent<LoopScanIntent>(INTENT_EVENT, { detail: intent }),
-    );
-    document.getElementById("intake")?.scrollIntoView({ behavior: "smooth" });
-  }
-
-  return (
-    <div className="mt-6">
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
-        <div>
-          <a
-            href={cta.startLoopScan.href}
-            onClick={(event) => {
-              event.preventDefault();
-              trackLoopScanCTA({
-                location: "loopscan_section",
-                page: "/loopscan",
-                cta_text: cta.startLoopScan.label,
-              });
-              selectIntent("book");
-            }}
-            className="inline-flex items-center justify-center rounded-[2px] bg-copper px-5 py-3 text-[13px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark"
-          >
-            {cta.startLoopScan.label}
-          </a>
-          <p className="mt-2 text-[13px] leading-5 text-graphite">
-            {fitCheckNote}
-          </p>
-        </div>
-        <a
-          href={cta.talkAboutProcess.href}
-          onClick={(event) => {
-            event.preventDefault();
-            trackLoopScanCTA({
-              location: "loopscan_section",
-              page: "/loopscan",
-              cta_text: cta.talkAboutProcess.label,
-            });
-            selectIntent("talk");
-          }}
-          className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
-        >
-          {cta.talkAboutProcess.label} →
-        </a>
-      </div>
-    </div>
   );
 }

@@ -97,25 +97,17 @@ export function KnowDemo() {
             LoopSignal organizes, connects, and makes operational knowledge
             usable across the systems and documents your team already relies on.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-5">
+          <div className="mt-8">
             <TrackedLink
-              href="/loopscan?source=loopknow#intake"
+              href={cta.startLoopScan.href}
               location="loopknow"
-              ctaText={cta.talkAboutProcess.label}
+              ctaText={cta.startLoopScan.label}
               onClick={() =>
-                trackKnowLoopScanClick({ cta_text: cta.talkAboutProcess.label })
+                trackKnowLoopScanClick({ cta_text: cta.startLoopScan.label })
               }
               className={marketingPrimary}
             >
-              {cta.talkAboutProcess.label}
-            </TrackedLink>
-            <TrackedLink
-              href={cta.learnLoopScan.href}
-              location="loopknow"
-              ctaText={cta.learnLoopScan.label}
-              className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
-            >
-              {cta.learnLoopScan.label} →
+              {cta.startLoopScan.label}
             </TrackedLink>
           </div>
         </Container>

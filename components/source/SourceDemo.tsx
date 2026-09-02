@@ -142,25 +142,17 @@ export function SourceDemo() {
             commercial data, and sourcing decisions into a workflow built
             around how your team actually works.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-5">
+          <div className="mt-8">
             <TrackedLink
-              href="/loopscan?source=loopsource#intake"
+              href={cta.startLoopScan.href}
               location="loopsource"
-              ctaText={cta.talkAboutProcess.label}
+              ctaText={cta.startLoopScan.label}
               onClick={() =>
-                trackSourceLoopScanClick({ cta_text: cta.talkAboutProcess.label })
+                trackSourceLoopScanClick({ cta_text: cta.startLoopScan.label })
               }
               className={marketingPrimary}
             >
-              {cta.talkAboutProcess.label}
-            </TrackedLink>
-            <TrackedLink
-              href={cta.learnLoopScan.href}
-              location="loopsource"
-              ctaText={cta.learnLoopScan.label}
-              className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
-            >
-              {cta.learnLoopScan.label} →
+              {cta.startLoopScan.label}
             </TrackedLink>
           </div>
         </Container>

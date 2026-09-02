@@ -109,7 +109,7 @@ export function SolveHome() {
             </div>
             <p className="mt-6 flex items-start gap-2 text-[13px] leading-5 text-stone">
               <LoopGlyph className="mt-0.5 h-3.5 w-7" />
-              This version stores investigations locally in this browser. Export important investigations for backup.
+              Free. Runs in your browser. Nothing leaves your device. Export important investigations for backup.
             </p>
           </div>
           <div className="hidden md:col-span-5 md:block">
@@ -165,12 +165,12 @@ export function SolveHome() {
 
       <section className="border-t border-line bg-cream">
         <div className="mx-auto flex max-w-[1120px] flex-wrap items-center justify-between gap-4 px-6 py-8 lg:px-8">
-          <p className="text-[14px] text-graphite">Need help with a recurring or cross-functional problem?</p>
+          <p className="text-[14px] text-graphite">Have a recurring or cross-functional problem?</p>
           <Link
-            href="/loopscan?intent=talk#intake"
+            href="/loopscan#intake"
             className="inline-flex min-h-[44px] items-center rounded-[3px] border border-ink/25 px-4 text-[14px] font-medium text-ink transition-colors hover:border-ink hover:bg-ink hover:text-cream focus-visible:outline-2 focus-visible:outline-copper"
           >
-            Talk to LoopSignal
+            Start with LoopScan
           </Link>
         </div>
       </section>

@@ -230,17 +230,17 @@ export default function AboutPage() {
             <p className="mt-6 text-[16px] leading-8 text-graphite">
               LoopSignal is new. I&apos;ve done this work for two decades
               inside companies; I haven&apos;t yet done it as an outside
-              engagement. That&apos;s why LoopScan is a fixed price with a
-              defined deliverable and an unconditional guarantee — the risk of
-              being early should sit with me, not with you.
+              engagement. That&apos;s why LoopScan starts with a conversation
+              and ends with a written read-back you can act on with or without
+              us. The risk of being early should sit with me, not with you.
             </p>
             <p className="mt-4 text-[16px] leading-8 text-graphite">
               Based in central Pennsylvania. I&apos;ve spent my career in
               plants that look like yours.
             </p>
             <div className="mt-10">
-              <Button href={cta.talkAboutProcess.href} location="about">
-                {cta.talkAboutProcess.label}
+              <Button href={cta.startLoopScan.href} location="about">
+                {cta.startLoopScan.label}
               </Button>
             </div>
           </Reveal>

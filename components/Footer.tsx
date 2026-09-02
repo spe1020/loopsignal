@@ -45,12 +45,12 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5">
               <li>
                 <TrackedLink
-                  href={cta.nav.href}
+                  href={cta.startLoopScan.href}
                   location="footer"
-                  ctaText={cta.nav.label}
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
+                  ctaText={cta.startLoopScan.label}
+                  className="text-sm font-medium text-cream transition-colors hover:text-white"
                 >
-                  {cta.nav.label}
+                  {cta.startLoopScan.label}
                 </TrackedLink>
               </li>
               <li>
@@ -115,13 +115,32 @@ export function Footer() {
             <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/40">
               Approach
             </p>
-            <p className="mt-4 text-sm leading-6 text-white/55">
-              LoopScan.
-              <br />
-              LoopBuild.
-              <br />
-              LoopOps.
-            </p>
+            <ul className="mt-4 space-y-2.5">
+              <li>
+                <Link
+                  href="/loopscan"
+                  className="text-sm text-white/70 transition-colors hover:text-cream"
+                >
+                  LoopScan
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/services#loopbuild"
+                  className="text-sm text-white/70 transition-colors hover:text-cream"
+                >
+                  LoopBuild
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/services#loopops"
+                  className="text-sm text-white/70 transition-colors hover:text-cream"
+                >
+                  LoopOps
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

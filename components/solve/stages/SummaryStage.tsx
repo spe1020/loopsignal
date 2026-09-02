@@ -244,8 +244,8 @@ export function SummaryStage() {
 
       {inv.status === "closed" ? (
         <div className="loop-no-print mt-8 flex flex-wrap items-center justify-between gap-4 rounded-[3px] border border-line bg-cream px-5 py-4">
-          <p className="text-[14px] text-graphite">Need help with a recurring or cross-functional problem?</p>
-          <Link href="/loopscan?intent=talk#intake" className="inline-flex min-h-[44px] items-center rounded-[3px] border border-ink/25 px-4 text-[14px] font-medium text-ink transition-colors hover:border-ink hover:bg-ink hover:text-cream focus-visible:outline-2 focus-visible:outline-copper">Talk to LoopSignal</Link>
+          <p className="text-[14px] text-graphite">Have a recurring or cross-functional problem?</p>
+          <Link href="/loopscan#intake" className="inline-flex min-h-[44px] items-center rounded-[3px] border border-ink/25 px-4 text-[14px] font-medium text-ink transition-colors hover:border-ink hover:bg-ink hover:text-cream focus-visible:outline-2 focus-visible:outline-copper">Start with LoopScan</Link>
         </div>
       ) : null}
     </div>

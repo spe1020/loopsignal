@@ -70,12 +70,12 @@ export function Header() {
 
         <div className="flex items-center gap-4">
           <TrackedLink
-            href={cta.nav.href}
+            href={cta.startLoopScan.href}
             location="navigation"
-            ctaText={cta.nav.label}
+            ctaText={cta.startLoopScan.label}
             className="hidden rounded-[2px] bg-copper px-4 py-2.5 text-[13px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark sm:inline-flex"
           >
-            {cta.nav.label}
+            {cta.startLoopScan.label}
           </TrackedLink>
           <button
             type="button"
@@ -114,13 +114,13 @@ export function Header() {
               </Link>
             ))}
             <TrackedLink
-              href={cta.nav.href}
+              href={cta.startLoopScan.href}
               location="navigation"
-              ctaText={cta.nav.label}
+              ctaText={cta.startLoopScan.label}
               onClick={() => setOpen(false)}
               className="mt-6 inline-flex items-center justify-center rounded-[2px] bg-copper px-4 py-3 text-[13px] font-medium text-white"
             >
-              {cta.nav.label}
+              {cta.startLoopScan.label}
             </TrackedLink>
           </nav>
         </div>

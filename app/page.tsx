@@ -12,10 +12,9 @@ import {
   cta,
   demoNote,
   featuredArticleSlugs,
-  fitCheckNote,
   founder,
   homepageFinding,
-  loopScanOffer,
+  loopScanBlock,
   painPoints,
   trustPrinciples,
 } from "@/lib/content";
@@ -60,14 +59,9 @@ export default function HomePage() {
               automate only what earns it.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-5">
-              <div>
-                <Button href={cta.fitCheck.href} location="hero">
-                  {cta.fitCheck.label}
-                </Button>
-                <p className="mt-2 text-[13px] leading-5 text-graphite">
-                  {fitCheckNote}
-                </p>
-              </div>
+              <Button href={cta.startLoopScan.href} location="hero">
+                {cta.startLoopScan.label}
+              </Button>
               <Button href={cta.seeDemos.href} variant="text">
                 {cta.seeDemos.label} →
               </Button>
@@ -80,35 +74,20 @@ export default function HomePage() {
               <p className="mt-3 text-sm leading-6 text-graphite">
                 {homepageFinding.source}
               </p>
-              <a
-                href={loopScanOffer.samplePdf.href}
-                download={loopScanOffer.samplePdf.filename}
-                className="mt-3 inline-block text-sm font-medium text-copper hover:text-copper-dark"
-              >
-                {loopScanOffer.samplePdf.cta} →
-              </a>
             </div>
           </Reveal>
         </Container>
       </section>
 
-      <section className="border-t border-line bg-paper py-8 md:py-10">
+      <section className="border-t border-line bg-paper py-10 md:py-12">
         <Container>
-          <Eyebrow>LoopScan</Eyebrow>
-          <p className="mt-3 text-[18px] font-medium leading-7 tracking-tight text-ink md:text-[20px]">
-            {loopScanOffer.priceLine}
+          <Eyebrow>{loopScanBlock.name}</Eyebrow>
+          <p className="mt-3 max-w-2xl text-[18px] font-medium leading-7 tracking-tight text-ink md:text-[20px]">
+            {loopScanBlock.text}
           </p>
-          <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
-            <div>
-              <Button href={cta.fitCheck.href} location="loopscan_section">
-                {cta.fitCheck.label}
-              </Button>
-              <p className="mt-2 text-[13px] leading-5 text-graphite">
-                {fitCheckNote}
-              </p>
-            </div>
-            <Button href={cta.startLoopScan.href} variant="text">
-              {cta.startLoopScan.label} →
+          <div className="mt-5">
+            <Button href={cta.startLoopScan.href} location="loopscan_section">
+              {cta.startLoopScan.label}
             </Button>
           </div>
         </Container>
@@ -350,20 +329,12 @@ export default function HomePage() {
               reconciling, or moving information between systems by hand, start
               there.
             </p>
-            <div className="mt-10 flex flex-wrap items-center gap-5">
-              <div>
-                <Button
-                  href={cta.fitCheck.href}
-                  variant="dark"
-                  location="final_cta"
-                >
-                  {cta.fitCheck.label}
-                </Button>
-                <p className="mt-2 text-[13px] leading-5 text-white/50">
-                  {fitCheckNote}
-                </p>
-              </div>
-              <Button href={cta.startLoopScan.href} variant="light">
+            <div className="mt-10">
+              <Button
+                href={cta.startLoopScan.href}
+                variant="dark"
+                location="final_cta"
+              >
                 {cta.startLoopScan.label}
               </Button>
             </div>

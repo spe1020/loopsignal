@@ -224,16 +224,13 @@ export default async function ArticlePage({ params }: Props) {
             If a process takes too long, requires repetitive work, depends on
             scattered information, or repeatedly creates problems, start there.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-5">
+          <div className="mt-8">
             <Button
-              href={cta.talkAboutProcess.href}
+              href={cta.startLoopScan.href}
               location="article"
               articleSlug={article.slug}
             >
-              {cta.talkAboutProcess.label}
-            </Button>
-            <Button href={cta.learnLoopScan.href} variant="text">
-              {cta.learnLoopScan.label}
+              {cta.startLoopScan.label}
             </Button>
           </div>
         </div>

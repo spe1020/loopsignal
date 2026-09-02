@@ -20,15 +20,10 @@ export default function PrivacyPage() {
         </h1>
         <div className="mt-10 max-w-2xl space-y-6 text-[16px] leading-8 text-graphite">
           <p>
-            If you send the LoopScan form, we receive your name, work email,
-            role, company, and the process you described. That submission goes
-            to Formspree, then to us. We use it to follow up about the work. We
-            do not sell it.
-          </p>
-          <p>
-            If you schedule a 30-minute fit check, Cal.com collects your name
-            and email so it can send the calendar invitation. We do not send
-            your process description or other form details to Cal.com.
+            If you send the LoopScan form, we receive your name, company, role,
+            email or phone, and anything you wrote about what&apos;s slowing you
+            down. That submission goes to Formspree, then to us. We use it to
+            set up a conversation. We do not sell it.
           </p>
           <p>
             This site uses Vercel Analytics for page views and button clicks.

@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         destination: "/supply",
         permanent: true,
       },
+      {
+        source: "/pricing",
+        destination: "/services",
+        statusCode: 301,
+      },
     ];
   },
 };

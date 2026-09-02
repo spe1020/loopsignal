@@ -68,11 +68,17 @@ export const routeMeta = {
     description:
       "Writing on manufacturing operations, process improvement, procurement, supply chain, and practical use of AI in the plant.",
   },
+  services: {
+    path: "/services",
+    title: "Services",
+    description:
+      "LoopScan evaluates how your plant actually runs. LoopBuild implements what the read-back points to. LoopOps keeps it working after we're done.",
+  },
   loopscan: {
     path: "/loopscan",
     title: "LoopScan",
     description:
-      "LoopScan: $7,500, two days on site, findings in 10 business days. An on-site review of how a process actually runs, with an unconditional guarantee.",
+      "An evaluation of how your plant actually runs: a conversation, a walk-through when it makes sense, and a written read-back with what we'd recommend next.",
   },
   demo: {
     path: "/demo",
@@ -143,7 +149,7 @@ export const routeMeta = {
   notFound: {
     path: "/404",
     title: "Page not found",
-    description: "This page does not exist. Start from home or begin a LoopScan.",
+    description: "This page does not exist. Start from home or start with LoopScan.",
     canonicalPath: "/",
     robots: { index: false, follow: false },
   },

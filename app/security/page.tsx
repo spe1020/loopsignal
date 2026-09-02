@@ -25,8 +25,8 @@ export default function SecurityPage() {
               Most of a LoopScan doesn’t need your data
             </h2>
             <p>
-              A LoopScan is two days on site, watching how work actually
-              happens. That is where the findings come from.
+              A LoopScan is mostly a conversation and a walk-through, watching
+              how work actually happens. That is where the findings come from.
             </p>
             <p>
               Some scans need a data pull to put a number on the problem. If
