@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { InvestigationProvider } from "./InvestigationProvider";
-import { LoopGlyph } from "./icons";
+import { LoopGlyph } from "@/components/loop/icons";
 
 export function InvestigationShell({ id, children }: { id: string; children: React.ReactNode }) {
   return (
     <InvestigationProvider
       id={id}
       fallback={
-        <div className="solve-root flex min-h-[60vh] items-center justify-center" aria-busy="true">
+        <div className="loop-root flex min-h-[60vh] items-center justify-center" aria-busy="true">
           <div className="flex items-center gap-3 text-[14px] text-stone">
             <LoopGlyph animated className="h-6 w-12" />
             Opening investigation…
@@ -17,7 +17,7 @@ export function InvestigationShell({ id, children }: { id: string; children: Rea
         </div>
       }
       missing={
-        <div className="solve-root flex min-h-[60vh] items-center justify-center px-6">
+        <div className="loop-root flex min-h-[60vh] items-center justify-center px-6">
           <div className="max-w-md text-center">
             <LoopGlyph className="mx-auto h-8 w-16" />
             <h1 className="mt-5 text-2xl font-medium tracking-tight text-ink">Investigation not found</h1>

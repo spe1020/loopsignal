@@ -5,10 +5,10 @@ import { verificationResults } from "@/lib/solve/schema";
 import { evidenceTypeMeta } from "../causeMeta";
 import { ContextPanel, usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
-import { IconTrash } from "../icons";
+import { IconTrash } from "@/components/loop/icons";
 import { resultMeta } from "../stages/VerifyStage";
-import { Checkbox, Field, SolveButton, TextArea, TextInput } from "../ui";
-import { useToast } from "../Toast";
+import { Checkbox, Field, SolveButton, TextArea, TextInput } from "@/components/loop/ui";
+import { useToast } from "@/components/loop/Toast";
 
 export function VerificationPanel({ actionId, verificationId }: { actionId: string; verificationId: string | null }) {
   const { investigation: inv, dispatch, restore } = useInvestigation();
@@ -31,7 +31,7 @@ export function VerificationPanel({ actionId, verificationId }: { actionId: stri
         <p className="text-[13px] leading-5 text-graphite"><span className="text-stone">Action:</span> {action.title || "Untitled action"}</p>
         <Field label="Expected result" htmlFor="ver-expected"><TextArea id="ver-expected" rows={2} value={v.expected} onChange={(e) => set({ expected: e.target.value })} /></Field>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Check date" htmlFor="ver-date"><input id="ver-date" type="date" value={v.checkAt?.slice(0, 10) ?? ""} onChange={(e) => set({ checkAt: e.target.value ? `${e.target.value}T12:00:00.000Z` : undefined })} className="min-h-(--solve-control) w-full rounded-[3px] border border-line bg-cream px-3 text-ink focus:border-copper focus:outline-none" /></Field>
+          <Field label="Check date" htmlFor="ver-date"><input id="ver-date" type="date" value={v.checkAt?.slice(0, 10) ?? ""} onChange={(e) => set({ checkAt: e.target.value ? `${e.target.value}T12:00:00.000Z` : undefined })} className="min-h-(--loop-control) w-full rounded-[3px] border border-line bg-cream px-3 text-ink focus:border-copper focus:outline-none" /></Field>
           <Field label="Verifier" htmlFor="ver-who"><TextInput id="ver-who" value={v.verifier ?? ""} onChange={(e) => set({ verifier: e.target.value })} /></Field>
         </div>
         <Field label="Observed result" htmlFor="ver-observed" helper="What actually happened after the action? Numbers, dates, counts."><TextArea id="ver-observed" rows={3} value={v.observed} onChange={(e) => set({ observed: e.target.value })} autoFocus={!v.observed} /></Field>
@@ -42,7 +42,7 @@ export function VerificationPanel({ actionId, verificationId }: { actionId: stri
               const m = resultMeta[r];
               const active = v.result === r;
               return (
-                <button key={r} type="button" role="radio" aria-checked={active} onClick={() => set({ result: r as VerificationResult })} className={`inline-flex min-h-(--solve-control) items-center justify-center gap-1.5 rounded-[3px] border px-3 text-[13px] font-medium focus-visible:outline-2 focus-visible:outline-copper ${active ? (r === "not_effective" ? "border-risk-critical bg-risk-critical text-white" : r === "effective" ? "border-risk-track bg-risk-track text-white" : "border-ink bg-ink text-cream") : "border-line bg-paper text-graphite hover:border-ink/40"}`}>
+                <button key={r} type="button" role="radio" aria-checked={active} onClick={() => set({ result: r as VerificationResult })} className={`inline-flex min-h-(--loop-control) items-center justify-center gap-1.5 rounded-[3px] border px-3 text-[13px] font-medium focus-visible:outline-2 focus-visible:outline-copper ${active ? (r === "not_effective" ? "border-risk-critical bg-risk-critical text-white" : r === "effective" ? "border-risk-track bg-risk-track text-white" : "border-ink bg-ink text-cream") : "border-line bg-paper text-graphite hover:border-ink/40"}`}>
                   {m.icon} {m.label}
                 </button>
               );

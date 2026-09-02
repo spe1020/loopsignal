@@ -4,8 +4,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import { softFindings } from "@/lib/solve/rules";
 import { useInvestigation } from "../InvestigationProvider";
-import { IconBranch, IconClock, IconGrid, IconNote, IconPresent, IconPlus } from "../icons";
-import { Chip, Note, SectionTitle, Segmented, SolveButton } from "../ui";
+import { IconBranch, IconClock, IconGrid, IconNote, IconPresent, IconPlus } from "@/components/loop/icons";
+import { Chip, Note, SectionTitle, Segmented, SolveButton } from "@/components/loop/ui";
 import { usePrimaryAction, useShell } from "../Workspace";
 import { EvidenceView } from "../investigate/EvidenceView";
 import { FishboneView } from "../investigate/FishboneView";
@@ -91,7 +91,7 @@ export function InvestigateStage() {
         {mode === "evidence" ? <EvidenceView /> : null}
         {mode === "timeline" ? <TimelineView /> : null}
       </div>
-      <p className="solve-secondary mt-8 flex flex-wrap items-center gap-2 text-[12px] text-stone">
+      <p className="loop-secondary mt-8 flex flex-wrap items-center gap-2 text-[12px] text-stone">
         <Chip tone="neutral">Cause evidence state</Chip> says how well a cause is supported. It is not the same as containment verification or action effectiveness.
       </p>
     </div>

@@ -1,4 +1,4 @@
-import { newId, nowIso } from "./ids";
+import { newId, nowIso, patchIn, stamp } from "@/lib/loop/ids";
 import type {
   Action,
   CauseNode,
@@ -35,11 +35,7 @@ export const SUGGESTED_CATEGORIES = [
   "Policy",
 ] as const;
 
-type Stamp = { id: string; createdAt: string; updatedAt: string };
-
-export function stamp(at = nowIso()): Stamp {
-  return { id: newId(), createdAt: at, updatedAt: at };
-}
+export { stamp };
 
 export function emptyProblem(): ProblemStatement {
   return {
@@ -134,17 +130,6 @@ export type SolveAction =
   | { type: "remove_lesson"; id: string }
   | { type: "reopen"; note?: string }
   | { type: "close"; note?: string };
-
-function patchIn<T extends { id: string; updatedAt: string }>(
-  list: T[],
-  id: string,
-  patch: Partial<T>,
-  at: string,
-): T[] {
-  return list.map((item) =>
-    item.id === id ? { ...item, ...patch, updatedAt: at } : item,
-  );
-}
 
 export function descendantIds(causes: CauseNode[], rootId: string): Set<string> {
   const ids = new Set<string>([rootId]);

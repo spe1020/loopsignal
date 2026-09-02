@@ -11,8 +11,8 @@ import { classificationMeta, evidenceStateMeta, removalTestMeta } from "../cause
 import { usePanel } from "../ContextPanel";
 import { Facilitation } from "../Facilitation";
 import { useInvestigation } from "../InvestigationProvider";
-import { IconAlert, IconLink, IconPresent, IconTarget } from "../icons";
-import { Card, Chip, Coaching, EmptyState, Note, SectionTitle, Select, SolveButton, TextArea } from "../ui";
+import { IconAlert, IconLink, IconPresent, IconTarget } from "@/components/loop/icons";
+import { Card, Chip, Coaching, EmptyState, Note, SectionTitle, Select, SolveButton, TextArea } from "@/components/loop/ui";
 import { useShell } from "../Workspace";
 
 /** Causes under review: classified, evidence-stated, flagged, or with any linked evidence. */

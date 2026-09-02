@@ -5,7 +5,7 @@ import { fromLocalInput, toLocalInput } from "@/lib/solve/format";
 import { ContextPanel, usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
 import { containmentStatusMeta } from "../stages/ContainStage";
-import { Field, Select, SolveButton, TextArea, TextInput } from "../ui";
+import { Field, Select, SolveButton, TextArea, TextInput } from "@/components/loop/ui";
 
 export function ContainmentPanel({ id }: { id: string | null }) {
   const { investigation: inv, dispatch } = useInvestigation();
@@ -23,7 +23,7 @@ export function ContainmentPanel({ id }: { id: string | null }) {
         <Field label="Scope" htmlFor="cont-scope" helper="Which parts, lots, orders, or shifts?"><TextInput id="cont-scope" value={item.scope} onChange={(e) => set({ scope: e.target.value })} /></Field>
         <Field label="Quantity affected" htmlFor="cont-qty"><TextInput id="cont-qty" value={item.quantityAffected ?? ""} onChange={(e) => set({ quantityAffected: e.target.value })} /></Field>
         <Field label="Started" htmlFor="cont-start">
-          <input id="cont-start" type="datetime-local" value={toLocalInput(item.startedAt)} onChange={(e) => set({ startedAt: fromLocalInput(e.target.value) })} className="min-h-(--solve-control) w-full rounded-[3px] border border-line bg-cream px-3 text-ink focus:border-copper focus:outline-none" />
+          <input id="cont-start" type="datetime-local" value={toLocalInput(item.startedAt)} onChange={(e) => set({ startedAt: fromLocalInput(e.target.value) })} className="min-h-(--loop-control) w-full rounded-[3px] border border-line bg-cream px-3 text-ink focus:border-copper focus:outline-none" />
         </Field>
         <Field label="Status" htmlFor="cont-status">
           <Select id="cont-status" value={item.status} onChange={(e) => set({ status: e.target.value as ContainmentStatus })}>

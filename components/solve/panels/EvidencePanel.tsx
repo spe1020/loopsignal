@@ -7,8 +7,8 @@ import { truncate } from "@/lib/solve/text";
 import { evidenceTypeMeta } from "../causeMeta";
 import { ContextPanel, usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
-import { IconTrash } from "../icons";
-import { Field, Select, SolveButton, TextArea, TextInput } from "../ui";
+import { IconTrash } from "@/components/loop/icons";
+import { Field, Select, SolveButton, TextArea, TextInput } from "@/components/loop/ui";
 import { RelationToggle } from "./CausePanel";
 
 export function EvidencePanel({ evidenceId, forCauseId }: { evidenceId: string | null; forCauseId?: string }) {
@@ -38,7 +38,7 @@ export function EvidencePanel({ evidenceId, forCauseId }: { evidenceId: string |
         </Field>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Source" htmlFor="ev-source"><TextInput id="ev-source" value={item.source} onChange={(e) => set({ source: e.target.value })} /></Field>
-          <Field label="Date" htmlFor="ev-date"><input id="ev-date" type="date" value={item.date?.slice(0, 10) ?? ""} onChange={(e) => set({ date: e.target.value || undefined })} className="min-h-(--solve-control) w-full rounded-[3px] border border-line bg-cream px-3 text-ink focus:border-copper focus:outline-none" /></Field>
+          <Field label="Date" htmlFor="ev-date"><input id="ev-date" type="date" value={item.date?.slice(0, 10) ?? ""} onChange={(e) => set({ date: e.target.value || undefined })} className="min-h-(--loop-control) w-full rounded-[3px] border border-line bg-cream px-3 text-ink focus:border-copper focus:outline-none" /></Field>
         </div>
 
         <section>

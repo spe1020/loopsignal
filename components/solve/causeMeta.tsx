@@ -1,6 +1,6 @@
 import type { CauseClassification, EvidenceState, EvidenceType, RemovalTest } from "@/lib/solve/schema";
-import { IconAlert, IconCheck, IconCircle, IconClose, IconDot, IconEye, IconFlag, IconNote, IconTarget, IconClock, IconQuestion, IconSearch, IconGrid, IconBook, IconMagnify } from "./icons";
-import type { Tone } from "./ui";
+import { IconAlert, IconCheck, IconCircle, IconClose, IconDot, IconEye, IconFlag, IconNote, IconTarget, IconClock, IconQuestion, IconSearch, IconGrid, IconBook, IconMagnify } from "@/components/loop/icons";
+import type { Tone } from "@/components/loop/ui";
 
 export const evidenceStateMeta: Record<EvidenceState, { label: string; short: string; tone: Tone; icon: React.ReactNode; hint: string }> = {
   assumption: { label: "Assumption", short: "Assumption", tone: "neutral", icon: <IconCircle size={12} />, hint: "Not yet checked against anything." },

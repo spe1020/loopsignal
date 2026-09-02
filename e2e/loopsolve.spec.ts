@@ -138,8 +138,8 @@ test("sample loads and prints without console errors", async ({ page }) => {
     await page.waitForLoadState("networkidle");
   }
   await page.emulateMedia({ media: "print" });
-  await expect(page.locator(".solve-print-header")).toBeVisible();
-  await expect(page.locator(".solve-report svg").first()).toBeVisible();
+  await expect(page.locator(".loop-print-header")).toBeVisible();
+  await expect(page.locator(".loop-report svg").first()).toBeVisible();
   expect(errors, errors.join("\n")).toEqual([]);
 });
 

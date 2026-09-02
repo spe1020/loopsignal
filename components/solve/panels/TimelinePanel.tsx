@@ -6,7 +6,7 @@ import { truncate } from "@/lib/solve/text";
 import { timelineTagMeta } from "../causeMeta";
 import { ContextPanel, usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
-import { Field, Select, SolveButton, TextArea } from "../ui";
+import { Field, Select, SolveButton, TextArea } from "@/components/loop/ui";
 
 export function TimelinePanel({ eventId }: { eventId: string | null }) {
   const { investigation: inv, dispatch } = useInvestigation();
@@ -18,7 +18,7 @@ export function TimelinePanel({ eventId }: { eventId: string | null }) {
     <ContextPanel title="Timeline event" fullScreen={inv.shopFloorMode}>
       <div className="flex flex-col gap-4">
         <Field label="Time" htmlFor="tl-at">
-          <input id="tl-at" type="datetime-local" value={toLocalInput(item.at)} onChange={(e) => { const iso = fromLocalInput(e.target.value); if (iso) set({ at: iso }); }} className="min-h-(--solve-control) w-full rounded-[3px] border border-line bg-cream px-3 text-ink focus:border-copper focus:outline-none" />
+          <input id="tl-at" type="datetime-local" value={toLocalInput(item.at)} onChange={(e) => { const iso = fromLocalInput(e.target.value); if (iso) set({ at: iso }); }} className="min-h-(--loop-control) w-full rounded-[3px] border border-line bg-cream px-3 text-ink focus:border-copper focus:outline-none" />
         </Field>
         <Field label="What happened" htmlFor="tl-text"><TextArea id="tl-text" rows={3} value={item.text} onChange={(e) => set({ text: e.target.value })} onSubmitKey={close} autoFocus /></Field>
         <Field label="Tag" htmlFor="tl-tag">

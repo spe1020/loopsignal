@@ -9,9 +9,9 @@ import { formatDate } from "@/lib/solve/format";
 import { truncate } from "@/lib/solve/text";
 import { usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
-import { IconAlert, IconCheck, IconCircle, IconClock, IconDot, IconLightning, IconPlus, IconShield, IconTrash, IconWrench } from "../icons";
-import { useToast } from "../Toast";
-import { Card, Chip, Coaching, EmptyState, IconButton, Note, SectionTitle, SolveButton, type Tone } from "../ui";
+import { IconAlert, IconCheck, IconCircle, IconClock, IconDot, IconLightning, IconPlus, IconShield, IconTrash, IconWrench } from "@/components/loop/icons";
+import { useToast } from "@/components/loop/Toast";
+import { Card, Chip, Coaching, EmptyState, IconButton, Note, SectionTitle, SolveButton, type Tone } from "@/components/loop/ui";
 import { usePrimaryAction } from "../Workspace";
 
 export const actionStatusMeta: Record<ActionStatus, { label: string; tone: Tone; icon: React.ReactNode }> = {
@@ -82,7 +82,7 @@ export function ActionCard({ action: a, onOpen, selected, showVerify }: { action
         {a.priority !== "normal" ? <Chip tone={pr.tone}>{pr.label}</Chip> : null}
         {overdue ? <Chip tone="red" icon={<IconAlert size={12} />}>Overdue</Chip> : null}
       </div>
-      {a.description ? <p className="solve-secondary mt-2 text-[13.5px] leading-5 text-graphite">{a.description}</p> : null}
+      {a.description ? <p className="loop-secondary mt-2 text-[13.5px] leading-5 text-graphite">{a.description}</p> : null}
       <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[12.5px] text-graphite">
         {a.owner ? <span>Owner: {a.owner}</span> : null}
         {a.dueDate ? <span className={overdue ? "font-medium text-risk-critical" : ""}><IconClock size={11} className="mr-1 inline" />Due {formatDate(a.dueDate)}</span> : null}
@@ -146,7 +146,7 @@ export function ActionsStage() {
               </h3>
               <SolveButton size="sm" variant="ghost" onClick={() => add(h === "immediate" ? "corrective" : "preventive", h, defaultLinks)} icon={<IconPlus size={13} />}>Add</SolveButton>
             </div>
-            <p className="solve-secondary mt-1.5 text-[12.5px] text-stone">{horizonMeta[h].sub}{h === "immediate" ? " e.g. “Replace worn fixture locator.”" : " e.g. “Change fixture PM interval and add locator wear check to setup standard.”"}</p>
+            <p className="loop-secondary mt-1.5 text-[12.5px] text-stone">{horizonMeta[h].sub}{h === "immediate" ? " e.g. “Replace worn fixture locator.”" : " e.g. “Change fixture PM interval and add locator wear check to setup standard.”"}</p>
             {items.length === 0 ? (
               <EmptyState className="mt-3" title={h === "immediate" ? "Nothing here yet. What fixes the cause now?" : "Nothing here yet. What stops this from coming back?"} action={<SolveButton size="sm" onClick={() => add(h === "immediate" ? "corrective" : "preventive", h, defaultLinks)} icon={<IconPlus size={13} />}>Add {h === "immediate" ? "corrective" : "preventive"} action</SolveButton>} />
             ) : (

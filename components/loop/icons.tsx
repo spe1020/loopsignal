@@ -88,7 +88,7 @@ export function LoopGlyph({
         strokeWidth={4.5}
         strokeLinecap="round"
         strokeLinejoin="round"
-        className={animated ? "solve-loop-spin" : undefined}
+        className={animated ? "loop-spin" : undefined}
       />
       <circle cx={LOOP_MARK_DOT.cx} cy={LOOP_MARK_DOT.cy} r={LOOP_MARK_DOT.r} fill="var(--copper)" />
     </svg>

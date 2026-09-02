@@ -11,12 +11,13 @@ import { createInvestigation } from "@/lib/solve/reducer";
 import { buildSample } from "@/lib/solve/sample";
 import type { Investigation } from "@/lib/solve/schema";
 import { deleteInvestigation, listInvestigations, nextRcaNumber, saveInvestigation } from "@/lib/solve/storage";
-import { IconDownload, IconPlus, IconUpload, LoopGlyph } from "./icons";
-import { downloadText, StatusBadge } from "./ProjectHeader";
-import { useToast } from "./Toast";
-import { IconButton, SolveButton, Card } from "./ui";
-import { IconCopy, IconTrash } from "./icons";
-import { useMediaQuery } from "./useMediaQuery";
+import { IconDownload, IconPlus, IconUpload, LoopGlyph } from "@/components/loop/icons";
+import { downloadText } from "@/lib/loop/download";
+import { StatusBadge } from "./ProjectHeader";
+import { useToast } from "@/components/loop/Toast";
+import { IconButton, SolveButton, Card } from "@/components/loop/ui";
+import { IconCopy, IconTrash } from "@/components/loop/icons";
+import { useMediaQuery } from "@/components/loop/useMediaQuery";
 
 export function SolveHome() {
   const router = useRouter();
@@ -91,7 +92,7 @@ export function SolveHome() {
   }
 
   return (
-    <div className="solve-root">
+    <div className="loop-root">
       <section className="border-b border-line bg-cream">
         <div className="mx-auto grid max-w-[1120px] gap-10 px-6 py-14 md:grid-cols-12 md:py-20 lg:px-8">
           <div className="md:col-span-7">
@@ -271,7 +272,7 @@ function Completion({ pct }: { pct: number }) {
 function LoopStages() {
   const steps = ["Problem", "Contain", "Investigate", "Root Cause", "Actions", "Verify", "Learn"];
   return (
-    <div className="solve-grid-bg relative rounded-[3px] border border-line bg-paper p-6">
+    <div className="loop-grid-bg relative rounded-[3px] border border-line bg-paper p-6">
       <LoopGlyph className="h-8 w-16" animated />
       <ol className="mt-5 grid grid-cols-2 gap-x-6 gap-y-2.5">
         {steps.map((s, i) => (

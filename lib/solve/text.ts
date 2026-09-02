@@ -27,11 +27,7 @@ export function jaccard(a: string, b: string): number {
   return union === 0 ? 0 : inter / union;
 }
 
-export function truncate(text: string, max = 60): string {
-  const t = text.trim();
-  if (t.length <= max) return t;
-  return `${t.slice(0, max - 1).trimEnd()}…`;
-}
+export { truncate } from "@/lib/loop/svg";
 
 export type ProblemCheck = {
   key: "actual" | "expected" | "location" | "timing" | "scope";

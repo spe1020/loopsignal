@@ -8,10 +8,10 @@ import type { CauseNode, FishboneCategory } from "@/lib/solve/schema";
 import { downloadSvg, fishboneSvg } from "@/lib/solve/svg";
 import { usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
-import { IconDownload, IconEdit, IconExpand, IconGrid, IconList, IconMinus, IconPlus } from "../icons";
-import { EmptyState, IconButton, Segmented, SolveButton, TextInput } from "../ui";
+import { IconDownload, IconEdit, IconExpand, IconGrid, IconList, IconMinus, IconPlus } from "@/components/loop/icons";
+import { EmptyState, IconButton, Segmented, SolveButton, TextInput } from "@/components/loop/ui";
 import { CauseBadges } from "./CauseCard";
-import { useMediaQuery } from "../useMediaQuery";
+import { useMediaQuery } from "@/components/loop/useMediaQuery";
 
 export function useFishboneActions() {
   const { investigation: inv, dispatch } = useInvestigation();
@@ -152,7 +152,7 @@ function FishboneDiagram({ zoom, selectedId, onSelect, onEditCategory, fill = fa
   const layout = useMemo(() => layoutFishbone(inv.fishboneCategories, inv.causes, inv.problem.generatedStatement), [inv.fishboneCategories, inv.causes, inv.problem.generatedStatement]);
   const byId = useMemo(() => new Map(inv.causes.map((c) => [c.id, c])), [inv.causes]);
   return (
-    <div className={`solve-grid-bg overflow-auto rounded-[3px] border border-line bg-paper ${fill ? "" : "max-h-[72vh]"}`}>
+    <div className={`loop-grid-bg overflow-auto rounded-[3px] border border-line bg-paper ${fill ? "" : "max-h-[72vh]"}`}>
       <div style={{ width: layout.width * zoom, height: layout.height * zoom }}>
         <div className="relative origin-top-left" style={{ width: layout.width, height: layout.height, transform: `scale(${zoom})` }}>
           <svg className="absolute inset-0" width={layout.width} height={layout.height} role="img" aria-label={`Fishbone diagram with ${layout.ribs.length} categories. A category list view is available.`}>
@@ -194,7 +194,7 @@ function FishboneDiagram({ zoom, selectedId, onSelect, onEditCategory, fill = fa
                   type="button"
                   onClick={() => onSelect(c.id)}
                   aria-pressed={sel}
-                  className={`solve-node absolute block rounded-[2px] border bg-cream px-2 py-1 text-left shadow-sm focus-visible:outline-2 focus-visible:outline-copper ${
+                  className={`loop-node absolute block rounded-[2px] border bg-cream px-2 py-1 text-left shadow-sm focus-visible:outline-2 focus-visible:outline-copper ${
                     sel ? "border-copper ring-2 ring-copper/30" : c.classification === "root" ? "border-copper" : "border-line hover:border-ink/40"
                   }`}
                   style={{ left: cb.x, top: cb.y, width: cb.width, height: cb.height }}

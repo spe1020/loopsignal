@@ -8,9 +8,9 @@ import { truncate } from "@/lib/solve/text";
 import { timelineTagMeta } from "../causeMeta";
 import { usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
-import { IconPlus, IconTrash, IconLink } from "../icons";
-import { useToast } from "../Toast";
-import { Chip, EmptyState, IconButton, Select, SolveButton, TextInput } from "../ui";
+import { IconPlus, IconTrash, IconLink } from "@/components/loop/icons";
+import { useToast } from "@/components/loop/Toast";
+import { Chip, EmptyState, IconButton, Select, SolveButton, TextInput } from "@/components/loop/ui";
 
 export function TimelineView() {
   const { investigation: inv, dispatch, restore } = useInvestigation();
@@ -46,7 +46,7 @@ export function TimelineView() {
         }}
         aria-label="Add timeline event"
       >
-        <input type="datetime-local" aria-label="Time" value={at} onChange={(e) => setAt(e.target.value)} required className="min-h-(--solve-control) rounded-[3px] border border-line bg-cream px-3 text-ink focus:border-copper focus:outline-none" />
+        <input type="datetime-local" aria-label="Time" value={at} onChange={(e) => setAt(e.target.value)} required className="min-h-(--loop-control) rounded-[3px] border border-line bg-cream px-3 text-ink focus:border-copper focus:outline-none" />
         <TextInput aria-label="What happened" placeholder="What happened at this moment?" value={text} onChange={(e) => setText(e.target.value)} required />
         <Select aria-label="Tag" value={tag} onChange={(e) => setTag(e.target.value as TimelineTag)}>
           {(Object.keys(timelineTagMeta) as TimelineTag[]).map((t) => <option key={t} value={t}>{timelineTagMeta[t].label}</option>)}
@@ -95,7 +95,7 @@ export function TimelineView() {
           })}
         </ol>
       )}
-      <p className="solve-secondary mt-3 text-[12px] text-stone">Times are shown in your local time zone.</p>
+      <p className="loop-secondary mt-3 text-[12px] text-stone">Times are shown in your local time zone.</p>
     </div>
   );
 }

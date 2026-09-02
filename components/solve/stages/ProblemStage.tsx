@@ -5,8 +5,8 @@ import type { ProblemStatement } from "@/lib/solve/schema";
 import { problemChecks } from "@/lib/solve/text";
 import { fromLocalInput, toLocalInput } from "@/lib/solve/format";
 import { useInvestigation } from "../InvestigationProvider";
-import { IconCheck, IconChevronDown, IconChevronRight, IconCircle } from "../icons";
-import { Card, Checkbox, Field, SectionTitle, TextArea, TextInput } from "../ui";
+import { IconCheck, IconChevronDown, IconChevronRight, IconCircle } from "@/components/loop/icons";
+import { Card, Checkbox, Field, SectionTitle, TextArea, TextInput } from "@/components/loop/ui";
 
 const guided: { key: keyof ProblemStatement; label: string; helper: string; rows?: number }[] = [
   { key: "whatHappened", label: "What happened?", helper: "The actual condition, as observed. Numbers beat adjectives.", rows: 3 },
@@ -48,7 +48,7 @@ export function ProblemStage() {
                   aria-label="Exact time (optional)"
                   value={toLocalInput(p.whenIso)}
                   onChange={(e) => set({ whenIso: fromLocalInput(e.target.value) })}
-                  className="solve-secondary mt-1 min-h-[40px] w-full max-w-xs rounded-[3px] border border-line bg-cream px-3 text-[13px] text-graphite focus:border-copper focus:outline-none"
+                  className="loop-secondary mt-1 min-h-[40px] w-full max-w-xs rounded-[3px] border border-line bg-cream px-3 text-[13px] text-graphite focus:border-copper focus:outline-none"
                 />
               ) : null}
             </Field>
@@ -59,11 +59,11 @@ export function ProblemStage() {
               type="button"
               aria-expanded={more}
               onClick={() => setMore((m) => !m)}
-              className="flex w-full min-h-(--solve-control) items-center gap-2 px-4 text-left text-[14px] font-medium text-ink focus-visible:outline-2 focus-visible:outline-copper"
+              className="flex w-full min-h-(--loop-control) items-center gap-2 px-4 text-left text-[14px] font-medium text-ink focus-visible:outline-2 focus-visible:outline-copper"
             >
               {more ? <IconChevronDown size={16} /> : <IconChevronRight size={16} />}
               More detail
-              <span className="solve-secondary ml-2 font-normal text-stone">process, equipment, impact flags</span>
+              <span className="loop-secondary ml-2 font-normal text-stone">process, equipment, impact flags</span>
             </button>
             {more ? (
               <div className="grid gap-4 border-t border-line px-4 py-4 sm:grid-cols-2">
@@ -108,12 +108,12 @@ export function ProblemStage() {
                     {c.label}
                     <span className="sr-only">{c.ok ? " — covered" : " — not yet"}</span>
                   </span>
-                  {!c.ok ? <span className="solve-secondary block text-[12px] leading-5 text-stone">{c.hint}</span> : null}
+                  {!c.ok ? <span className="loop-secondary block text-[12px] leading-5 text-stone">{c.hint}</span> : null}
                 </span>
               </li>
             ))}
           </ul>
-          <p className="solve-secondary mt-3 text-[12px] leading-5 text-stone">Guidance only. Nothing here blocks you.</p>
+          <p className="loop-secondary mt-3 text-[12px] leading-5 text-stone">Guidance only. Nothing here blocks you.</p>
         </Card>
       </aside>
     </div>
