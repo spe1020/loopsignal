@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { ToastProvider } from "@/components/solve/Toast";
+import { ToastProvider } from "@/components/loop/Toast";
 import { routeMeta, routePageMeta } from "@/lib/seo";
-import "./solve.css";
+import "../loop.css";
 
 export const metadata: Metadata = routePageMeta(routeMeta.solve);
 

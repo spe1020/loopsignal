@@ -3,8 +3,8 @@
 import type { CauseNode, Investigation } from "@/lib/solve/schema";
 import { supportCount } from "@/lib/solve/reducer";
 import { classificationMeta, evidenceStateMeta } from "../causeMeta";
-import { IconAlert, IconChevronDown, IconChevronRight, IconLink, IconMore, IconPlus, IconBranch } from "../icons";
-import { Chip } from "../ui";
+import { IconAlert, IconChevronDown, IconChevronRight, IconLink, IconMore, IconPlus, IconBranch } from "@/components/loop/icons";
+import { Chip } from "@/components/loop/ui";
 
 export function CauseBadges({ inv, cause, compact = false }: { inv: Investigation; cause: CauseNode; compact?: boolean }) {
   const { supports, contradicts } = supportCount(inv, cause.id);
@@ -69,7 +69,7 @@ export function CauseCard({
     <div
       data-cause-id={cause.id}
       style={style}
-      className={`solve-node flex flex-col rounded-[3px] border bg-cream text-left shadow-sm transition-colors ${
+      className={`loop-node flex flex-col rounded-[3px] border bg-cream text-left shadow-sm transition-colors ${
         selected ? "border-copper ring-2 ring-copper/30" : isRoot ? "border-copper" : "border-line hover:border-ink/40"
       } ${className}`}
     >

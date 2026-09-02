@@ -4,34 +4,30 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { trackSolve } from "@/lib/solve/analytics";
-import { completionPercent } from "@/lib/solve/completion";
-import { formatDate } from "@/lib/solve/format";
-import { duplicateInvestigation, exportFilename, parseImport, serialize } from "@/lib/solve/io";
+import { parseImport } from "@/lib/solve/io";
 import { createInvestigation } from "@/lib/solve/reducer";
 import { buildSample } from "@/lib/solve/sample";
-import type { Investigation } from "@/lib/solve/schema";
-import { deleteInvestigation, listInvestigations, nextRcaNumber, saveInvestigation } from "@/lib/solve/storage";
-import { IconDownload, IconPlus, IconUpload, LoopGlyph } from "./icons";
-import { downloadText, StatusBadge } from "./ProjectHeader";
-import { useToast } from "./Toast";
-import { IconButton, SolveButton, Card } from "./ui";
-import { IconCopy, IconTrash } from "./icons";
-import { useMediaQuery } from "./useMediaQuery";
+import { nextRcaNumber, saveInvestigation } from "@/lib/solve/storage";
+import { IconPlus, IconUpload, LoopGlyph } from "@/components/loop/icons";
+import { RecentList } from "@/components/loop/RecentList";
+import { downloadText } from "@/lib/loop/download";
+import { deleteRecent, duplicateRecent, exportRecent, listRecent, restoreRecent, type RecentItem } from "@/lib/loop/recent";
+import { useToast } from "@/components/loop/Toast";
+import { SolveButton } from "@/components/loop/ui";
 
 export function SolveHome() {
   const router = useRouter();
   const toast = useToast();
-  const [items, setItems] = useState<Investigation[] | null>(null);
+  const [items, setItems] = useState<RecentItem[] | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-  const wide = useMediaQuery("(min-width: 768px)", true);
 
   const refresh = useCallback(async () => {
-    setItems(await listInvestigations());
+    setItems(await listRecent());
   }, []);
 
   useEffect(() => {
     let cancelled = false;
-    listInvestigations().then((list) => {
+    listRecent().then((list) => {
       if (!cancelled) setItems(list);
     });
     return () => {
@@ -66,32 +62,32 @@ export function SolveHome() {
     await refresh();
   }
 
-  async function onDuplicate(inv: Investigation) {
-    const copy = duplicateInvestigation(inv, nextRcaNumber());
-    await saveInvestigation(copy);
-    toast.show(`Duplicated as ${copy.rcaNumber}.`);
+  async function onDuplicate(item: RecentItem) {
+    const copy = await duplicateRecent(item);
+    toast.show(`Duplicated as ${copy.number}.`);
     await refresh();
   }
 
-  function onExport(inv: Investigation) {
-    downloadText(exportFilename(inv), serialize(inv));
-    trackSolve("loopsolve_export", { causes: inv.causes.length });
+  function onExport(item: RecentItem) {
+    const { filename, text } = exportRecent(item);
+    downloadText(filename, text);
+    if (item.tool === "solve") trackSolve("loopsolve_export");
   }
 
-  async function onDelete(inv: Investigation) {
-    await deleteInvestigation(inv.id);
+  async function onDelete(item: RecentItem) {
+    await deleteRecent(item);
     await refresh();
-    toast.show(`Deleted ${inv.rcaNumber}.`, {
+    toast.show(`Deleted ${item.number}.`, {
       ttl: 8000,
       undo: async () => {
-        await saveInvestigation(inv);
+        await restoreRecent(item);
         await refresh();
       },
     });
   }
 
   return (
-    <div className="solve-root">
+    <div className="loop-root">
       <section className="border-b border-line bg-cream">
         <div className="mx-auto grid max-w-[1120px] gap-10 px-6 py-14 md:grid-cols-12 md:py-20 lg:px-8">
           <div className="md:col-span-7">
@@ -125,8 +121,8 @@ export function SolveHome() {
       <section className="mx-auto max-w-[1120px] px-6 py-12 lg:px-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="text-[22px] font-medium tracking-[-0.02em] text-ink">Recent investigations</h2>
-            <p className="mt-1 text-[14px] text-graphite">Sorted by last update.</p>
+            <h2 className="text-[22px] font-medium tracking-[-0.02em] text-ink">Recent</h2>
+            <p className="mt-1 text-[14px] text-graphite">Every investigation and process map in this browser, newest first.</p>
           </div>
           <div className="flex gap-2">
             <input
@@ -163,82 +159,7 @@ export function SolveHome() {
             </div>
           </div>
         ) : (
-          <>
-            {wide ? (
-            <div className="mt-6 overflow-x-auto rounded-[3px] border border-line bg-cream">
-              <table className="w-full text-left text-[14px]">
-                <thead className="border-b border-line bg-paper text-[11px] font-medium uppercase tracking-[0.14em] text-stone">
-                  <tr>
-                    <th className="px-4 py-3">RCA #</th>
-                    <th className="px-4 py-3">Title</th>
-                    <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3">Owner</th>
-                    <th className="px-4 py-3">Created</th>
-                    <th className="px-4 py-3">Updated</th>
-                    <th className="px-4 py-3">Completion</th>
-                    <th className="px-4 py-3"><span className="sr-only">Actions</span></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {items.map((inv) => {
-                    const pct = completionPercent(inv);
-                    return (
-                      <tr key={inv.id} className="border-b border-line last:border-0 hover:bg-paper/70">
-                        <td className="px-4 py-3 font-mono text-[12px] tracking-[0.06em] text-copper">
-                          <Link href={`/solve/${inv.id}`} className="focus-visible:outline-2 focus-visible:outline-copper">{inv.rcaNumber}</Link>
-                        </td>
-                        <td className="max-w-[360px] px-4 py-3">
-                          <Link href={`/solve/${inv.id}`} className="block truncate font-medium text-ink hover:text-copper focus-visible:outline-2 focus-visible:outline-copper">
-                            {inv.title || <span className="font-normal text-stone">Untitled investigation</span>}
-                          </Link>
-                        </td>
-                        <td className="px-4 py-3"><StatusBadge status={inv.status} /></td>
-                        <td className="px-4 py-3 text-graphite">{inv.owner || "—"}</td>
-                        <td className="px-4 py-3 text-graphite whitespace-nowrap">{formatDate(inv.createdAt)}</td>
-                        <td className="px-4 py-3 text-graphite whitespace-nowrap">{formatDate(inv.updatedAt)}</td>
-                        <td className="px-4 py-3">
-                          <Completion pct={pct} />
-                        </td>
-                        <td className="px-2 py-2">
-                          <div className="flex items-center justify-end gap-0.5">
-                            <Link href={`/solve/${inv.id}`} className="inline-flex min-h-[36px] items-center rounded-[3px] px-2.5 text-[13px] font-medium text-ink hover:bg-ink/5 focus-visible:outline-2 focus-visible:outline-copper">Open</Link>
-                            <IconButton label={`Duplicate ${inv.rcaNumber}`} onClick={() => onDuplicate(inv)} className="min-h-[36px] min-w-[36px]"><IconCopy size={15} /></IconButton>
-                            <IconButton label={`Export ${inv.rcaNumber}`} onClick={() => onExport(inv)} className="min-h-[36px] min-w-[36px]"><IconDownload size={15} /></IconButton>
-                            <IconButton label={`Delete ${inv.rcaNumber}`} onClick={() => onDelete(inv)} className="min-h-[36px] min-w-[36px] hover:text-risk-critical"><IconTrash size={15} /></IconButton>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            ) : (
-            <ul className="mt-6 flex flex-col gap-3">
-              {items.map((inv) => (
-                <Card as="li" key={inv.id} className="p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="font-mono text-[12px] tracking-[0.06em] text-copper">{inv.rcaNumber}</span>
-                    <StatusBadge status={inv.status} />
-                  </div>
-                  <Link href={`/solve/${inv.id}`} className="mt-2 block text-[16px] font-medium leading-6 text-ink focus-visible:outline-2 focus-visible:outline-copper">
-                    {inv.title || <span className="font-normal text-stone">Untitled investigation</span>}
-                  </Link>
-                  <p className="mt-1 text-[13px] text-stone">
-                    {inv.owner ? `${inv.owner} · ` : ""}Updated {formatDate(inv.updatedAt)}
-                  </p>
-                  <div className="mt-3"><Completion pct={completionPercent(inv)} /></div>
-                  <div className="mt-3 flex flex-wrap gap-1">
-                    <SolveButton size="sm" variant="dark" onClick={() => router.push(`/solve/${inv.id}`)}>Open</SolveButton>
-                    <SolveButton size="sm" onClick={() => onDuplicate(inv)}>Duplicate</SolveButton>
-                    <SolveButton size="sm" onClick={() => onExport(inv)}>Export</SolveButton>
-                    <SolveButton size="sm" variant="danger" onClick={() => onDelete(inv)}>Delete</SolveButton>
-                  </div>
-                </Card>
-              ))}
-            </ul>
-            )}
-          </>
+          <RecentList items={items} onDuplicate={onDuplicate} onExport={onExport} onDelete={onDelete} />
         )}
       </section>
 
@@ -257,21 +178,11 @@ export function SolveHome() {
   );
 }
 
-function Completion({ pct }: { pct: number }) {
-  return (
-    <div className="flex items-center gap-2" aria-label={`${pct} percent complete`}>
-      <span className="h-1.5 w-20 overflow-hidden rounded-full bg-paper-2">
-        <span className="block h-full rounded-full bg-copper" style={{ width: `${pct}%` }} />
-      </span>
-      <span className="font-mono text-[12px] text-graphite">{pct}%</span>
-    </div>
-  );
-}
 
 function LoopStages() {
   const steps = ["Problem", "Contain", "Investigate", "Root Cause", "Actions", "Verify", "Learn"];
   return (
-    <div className="solve-grid-bg relative rounded-[3px] border border-line bg-paper p-6">
+    <div className="loop-grid-bg relative rounded-[3px] border border-line bg-paper p-6">
       <LoopGlyph className="h-8 w-16" animated />
       <ol className="mt-5 grid grid-cols-2 gap-x-6 gap-y-2.5">
         {steps.map((s, i) => (

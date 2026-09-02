@@ -9,11 +9,11 @@ import { downloadSvg, whysSvg } from "@/lib/solve/svg";
 import { truncate } from "@/lib/solve/text";
 import { usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
-import { IconDownload, IconGrid, IconList, IconMinus, IconPlus } from "../icons";
-import { useToast } from "../Toast";
-import { EmptyState, IconButton, Note, Segmented, SolveButton, TextArea } from "../ui";
+import { IconDownload, IconGrid, IconList, IconMinus, IconPlus } from "@/components/loop/icons";
+import { useToast } from "@/components/loop/Toast";
+import { EmptyState, IconButton, Note, Segmented, SolveButton, TextArea } from "@/components/loop/ui";
 import { CauseBadges, CauseCard } from "./CauseCard";
-import { useMediaQuery } from "../useMediaQuery";
+import { useMediaQuery } from "@/components/loop/useMediaQuery";
 
 export type Composer = { parentId: string | null; mode: "child" | "branch"; anchorId?: string } | null;
 
@@ -122,7 +122,7 @@ export function WhyComposer({
         <SolveButton size="sm" variant="ghost" onClick={onCancel}>
           Done
         </SolveButton>
-        <span className="solve-secondary ml-auto text-[11.5px] text-stone">Enter adds · Shift+Enter newline · Esc closes</span>
+        <span className="loop-secondary ml-auto text-[11.5px] text-stone">Enter adds · Shift+Enter newline · Esc closes</span>
       </div>
     </div>
   );
@@ -251,7 +251,7 @@ function WhyDiagram({ zoom, selectedId, composer, setComposer, onDone, onSelect,
   const pad = 16;
 
   return (
-    <div className="solve-grid-bg overflow-auto rounded-[3px] border border-line bg-paper" style={{ maxHeight: "72vh" }}>
+    <div className="loop-grid-bg overflow-auto rounded-[3px] border border-line bg-paper" style={{ maxHeight: "72vh" }}>
       <div style={{ width: (layout.width + pad * 2) * zoom, height: (height + pad * 2) * zoom }}>
         <div className="relative origin-top-left" style={{ width: layout.width + pad * 2, height: height + pad * 2, transform: `scale(${zoom})` }}>
           <svg

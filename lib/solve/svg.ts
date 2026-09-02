@@ -1,34 +1,10 @@
+import { escSvg as esc, SVG_FONT as FONT, truncate, wrapText } from "@/lib/loop/svg";
 import { layoutFishbone } from "./layout/fishbone";
 import { layoutWhys, WHY_ROOT_ID } from "./layout/whys";
 import type { Investigation } from "./schema";
-import { truncate } from "./text";
 
-const FONT = "IBM Plex Sans, system-ui, sans-serif";
-
-export function wrapText(text: string, maxChars: number, maxLines: number): string[] {
-  const words = text.trim().split(/\s+/).filter(Boolean);
-  const lines: string[] = [];
-  let cur = "";
-  for (const w of words) {
-    const next = cur ? `${cur} ${w}` : w;
-    if (next.length > maxChars && cur) {
-      lines.push(cur);
-      cur = w;
-      if (lines.length === maxLines) break;
-    } else {
-      cur = next;
-    }
-  }
-  if (lines.length < maxLines && cur) lines.push(cur);
-  if (lines.length === maxLines && words.join(" ").length > lines.join(" ").length) {
-    lines[maxLines - 1] = truncate(lines[maxLines - 1], Math.max(4, maxChars - 1));
-  }
-  return lines.length ? lines : [""];
-}
-
-function esc(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
+export { downloadSvg } from "@/lib/loop/download";
+export { wrapText };
 
 const stateLabel: Record<string, string> = {
   assumption: "Assumption",
@@ -119,14 +95,3 @@ export function fishboneSvg(inv: Investigation, opts: { title?: boolean } = {}):
   return parts.join("");
 }
 
-export function downloadSvg(filename: string, svg: string) {
-  const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-}

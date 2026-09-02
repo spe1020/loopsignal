@@ -5,9 +5,9 @@ import { stamp, SUGGESTED_CATEGORIES } from "@/lib/solve/reducer";
 import type { FishboneCategory } from "@/lib/solve/schema";
 import { ContextPanel, usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
-import { IconArrowDown, IconArrowUp, IconPlus, IconTrash } from "../icons";
-import { useToast } from "../Toast";
-import { Field, SolveButton, TextInput } from "../ui";
+import { IconArrowDown, IconArrowUp, IconPlus, IconTrash } from "@/components/loop/icons";
+import { useToast } from "@/components/loop/Toast";
+import { Field, SolveButton, TextInput } from "@/components/loop/ui";
 
 export function CategoryPanel({ categoryId }: { categoryId: string | null }) {
   const { investigation: inv, dispatch, restore } = useInvestigation();

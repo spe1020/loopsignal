@@ -13,8 +13,8 @@ import { ContextPanel, usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
 import { useWhyActions } from "../investigate/FiveWhys";
 import { useCreateEvidence } from "../investigate/useCreateEvidence";
-import { IconAlert, IconBranch, IconLink, IconPlus, IconTrash } from "../icons";
-import { Chip, Coaching, Field, Select, SolveButton, TextArea, TextInput } from "../ui";
+import { IconAlert, IconBranch, IconLink, IconPlus, IconTrash } from "@/components/loop/icons";
+import { Chip, Coaching, Field, Select, SolveButton, TextArea, TextInput } from "@/components/loop/ui";
 
 function OptionRow<T extends string>({ label, value, options, onChange, disabledKeys = {}, name }: { label: string; value: T | undefined; options: { value: T; label: string; icon?: React.ReactNode; tone?: string }[]; onChange: (v: T) => void; disabledKeys?: Partial<Record<T, string>>; name: string }) {
   return (

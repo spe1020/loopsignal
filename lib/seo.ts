@@ -110,6 +110,12 @@ export const routeMeta = {
     description:
       "Structured problem solving for real work: Five Whys, Fishbone, evidence, corrective actions, and effectiveness verification. Free, in your browser.",
   },
+  flow: {
+    path: "/flow",
+    title: "LoopFlow",
+    description:
+      "Process mapping for people who have to fix the process. Map it as it runs, with times and handoffs, and open a LoopSolve investigation from any pain point.",
+  },
   firstLoop: {
     path: "/first-loop",
     title: "Find Your First Loop",

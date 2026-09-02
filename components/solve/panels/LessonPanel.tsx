@@ -3,7 +3,7 @@
 import type { LessonLearned } from "@/lib/solve/schema";
 import { ContextPanel, usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
-import { Checkbox, Field, SolveButton, TextArea, TextInput } from "../ui";
+import { Checkbox, Field, SolveButton, TextArea, TextInput } from "@/components/loop/ui";
 
 export function LessonPanel({ lessonId }: { lessonId: string | null }) {
   const { investigation: inv, dispatch } = useInvestigation();

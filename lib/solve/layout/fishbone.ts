@@ -132,9 +132,4 @@ export function layoutFishbone(
   return { width, height, spineY, spineX1, spineX2, head, ribs };
 }
 
-export function rectsOverlap(
-  a: { x: number; y: number; width: number; height: number },
-  b: { x: number; y: number; width: number; height: number },
-): boolean {
-  return a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
-}
+export { rectsOverlap } from "@/lib/loop/svg";

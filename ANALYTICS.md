@@ -667,3 +667,30 @@ Use that data to choose future Insights topics. Do not keyword-stuff the website
 | Lead payload sanitization | `lib/leads.ts` |
 | Analytics + Speed Insights | `app/layout.tsx` |
 | Public URL / canonicals | `lib/site.ts`, page metadata, `app/sitemap.ts`, `app/robots.ts` |
+
+## LoopSolve and LoopFlow (local tools)
+
+Both tools run entirely in the browser. Events carry only the event name, an
+optional stage from a closed list, and finite numeric counts. Never cause text,
+step names, lane names, pain-point text, or rationale.
+
+LoopSolve events are typed in `lib/solve/analytics.ts`; LoopFlow events in
+`lib/flow/analytics.ts`. Both go through `trackTool` in `lib/loop/analytics.ts`,
+which drops anything that is not a whitelisted string key or a finite number.
+
+### LoopFlow events
+
+| Event | When | Allowed metadata |
+| --- | --- | --- |
+| `loopflow_new` | New map created | — |
+| `loopflow_sample_open` | Sample map opened | `linked` (1 if the LoopSolve sample was linked) |
+| `loopflow_step_added` | A step is added (panel, toolbar, keyboard, or Walk Mode) | `stage`, `steps` (count), `walk` (1 in Walk Mode) |
+| `loopflow_decision_added` | A decision step is added | `stage`, `steps` |
+| `loopflow_observation_recorded` | Stopwatch stop appends an observation | `stage`, `minutes` |
+| `loopflow_pain_added` | A pain point is created | `stage`, `pain` (count), `walk` |
+| `loopflow_investigation_started` | A LoopSolve investigation is opened from a step or pain point | `stage`, `pain` (1 if from a pain point) |
+| `loopflow_future_forked` | Future state forked | `stage`, `steps` |
+| `loopflow_walk_enter` | Walk Mode entered | `stage`, `steps` |
+| `loopflow_export` | JSON / bundle / SVG / CSV export | `stage`, `kind` (0 JSON, 1 bundle, 2 SVG, 3 CSV), `steps`, `investigations` |
+| `loopflow_import` | JSON or bundle imported | `steps`, `investigations` |
+| `loopflow_print` | Print requested | `stage` |

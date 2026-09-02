@@ -5,7 +5,7 @@ import { IconAlert, IconCheck, IconCircle, IconDot, IconShield } from "./icons";
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-copper";
 
-export const control = `min-h-(--solve-control) ${focus}`;
+export const control = `min-h-(--loop-control) ${focus}`;
 
 type BtnVariant = "primary" | "secondary" | "ghost" | "danger" | "dark";
 
@@ -17,14 +17,14 @@ const btnVariants: Record<BtnVariant, string> = {
   dark: "bg-ink text-cream hover:bg-black border border-ink",
 };
 
-export const SolveButton = forwardRef<
+export const LoopButton = forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     variant?: BtnVariant;
     size?: "sm" | "md" | "lg";
     icon?: ReactNode;
   }
->(function SolveButton({ variant = "secondary", size = "md", icon, className = "", children, type = "button", ...rest }, ref) {
+>(function LoopButton({ variant = "secondary", size = "md", icon, className = "", children, type = "button", ...rest }, ref) {
   const sizes = {
     sm: "px-3 text-[13px] min-h-[36px]",
     md: `px-4 text-[14px] ${control}`,
@@ -43,6 +43,9 @@ export const SolveButton = forwardRef<
   );
 });
 
+/** @deprecated alias kept for LoopSolve; new code uses LoopButton. */
+export const SolveButton = LoopButton;
+
 export function IconButton({
   label,
   className = "",
@@ -54,7 +57,7 @@ export function IconButton({
       type="button"
       aria-label={label}
       title={label}
-      className={`inline-flex min-h-(--solve-control) min-w-(--solve-control) items-center justify-center rounded-[3px] text-graphite transition-colors hover:bg-ink/5 hover:text-ink disabled:opacity-40 ${focus} ${className}`}
+      className={`inline-flex min-h-(--loop-control) min-w-(--loop-control) items-center justify-center rounded-[3px] text-graphite transition-colors hover:bg-ink/5 hover:text-ink disabled:opacity-40 ${focus} ${className}`}
       {...rest}
     >
       {children}
@@ -86,7 +89,7 @@ export function Field({
         {label}
         {required ? <span className="ml-1 text-copper">*</span> : null}
       </label>
-      {helper ? <p className="solve-secondary -mt-0.5 text-[12.5px] leading-5 text-stone">{helper}</p> : null}
+      {helper ? <p className="loop-secondary -mt-0.5 text-[12.5px] leading-5 text-stone">{helper}</p> : null}
       {children}
     </div>
   );
@@ -94,7 +97,7 @@ export function Field({
 
 export const TextInput = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   function TextInput({ className = "", ...rest }, ref) {
-    return <input ref={ref} className={`${inputBase} min-h-(--solve-control) ${className}`} {...rest} />;
+    return <input ref={ref} className={`${inputBase} min-h-(--loop-control) ${className}`} {...rest} />;
   },
 );
 
@@ -104,7 +107,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttrib
       <textarea
         ref={ref}
         rows={rows}
-        className={`${inputBase} min-h-(--solve-control) resize-y py-2.5 leading-6 ${className}`}
+        className={`${inputBase} min-h-(--loop-control) resize-y py-2.5 leading-6 ${className}`}
         onKeyDown={(e) => {
           onKeyDown?.(e);
           if (onSubmitKey && e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
@@ -120,7 +123,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttrib
 
 export function Select({ className = "", children, ...rest }: React.SelectHTMLAttributes<HTMLSelectElement>) {
   return (
-    <select className={`${inputBase} min-h-(--solve-control) appearance-none bg-[url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%234a4a4a' stroke-width='2'><path d='m6 9 6 6 6-6'/></svg>")] bg-[length:14px] bg-[right_10px_center] bg-no-repeat pr-8 ${className}`} {...rest}>
+    <select className={`${inputBase} min-h-(--loop-control) appearance-none bg-[url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%234a4a4a' stroke-width='2'><path d='m6 9 6 6 6-6'/></svg>")] bg-[length:14px] bg-[right_10px_center] bg-no-repeat pr-8 ${className}`} {...rest}>
       {children}
     </select>
   );
@@ -129,7 +132,7 @@ export function Select({ className = "", children, ...rest }: React.SelectHTMLAt
 export function Checkbox({ label, className = "", ...rest }: React.InputHTMLAttributes<HTMLInputElement> & { label: string }) {
   const id = useId();
   return (
-    <label htmlFor={id} className={`inline-flex min-h-(--solve-control) cursor-pointer items-center gap-2.5 text-[14px] text-ink ${className}`}>
+    <label htmlFor={id} className={`inline-flex min-h-(--loop-control) cursor-pointer items-center gap-2.5 text-[14px] text-ink ${className}`}>
       <input id={id} type="checkbox" className={`h-5 w-5 shrink-0 accent-copper ${focus}`} {...rest} />
       {label}
     </label>
@@ -163,7 +166,7 @@ export function Chip({
 }) {
   return (
     <Tag
-      className={`solve-chip inline-flex items-center gap-1.5 rounded-[3px] border px-2 py-0.5 text-[12px] font-medium tracking-[0.01em] whitespace-nowrap ${toneClasses[tone]} ${className}`}
+      className={`loop-chip inline-flex items-center gap-1.5 rounded-[3px] border px-2 py-0.5 text-[12px] font-medium tracking-[0.01em] whitespace-nowrap ${toneClasses[tone]} ${className}`}
     >
       {icon}
       {children}
@@ -327,7 +330,7 @@ export function Toggle({ label, checked, onChange, description }: { label: strin
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className={`flex w-full min-h-(--solve-control) items-center justify-between gap-4 rounded-[3px] px-2 text-left hover:bg-ink/5 ${focus}`}
+      className={`flex w-full min-h-(--loop-control) items-center justify-between gap-4 rounded-[3px] px-2 text-left hover:bg-ink/5 ${focus}`}
     >
       <span>
         <span className="block text-[14px] text-ink">{label}</span>

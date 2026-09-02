@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { readableZodError, runMigrations, type Migration } from "@/lib/loop/migrate";
 import { newId, nowIso } from "./ids";
 import type { Investigation } from "./schema";
 import { InvestigationSchema, SCHEMA_VERSION } from "./schema";
@@ -9,32 +9,16 @@ export type ImportResult =
   | { ok: false; error: string };
 
 /** Migrations keyed by the version they upgrade FROM. */
-const migrations: Record<number, (doc: Record<string, unknown>) => Record<string, unknown>> = {
+const migrations: Record<number, Migration> = {
   // 1 → 2 would go here.
 };
 
 export function migrate(doc: Record<string, unknown>): Record<string, unknown> {
-  let version = typeof doc.schemaVersion === "number" ? doc.schemaVersion : 1;
-  let current = doc;
-  while (version < SCHEMA_VERSION) {
-    const step = migrations[version];
-    if (!step) break;
-    current = step(current);
-    version += 1;
-    current.schemaVersion = version;
-  }
-  return current;
+  return runMigrations(doc, migrations, SCHEMA_VERSION);
 }
 
 export function serialize(inv: Investigation): string {
   return JSON.stringify(inv, null, 2);
-}
-
-function readable(err: z.ZodError): string {
-  const first = err.issues[0];
-  if (!first) return "The file is not a LoopSolve investigation.";
-  const path = first.path.length ? first.path.join(".") : "document";
-  return `Invalid investigation file: ${path} — ${first.message}.`;
 }
 
 /**
@@ -59,7 +43,7 @@ export function parseImport(text: string, rcaNumber: string): ImportResult {
     };
   }
   const result = InvestigationSchema.safeParse(doc);
-  if (!result.success) return { ok: false, error: readable(result.error) };
+  if (!result.success) return { ok: false, error: readableZodError(result.error, "investigation") };
   const at = nowIso();
   const inv: Investigation = {
     ...result.data,

@@ -8,7 +8,7 @@ import { evidenceStateMeta } from "../causeMeta";
 import { ContextPanel, usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
 import { actionStatusMeta, horizonMeta, kindMeta, priorityMeta } from "../stages/ActionsStage";
-import { Checkbox, Field, Select, SolveButton, TextArea, TextInput } from "../ui";
+import { Checkbox, Field, Select, SolveButton, TextArea, TextInput } from "@/components/loop/ui";
 
 export function ActionPanel({ actionId }: { actionId: string | null; kindPreset?: ActionKind; horizonPreset?: ActionHorizon }) {
   const { investigation: inv, dispatch } = useInvestigation();
@@ -64,7 +64,7 @@ export function ActionPanel({ actionId }: { actionId: string | null; kindPreset?
         </section>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Owner" htmlFor="act-owner"><TextInput id="act-owner" value={a.owner ?? ""} onChange={(e) => set({ owner: e.target.value })} /></Field>
-          <Field label="Due date" htmlFor="act-due"><input id="act-due" type="date" value={a.dueDate ?? ""} onChange={(e) => set({ dueDate: e.target.value || undefined })} className="min-h-(--solve-control) w-full rounded-[3px] border border-line bg-cream px-3 text-ink focus:border-copper focus:outline-none" /></Field>
+          <Field label="Due date" htmlFor="act-due"><input id="act-due" type="date" value={a.dueDate ?? ""} onChange={(e) => set({ dueDate: e.target.value || undefined })} className="min-h-(--loop-control) w-full rounded-[3px] border border-line bg-cream px-3 text-ink focus:border-copper focus:outline-none" /></Field>
           <Field label="Priority" htmlFor="act-priority">
             <Select id="act-priority" value={a.priority} onChange={(e) => set({ priority: e.target.value as ActionPriority })}>
               {actionPriorities.map((p) => <option key={p} value={p}>{priorityMeta[p].label}</option>)}

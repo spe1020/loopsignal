@@ -8,9 +8,9 @@ import { truncate } from "@/lib/solve/text";
 import { evidenceTypeMeta } from "../causeMeta";
 import { usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
-import { IconPlus, IconSearch, IconTrash } from "../icons";
-import { useToast } from "../Toast";
-import { Card, EmptyState, IconButton, Select, SolveButton, TextInput } from "../ui";
+import { IconPlus, IconSearch, IconTrash } from "@/components/loop/icons";
+import { useToast } from "@/components/loop/Toast";
+import { Card, EmptyState, IconButton, Select, SolveButton, TextInput } from "@/components/loop/ui";
 import { useCreateEvidence } from "./useCreateEvidence";
 
 export function EvidenceView() {
@@ -69,7 +69,7 @@ export function EvidenceView() {
                   </button>
                   <IconButton label="Delete evidence" onClick={() => remove(e)} className="hover:text-risk-critical"><IconTrash size={15} /></IconButton>
                 </div>
-                {e.description ? <p className="solve-secondary mt-2 line-clamp-3 text-[13.5px] leading-5 text-graphite">{e.description}</p> : null}
+                {e.description ? <p className="loop-secondary mt-2 line-clamp-3 text-[13.5px] leading-5 text-graphite">{e.description}</p> : null}
                 <div className="mt-2 flex flex-col gap-1 text-[12.5px]">
                   {supports.length ? <p><span className="font-medium text-risk-track">Supports:</span> <span className="text-graphite">{supports.map((l) => truncate(causeById.get(l.causeId)?.text ?? "", 50)).join(" · ")}</span></p> : null}
                   {contradicts.length ? <p><span className="font-medium text-risk-critical">Contradicts:</span> <span className="text-graphite">{contradicts.map((l) => truncate(causeById.get(l.causeId)?.text ?? "", 50)).join(" · ")}</span></p> : null}

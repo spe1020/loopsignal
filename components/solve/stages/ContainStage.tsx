@@ -4,10 +4,10 @@ import { stamp } from "@/lib/solve/reducer";
 import type { ContainmentAction, ContainmentStatus } from "@/lib/solve/schema";
 import { usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
-import { IconCheck, IconCircle, IconDot, IconPlus, IconShield, IconTrash } from "../icons";
-import { useToast } from "../Toast";
+import { IconCheck, IconCircle, IconDot, IconPlus, IconShield, IconTrash } from "@/components/loop/icons";
+import { useToast } from "@/components/loop/Toast";
 import { usePrimaryAction } from "../Workspace";
-import { Card, Chip, EmptyState, IconButton, Note, SectionTitle, SolveButton, type Tone } from "../ui";
+import { Card, Chip, EmptyState, IconButton, Note, SectionTitle, SolveButton, type Tone } from "@/components/loop/ui";
 
 export const containmentStatusMeta: Record<ContainmentStatus, { label: string; tone: Tone; icon: React.ReactNode }> = {
   open: { label: "Open", tone: "neutral", icon: <IconCircle size={12} /> },
@@ -93,7 +93,7 @@ export function ContainStage() {
                   <button
                     type="button"
                     onClick={() => open({ kind: "containment", containmentId: c.id })}
-                    className="min-h-(--solve-control) flex-1 rounded-[2px] text-left text-[15px] font-medium leading-6 text-ink hover:text-copper focus-visible:outline-2 focus-visible:outline-copper"
+                    className="min-h-(--loop-control) flex-1 rounded-[2px] text-left text-[15px] font-medium leading-6 text-ink hover:text-copper focus-visible:outline-2 focus-visible:outline-copper"
                   >
                     {c.action || <span className="font-normal text-stone">Untitled containment — tap to edit</span>}
                   </button>
@@ -106,9 +106,9 @@ export function ContainStage() {
                   {c.owner ? <span className="text-[13px] text-graphite">Owner: {c.owner}</span> : null}
                   {c.quantityAffected ? <span className="text-[13px] text-graphite">Qty: {c.quantityAffected}</span> : null}
                 </div>
-                {c.scope ? <p className="solve-secondary mt-2 text-[13px] leading-5 text-graphite">Scope: {c.scope}</p> : null}
+                {c.scope ? <p className="loop-secondary mt-2 text-[13px] leading-5 text-graphite">Scope: {c.scope}</p> : null}
                 {c.verificationNote ? (
-                  <p className="solve-secondary mt-1 text-[13px] leading-5 text-graphite">
+                  <p className="loop-secondary mt-1 text-[13px] leading-5 text-graphite">
                     <span className="text-stone">Containment check:</span> {c.verificationNote}
                   </p>
                 ) : null}

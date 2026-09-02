@@ -15,18 +15,18 @@ import { truncate } from "@/lib/solve/text";
 import { evidenceStateMeta } from "../causeMeta";
 import { usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
-import { IconCopy, IconDownload, IconPlus, IconPrint, IconTrash, LoopGlyph } from "../icons";
-import { downloadText } from "../ProjectHeader";
+import { IconCopy, IconDownload, IconPlus, IconPrint, IconTrash, LoopGlyph } from "@/components/loop/icons";
+import { downloadText } from "@/lib/loop/download";
 import { containmentStatusMeta } from "./ContainStage";
 import { actionStatusMeta } from "./ActionsStage";
 import { resultMeta } from "./VerifyStage";
-import { useToast } from "../Toast";
-import { Card, Chip, EmptyState, IconButton, SectionTitle, SolveButton, Toggle } from "../ui";
+import { useToast } from "@/components/loop/Toast";
+import { Card, Chip, EmptyState, IconButton, SectionTitle, SolveButton, Toggle } from "@/components/loop/ui";
 import { usePrimaryAction } from "../Workspace";
 
 function Section({ id, title, children, breakBefore = false }: { id: string; title: string; children: React.ReactNode; breakBefore?: boolean }) {
   return (
-    <section id={`report-${id}`} aria-labelledby={`report-${id}-h`} className={`solve-print-section mt-8 first:mt-0 ${breakBefore ? "solve-print-break" : ""}`}>
+    <section id={`report-${id}`} aria-labelledby={`report-${id}-h`} className={`loop-print-section mt-8 first:mt-0 ${breakBefore ? "loop-print-break" : ""}`}>
       <h3 id={`report-${id}-h`} className="border-b border-ink/20 pb-1.5 text-[15px] font-medium uppercase tracking-[0.08em] text-ink">{title}</h3>
       <div className="mt-3 text-[14px] leading-6 text-ink">{children}</div>
     </section>
@@ -85,7 +85,7 @@ export function SummaryStage() {
 
   return (
     <div>
-      <div className="solve-no-print">
+      <div className="loop-no-print">
         <SectionTitle eyebrow="Summary" title="The report, and what we learned.">
           Print it, copy it as Markdown, or export the JSON. Switch to 8D labels for a customer or supplier that expects them.
         </SectionTitle>
@@ -101,12 +101,12 @@ export function SummaryStage() {
       </div>
 
       {/* Print header: repeated on every page via position:fixed in print CSS */}
-      <div className="solve-print-header hidden">
+      <div className="loop-print-header hidden">
         <span>{inv.rcaNumber} · {inv.title || "Untitled investigation"}</span>
         <span>Status: {statusLabels[inv.status]} · LoopSolve</span>
       </div>
 
-      <article className="solve-report solve-print-body mt-6 rounded-[3px] border border-line bg-white p-5 md:p-8 print:border-0 print:p-0">
+      <article className="loop-report loop-print-body mt-6 rounded-[3px] border border-line bg-white p-5 md:p-8 print:border-0 print:p-0">
         <header className="flex flex-wrap items-start justify-between gap-4 border-b border-ink pb-4">
           <div>
             <p className="font-mono text-[12px] tracking-[0.1em] text-copper">{inv.rcaNumber}</p>
@@ -207,7 +207,7 @@ export function SummaryStage() {
             ) : <p className="text-stone">No verification recorded.</p>}
           </Section>
           <Section id="lessons" title={label("lessons")}>
-            <div className="solve-no-print mb-3 flex flex-wrap items-center gap-2">
+            <div className="loop-no-print mb-3 flex flex-wrap items-center gap-2">
               <SolveButton size="sm" onClick={addLesson} icon={<IconPlus size={13} />}>Add lesson</SolveButton>
               <span className="text-[12.5px] text-stone">Handoff to LoopKnow, later.</span>
             </div>
@@ -222,12 +222,12 @@ export function SummaryStage() {
                         <span className="block">{l.lesson || <span className="text-stone">Untitled lesson — tap to edit</span>}</span>
                         <span className="block text-[13px] text-graphite">{l.relatedProcess ? `Process: ${l.relatedProcess}. ` : ""}{updates ? `Update: ${updates}. ` : ""}{l.similarProcessesToReview ? `Review: ${l.similarProcessesToReview}` : ""}</span>
                       </button>
-                      <IconButton label="Delete lesson" onClick={() => removeLesson(l)} className="solve-no-print hover:text-risk-critical"><IconTrash size={14} /></IconButton>
+                      <IconButton label="Delete lesson" onClick={() => removeLesson(l)} className="loop-no-print hover:text-risk-critical"><IconTrash size={14} /></IconButton>
                     </Card>
                   );
                 })}
               </ul>
-            ) : <EmptyState className="solve-no-print" title="What should the organization keep from this? One or two lessons are enough." action={<SolveButton size="sm" onClick={addLesson} icon={<IconPlus size={13} />}>Add lesson</SolveButton>} />}
+            ) : <EmptyState className="loop-no-print" title="What should the organization keep from this? One or two lessons are enough." action={<SolveButton size="sm" onClick={addLesson} icon={<IconPlus size={13} />}>Add lesson</SolveButton>} />}
           </Section>
           <Section id="history" title={label("history")}>
             <ul className="flex flex-col gap-1 text-[13px]">
@@ -243,7 +243,7 @@ export function SummaryStage() {
       </article>
 
       {inv.status === "closed" ? (
-        <div className="solve-no-print mt-8 flex flex-wrap items-center justify-between gap-4 rounded-[3px] border border-line bg-cream px-5 py-4">
+        <div className="loop-no-print mt-8 flex flex-wrap items-center justify-between gap-4 rounded-[3px] border border-line bg-cream px-5 py-4">
           <p className="text-[14px] text-graphite">Need help with a recurring or cross-functional problem?</p>
           <Link href="/loopscan?intent=talk#intake" className="inline-flex min-h-[44px] items-center rounded-[3px] border border-ink/25 px-4 text-[14px] font-medium text-ink transition-colors hover:border-ink hover:bg-ink hover:text-cream focus-visible:outline-2 focus-visible:outline-copper">Talk to LoopSignal</Link>
         </div>

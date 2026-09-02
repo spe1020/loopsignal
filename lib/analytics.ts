@@ -73,6 +73,18 @@ export const analyticsEvents = [
   "loopsolve_shopfloor_toggle",
   "loopsolve_facilitation_enter",
   "loopsolve_print",
+  "loopflow_new",
+  "loopflow_sample_open",
+  "loopflow_step_added",
+  "loopflow_decision_added",
+  "loopflow_observation_recorded",
+  "loopflow_pain_added",
+  "loopflow_investigation_started",
+  "loopflow_future_forked",
+  "loopflow_walk_enter",
+  "loopflow_export",
+  "loopflow_import",
+  "loopflow_print",
 ] as const;
 
 export type AnalyticsEvent = (typeof analyticsEvents)[number];

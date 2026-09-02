@@ -3,7 +3,9 @@ import { stages } from "./schema";
 import { stageScore } from "./completion";
 import { hardFindings } from "./rules";
 
-export type StageState = "empty" | "in_progress" | "needs_attention" | "complete" | "verified";
+import { stageStateLabels, type StageState } from "@/lib/loop/stages";
+
+export { stageStateLabels, type StageState };
 
 export type StageMeta = {
   stage: Stage;
@@ -79,11 +81,3 @@ export function stageState(inv: Investigation, stage: Stage): StageState {
       return inv.lessons.length > 0 ? "in_progress" : "empty";
   }
 }
-
-export const stageStateLabels: Record<StageState, string> = {
-  empty: "Empty",
-  in_progress: "In progress",
-  needs_attention: "Needs attention",
-  complete: "Complete",
-  verified: "Verified",
-};

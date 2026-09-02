@@ -353,6 +353,15 @@ export const tools = [
     cta: "Try LoopSolve",
     badge: "Free tool",
   },
+  {
+    href: "/flow",
+    name: "LoopFlow",
+    headline: "See the process. Find the friction. Fix it once.",
+    description:
+      "Map the process as it actually runs, with times and handoffs on every step. See where the waiting is. Open a LoopSolve investigation from any pain point. Free, runs in your browser, nothing leaves your device.",
+    cta: "Try LoopFlow",
+    badge: "Free tool",
+  },
 ] as const;
 
 export const demoNote =

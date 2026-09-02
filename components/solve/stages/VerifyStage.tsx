@@ -9,10 +9,10 @@ import type { Action, Verification, VerificationResult } from "@/lib/solve/schem
 import { formatDate } from "@/lib/solve/format";
 import { usePanel } from "../ContextPanel";
 import { useInvestigation } from "../InvestigationProvider";
-import { IconAlert, IconCheck, IconClock, IconClose, IconDot, IconPlus, IconShield, LoopGlyph } from "../icons";
-import { useToast } from "../Toast";
+import { IconAlert, IconCheck, IconClock, IconClose, IconDot, IconPlus, IconShield, LoopGlyph } from "@/components/loop/icons";
+import { useToast } from "@/components/loop/Toast";
 import { kindMeta } from "./ActionsStage";
-import { Card, Chip, EmptyState, Note, SectionTitle, SolveButton, type Tone } from "../ui";
+import { Card, Chip, EmptyState, Note, SectionTitle, SolveButton, type Tone } from "@/components/loop/ui";
 import { usePrimaryAction } from "../Workspace";
 
 export const resultMeta: Record<VerificationResult, { label: string; tone: Tone; icon: React.ReactNode }> = {
@@ -111,7 +111,7 @@ export function VerifyStage() {
                       <Chip tone={kindMeta[a.kind].tone} icon={kindMeta[a.kind].icon}>{kindMeta[a.kind].label}</Chip>
                       <span className="text-[15px] font-medium text-ink">{a.title || "Untitled action"}</span>
                     </p>
-                    {a.verificationMethod ? <p className="solve-secondary mt-1 text-[13px] text-graphite"><span className="text-stone">Method:</span> {a.verificationMethod}</p> : null}
+                    {a.verificationMethod ? <p className="loop-secondary mt-1 text-[13px] text-graphite"><span className="text-stone">Method:</span> {a.verificationMethod}</p> : null}
                   </div>
                   <SolveButton variant={latest ? "secondary" : "primary"} onClick={() => add(a)} icon={<IconPlus size={14} />}>{latest ? "Re-verify" : "Record verification"}</SolveButton>
                 </div>
@@ -146,7 +146,7 @@ export function VerifyStage() {
       )}
 
       {preventive.length ? (
-        <p className="solve-secondary mt-4 text-[12.5px] text-stone">
+        <p className="loop-secondary mt-4 text-[12.5px] text-stone">
           {preventive.length} preventive action{preventive.length === 1 ? "" : "s"} tracked on the Actions stage. Preventive actions can be verified here too, but only corrective actions gate closure.
         </p>
       ) : null}

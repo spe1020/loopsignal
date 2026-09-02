@@ -1,4 +1,4 @@
-import { trackEvent } from "@/lib/analytics";
+import { trackTool } from "@/lib/loop/analytics";
 import type { Stage } from "./schema";
 
 export const solveEvents = [
@@ -26,10 +26,5 @@ export type SolveEvent = (typeof solveEvents)[number];
 export type SolveEventProps = { stage?: Stage } & Record<string, number | Stage | undefined>;
 
 export function trackSolve(event: SolveEvent, props: SolveEventProps = {}) {
-  const safe: Record<string, number | string> = {};
-  for (const [k, v] of Object.entries(props)) {
-    if (k === "stage" && typeof v === "string") safe.stage = v;
-    else if (typeof v === "number" && Number.isFinite(v)) safe[k] = v;
-  }
-  trackEvent(event, safe);
+  trackTool(event, props, ["stage"]);
 }

@@ -6,12 +6,12 @@ import { supportCount } from "@/lib/solve/reducer";
 import type { CauseClassification, CauseNode, RemovalTest } from "@/lib/solve/schema";
 import { truncate } from "@/lib/solve/text";
 import { classificationMeta, evidenceStateMeta, evidenceTypeMeta, removalTestMeta } from "./causeMeta";
-import { IconArrowLeft, IconArrowRight, IconBranch, IconClose, IconPlus, LoopGlyph } from "./icons";
+import { IconArrowLeft, IconArrowRight, IconBranch, IconClose, IconPlus, LoopGlyph } from "@/components/loop/icons";
 import { useInvestigation } from "./InvestigationProvider";
 import { useFishboneActions } from "./investigate/FishboneView";
 import { useWhyActions } from "./investigate/FiveWhys";
 import { candidateCauses } from "./stages/RootCauseStage";
-import { Chip, Kbd, Segmented, SolveButton, TextArea } from "./ui";
+import { Chip, Kbd, Segmented, SolveButton, TextArea } from "@/components/loop/ui";
 import { useShell } from "./Workspace";
 
 type Tool = "whys" | "fishbone";

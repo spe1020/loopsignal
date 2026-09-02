@@ -1,60 +1,60 @@
-/* LoopSolve workspace styles. Scoped by .solve-root so they never leak into marketing pages. */
+/* Loop workspace styles (LoopSolve, LoopFlow). Scoped by .loop-root so they never leak into marketing pages. */
 
-.solve-root {
-  --solve-control: 44px;
-  --solve-gap: 8px;
-  --solve-font: 15px;
-  font-size: var(--solve-font);
+.loop-root {
+  --loop-control: 44px;
+  --loop-gap: 8px;
+  --loop-font: 15px;
+  font-size: var(--loop-font);
   background: var(--paper);
   color: var(--ink);
 }
 
-.solve-root.solve-shopfloor {
-  --solve-control: 56px;
-  --solve-gap: 12px;
-  --solve-font: 18px;
+.loop-root.loop-shopfloor {
+  --loop-control: 56px;
+  --loop-gap: 12px;
+  --loop-font: 18px;
 }
 
-.solve-root.solve-shopfloor .solve-secondary {
+.loop-root.loop-shopfloor .loop-secondary {
   display: none !important;
 }
 
-.solve-root.solve-shopfloor .solve-chip {
+.loop-root.loop-shopfloor .loop-chip {
   font-size: 15px;
   padding: 10px 14px;
   border-width: 2px;
 }
 
-.solve-root.solve-shopfloor textarea,
-.solve-root.solve-shopfloor input,
-.solve-root.solve-shopfloor select {
+.loop-root.loop-shopfloor textarea,
+.loop-root.loop-shopfloor input,
+.loop-root.loop-shopfloor select {
   font-size: 18px;
 }
 
-.solve-root :focus-visible {
+.loop-root :focus-visible {
   outline: 2px solid var(--copper);
   outline-offset: 2px;
 }
 
-.solve-panel,
-.solve-sheet {
+.loop-panel,
+.loop-sheet {
   transition:
     transform 180ms ease-out,
     opacity 180ms ease-out;
 }
 
-.solve-node-enter {
-  animation: solve-node-in 180ms ease-out;
+.loop-node-enter {
+  animation: loop-node-in 180ms ease-out;
 }
 
-.solve-node {
+.loop-node {
   transition:
     left 180ms ease-out,
     top 180ms ease-out,
     border-color 150ms ease-out;
 }
 
-@keyframes solve-node-in {
+@keyframes loop-node-in {
   from {
     opacity: 0;
     transform: translateY(6px);
@@ -65,11 +65,11 @@
   }
 }
 
-.solve-saved-pulse {
-  animation: solve-saved 900ms ease-out;
+.loop-saved-pulse {
+  animation: loop-saved 900ms ease-out;
 }
 
-@keyframes solve-saved {
+@keyframes loop-saved {
   0% {
     color: var(--copper);
   }
@@ -78,35 +78,35 @@
   }
 }
 
-.solve-loop-spin {
-  animation: solve-loop-dash 6s linear infinite;
+.loop-spin {
+  animation: loop-dash-anim 6s linear infinite;
   stroke-dasharray: 8 10;
 }
 
-@keyframes solve-loop-dash {
+@keyframes loop-dash-anim {
   to {
     stroke-dashoffset: -180;
   }
 }
 
-.solve-grid-bg {
+.loop-grid-bg {
   background-image:
     linear-gradient(to right, rgba(31, 31, 31, 0.045) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(31, 31, 31, 0.045) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
-body[data-solve-workspace="1"] > footer {
+body[data-loop-workspace="1"] > footer {
   display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .solve-panel,
-  .solve-sheet,
-  .solve-node,
-  .solve-node-enter,
-  .solve-saved-pulse,
-  .solve-loop-spin {
+  .loop-panel,
+  .loop-sheet,
+  .loop-node,
+  .loop-node-enter,
+  .loop-saved-pulse,
+  .loop-spin {
     animation: none !important;
     transition: none !important;
   }
@@ -118,18 +118,18 @@ body[data-solve-workspace="1"] > footer {
     margin: 16mm 14mm 18mm 14mm;
   }
   body,
-  .solve-root {
+  .loop-root {
     background: #fff !important;
     color: #000 !important;
     font-size: 11pt;
   }
   body > header,
   body > footer,
-  .solve-chrome,
-  .solve-no-print {
+  .loop-chrome,
+  .loop-no-print {
     display: none !important;
   }
-  .solve-print-header {
+  .loop-print-header {
     display: flex !important;
     position: fixed;
     top: 0;
@@ -142,28 +142,47 @@ body[data-solve-workspace="1"] > footer {
     padding-bottom: 4pt;
     background: #fff;
   }
-  .solve-print-body {
+  .loop-print-body {
     padding-top: 22pt;
   }
-  .solve-print-section {
+  .loop-print-section {
     break-inside: auto;
   }
-  .solve-print-break {
+  .loop-print-break {
     break-before: page;
   }
-  .solve-print-section svg {
+  .loop-print-section svg {
     max-width: 100% !important;
     height: auto !important;
   }
-  .solve-report * {
+  .loop-report * {
     color: #000 !important;
     box-shadow: none !important;
   }
-  .solve-report a {
+  .loop-report a {
     text-decoration: none;
   }
-  .solve-main {
+  .loop-main {
     overflow: visible !important;
     max-height: none !important;
+  }
+}
+
+/* LoopFlow map */
+.loop-hatch {
+  background-image: repeating-linear-gradient(45deg, rgba(122, 122, 122, 0.16) 0 2px, transparent 2px 9px);
+}
+.loop-map-scroll {
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media print {
+  .loop-print-map svg {
+    width: 100% !important;
+    height: auto !important;
+  }
+  .loop-print-continued {
+    display: block;
   }
 }
