@@ -109,3 +109,74 @@ function stepShapeSvg(s: Step, b: { x: number; y: number; width: number; height:
   }
   return out.join("");
 }
+
+export type MapPage = { svg: string; from: number; to: number; continued: boolean; total: number };
+
+/**
+ * Split a wide map into print pages by step column. Each page repeats the
+ * lane headers; pages after the first carry a continuation header.
+ */
+export function mapSvgPages(map: ProcessMap, kind: VersionKind = "current", maxContentWidth = 1500): MapPage[] {
+  const version = kind === "current" ? map.versions.current : map.versions.future;
+  if (!version) return [];
+  const layout = layoutMap(version, map.lanes, map.unit);
+  const headerRight = 16 + 128 + 8;
+  const content = layout.width - headerRight;
+  if (content <= maxContentWidth || layout.steps.length === 0) {
+    return [{ svg: renderMapSvg(map, kind, layout, { title: true }), from: 1, to: layout.steps.length, continued: false, total: 1 }];
+  }
+  const groups: { from: number; to: number; x0: number; x1: number }[] = [];
+  let start = 0;
+  let x0 = layout.steps[0].colX - 8;
+  for (let i = 0; i < layout.steps.length; i += 1) {
+    const b = layout.steps[i];
+    const right = b.x + b.width + 8;
+    if (right - x0 > maxContentWidth && i > start) {
+      groups.push({ from: start, to: i - 1, x0, x1: layout.steps[i].colX - 8 });
+      start = i;
+      x0 = layout.steps[i].colX - 8;
+    }
+  }
+  groups.push({ from: start, to: layout.steps.length - 1, x0, x1: layout.width });
+  const stepById = new Map(version.steps.map((s) => [s.id, s]));
+  const painBy = new Map<string, number>();
+  for (const p of version.painPoints) painBy.set(p.stepId, (painBy.get(p.stepId) ?? 0) + 1);
+  const label = kind === "current" ? "Current state" : "Future state";
+  return groups.map((g, gi) => {
+    const w = headerRight + (g.x1 - g.x0) + 16;
+    const h = layout.height + 40;
+    const shift = headerRight - g.x0;
+    const parts: string[] = [];
+    parts.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" font-family="${FONT}" role="img" aria-label="${esc(label)} process map for ${esc(map.mapNumber)}, page ${gi + 1} of ${groups.length}">`);
+    parts.push(`<defs><pattern id="lf-hatch" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="${COLORS.stone}" stroke-width="1.2" opacity="0.55"/></pattern><marker id="lf-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="${COLORS.graphite}"/></marker><marker id="lf-arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="${COLORS.red}"/></marker><clipPath id="lf-clip-${gi}"><rect x="${headerRight}" y="0" width="${w - headerRight - 8}" height="${h}"/></clipPath></defs>`);
+    parts.push(`<rect width="${w}" height="${h}" fill="#ffffff"/>`);
+    parts.push(`<text x="16" y="26" font-size="14" font-weight="600" fill="${COLORS.ink}">${esc(label)} — ${esc(map.mapNumber)} ${esc(map.title)}${gi > 0 ? " (continued)" : ""} · steps ${g.from + 1}–${g.to + 1} of ${layout.steps.length}</text>`);
+    parts.push(`<g transform="translate(0,40)">`);
+    for (const lane of layout.lanes) {
+      parts.push(`<rect x="16" y="${lane.y}" width="${w - 32}" height="${lane.height}" fill="${lane.index % 2 ? COLORS.paper : "#ffffff"}" stroke="${COLORS.line}"/>`);
+      parts.push(`<rect x="16" y="${lane.y}" width="128" height="${lane.height}" fill="${COLORS.ink}"/>`);
+      parts.push(`<rect x="16" y="${lane.y}" width="4" height="${lane.height}" fill="${laneColor(lane.index)}"/>`);
+      wrapText(lane.name || "Lane", 16, 3).forEach((ln, i) => parts.push(`<text x="30" y="${lane.y + 24 + i * 15}" font-size="12" font-weight="600" fill="${COLORS.cream}">${esc(ln)}</text>`));
+    }
+    // Clip in page space first, then shift the content into the window.
+    parts.push(`<g clip-path="url(#lf-clip-${gi})"><g transform="translate(${shift},0)">`);
+    for (const gap of layout.waits) {
+      if (gap.x + gap.width < g.x0 || gap.x > g.x1) continue;
+      parts.push(`<rect x="${gap.x}" y="${gap.y}" width="${gap.width}" height="${gap.height}" fill="url(#lf-hatch)" stroke="${COLORS.stone}" stroke-dasharray="3 3"/>`);
+      parts.push(`<text x="${gap.x + gap.width / 2}" y="${gap.y + gap.height / 2 + 4}" font-size="10" text-anchor="middle" fill="${COLORS.graphite}" font-weight="600">${esc(gap.label)}</text>`);
+    }
+    for (const e of layout.edges) {
+      const red = e.kind === "rework";
+      parts.push(`<path d="${e.path}" fill="none" stroke="${red ? COLORS.red : COLORS.graphite}" stroke-width="1.5" ${e.kind === "branch" ? 'stroke-dasharray="5 4"' : ""} marker-end="url(#${red ? "lf-arrow-red" : "lf-arrow"})"/>`);
+      if (e.kind === "handoff" && e.markerX !== undefined && e.markerY !== undefined) parts.push(`<circle cx="${e.markerX}" cy="${e.markerY}" r="6" fill="#ffffff" stroke="${COLORS.ink}" stroke-width="1.4"/>`);
+      if (e.label && e.labelX !== undefined && e.labelY !== undefined) parts.push(`<text x="${e.labelX}" y="${e.labelY}" font-size="10" font-style="italic" fill="${red ? COLORS.red : COLORS.graphite}">${esc(truncate(e.label, 18))}</text>`);
+    }
+    for (let i = g.from; i <= g.to; i += 1) {
+      const b = layout.steps[i];
+      const s = stepById.get(b.id);
+      if (s) parts.push(stepShapeSvg(s, b, painBy.get(s.id) ?? 0, b.laneIndex));
+    }
+    parts.push("</g></g></g></svg>");
+    return { svg: parts.join(""), from: g.from + 1, to: g.to + 1, continued: gi > 0, total: groups.length };
+  });
+}

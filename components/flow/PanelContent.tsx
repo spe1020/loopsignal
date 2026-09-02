@@ -4,6 +4,7 @@ import { useFlowPanel } from "./panel";
 import { DiagramPanel } from "./panels/DiagramPanel";
 import { LanePanel } from "./panels/LanePanel";
 import { PainPanel } from "./panels/PainPanel";
+import { RationalePanel } from "./panels/RationalePanel";
 import { StepPanel } from "./panels/StepPanel";
 
 export function PanelContent() {
@@ -18,6 +19,8 @@ export function PanelContent() {
       return <PainPanel painId={state.painId} version={state.version} />;
     case "diagram":
       return <DiagramPanel version={state.version} />;
+    case "rationale":
+      return <RationalePanel key={state.changeKey} changeKey={state.changeKey} />;
     default:
       return null;
   }

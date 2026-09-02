@@ -83,6 +83,63 @@ test("map twelve steps from the keyboard, add a decision and a pain point", asyn
   expect(errors, errors.join("\n")).toEqual([]);
 });
 
+test("investigation opens pre-filled and links both ways; fork, rationale, summary, print", async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto("/flow");
+  await page.getByRole("button", { name: "Explore Sample Map" }).first().click();
+  await page.waitForURL(/\/map/);
+  const base = page.url().replace(/\/map.*$/, "");
+
+  // Start an investigation from the "re-keys" pain point on Analyze.
+  await page.goto(`${base}/analyze`);
+  await expect(page.getByText("Lead time", { exact: true }).first()).toBeVisible();
+  const painRow = page.locator("li", { hasText: "re-keyed into ERP" }).first();
+  await painRow.getByRole("button", { name: "Start investigation" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Start LoopSolve investigation" }).click();
+  await page.waitForURL(/\/solve\/[^/]+\/problem/);
+  await expect(page.getByLabel("What happened?")).toHaveValue(/re-keyed into ERP/);
+  await expect(page.getByLabel("Where?")).toHaveValue(/Order Entry/);
+  const back = page.getByRole("link", { name: /From LoopFlow MAP-/ });
+  await expect(back).toBeVisible();
+  await back.click();
+  await page.waitForURL(/\/flow\/[^/]+\/map\?step=/);
+  await expect(page.getByRole("dialog").getByLabel("Name")).toHaveValue("Order Entry re-keys quote into ERP");
+  await expect(page.getByRole("dialog").getByText(/re-keyed into ERP/)).toBeVisible();
+
+  // Pain point shows the live LoopSolve status.
+  await page.goto(`${base}/analyze`);
+  await expect(page.locator("li", { hasText: "re-keyed into ERP" }).first().getByText("Draft")).toBeVisible();
+
+  // Discard the sample's future state, fork a fresh one, delete two steps with rationale.
+  await page.goto(`${base}/future`);
+  await page.getByRole("button", { name: "Discard" }).click();
+  await page.getByRole("button", { name: "Fork current state" }).first().click();
+  await expect(page.getByText("Future state forked from current", { exact: false })).toBeVisible();
+  await page.goto(`${base}/map?version=future`);
+  await expect(page.getByText("Future state · edits here never touch the current map")).toBeVisible();
+  for (const name of ["Engineering returns notes to Sales", "Order Entry re-keys quote into ERP"]) {
+    await page.getByRole("button", { name: new RegExp(name) }).first().click();
+    await page.getByRole("dialog").getByRole("button", { name: "Delete step" }).click();
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+  }
+  await page.goto(`${base}/future`);
+  await expect(page.getByText("2 removed", { exact: false })).toBeVisible();
+  for (const name of ["Engineering returns notes to Sales", "Order Entry re-keys quote into ERP"]) {
+    await page.locator("li", { hasText: `Removed` }).filter({ hasText: name }).getByRole("button").first().click();
+    await page.getByRole("dialog").getByLabel("Rationale").fill(`${name} is no longer needed once the record is shared.`);
+    await page.getByRole("dialog").getByRole("button", { name: "Done" }).click();
+  }
+  await expect(page.getByText("every change is explained")).toBeVisible();
+
+  // Summary and print
+  await page.goto(`${base}/summary`);
+  await expect(page.locator(".loop-report svg").first()).toBeVisible();
+  await expect(page.getByText("Change rationale", { exact: true })).toBeVisible();
+  await page.emulateMedia({ media: "print" });
+  await expect(page.locator(".loop-print-header")).toBeVisible();
+  expect(errors, errors.join("\n")).toEqual([]);
+});
+
 test("stopwatch on the mobile list records an observation", async ({ page }, info) => {
   test.skip((info.project.use.viewport?.width ?? 0) >= 768, "mobile list only");
   await page.goto("/flow");
@@ -103,7 +160,7 @@ test("sample map renders every stage without console errors", async ({ page }) =
   await page.getByRole("button", { name: "Explore Sample Map" }).first().click();
   await page.waitForURL(/\/map/);
   const base = page.url().replace(/\/map.*$/, "");
-  for (const s of ["scope", "map", "map?version=future"]) {
+  for (const s of ["scope", "map", "map?version=future", "analyze", "future", "summary"]) {
     await page.goto(`${base}/${s}`);
     await page.waitForLoadState("networkidle");
   }

@@ -176,3 +176,13 @@ body[data-loop-workspace="1"] > footer {
   scrollbar-width: thin;
   -webkit-overflow-scrolling: touch;
 }
+
+@media print {
+  .loop-print-map svg {
+    width: 100% !important;
+    height: auto !important;
+  }
+  .loop-print-continued {
+    display: block;
+  }
+}

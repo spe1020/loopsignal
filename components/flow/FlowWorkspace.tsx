@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { createContext, useCallback, useContext, useEffect, useMemo, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, type ReactNode } from "react";
 import { PanelProvider, usePanelState } from "@/components/loop/ContextPanel";
 import { StageRail, StageStrip } from "@/components/loop/StageNav";
 import { WorkspaceShell } from "@/components/loop/WorkspaceShell";
@@ -75,8 +75,13 @@ function Inner({ stage, children, panel }: { stage: Stage; children: ReactNode; 
 
   const shell = useMemo(() => ({ version, setVersion, walking, enterWalk, exitWalk, focusStepId }), [version, setVersion, walking, enterWalk, exitWalk, focusStepId]);
 
+  // Close the panel when the stage changes (not on mount, so ?step= can open one).
+  const lastStage = useRef(stage);
   useEffect(() => {
-    close();
+    if (lastStage.current !== stage) {
+      lastStage.current = stage;
+      close();
+    }
   }, [stage, close]);
 
   const shop = map.shopFloorMode;

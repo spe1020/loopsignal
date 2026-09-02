@@ -61,3 +61,20 @@ describe("swimlane layout", () => {
     expect(cur).toContain("lf-arrow-red"); // rework loop drawn red
   });
 });
+
+describe("print pages", () => {
+  it("splits a wide map into pages that each carry their steps", async () => {
+    const { mapSvgPages } = await import("../svg");
+    const map = buildSampleMap("MAP-2026-001");
+    const pages = mapSvgPages(map, "current", 900);
+    expect(pages.length).toBeGreaterThan(1);
+    expect(pages[0].continued).toBe(false);
+    expect(pages[1].continued).toBe(true);
+    expect(pages[1].svg).toContain("<clipPath");
+    // the second page must actually contain step text, not just lane headers
+    const second = pages[1];
+    const names = map.versions.current.steps.filter((s) => s.order + 1 >= second.from && s.order + 1 <= second.to).map((s) => s.name.split(" ")[0]);
+    expect(names.some((n) => second.svg.includes(n))).toBe(true);
+    expect(pages.map((p) => p.to).at(-1)).toBe(map.versions.current.steps.length);
+  });
+});

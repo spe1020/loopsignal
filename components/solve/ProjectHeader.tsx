@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DeleteSheet, InlineTitle, MenuDivider, MenuItem, MetaInput, OverflowMenu, StatusChip, ToolHeader } from "@/components/loop/HeaderParts";
@@ -81,6 +82,11 @@ export function ProjectHeader({ stage, onFacilitate }: { stage: Stage; onFacilit
           <>
             <StatusBadge status={inv.status} large={shop} />
             {shop ? <Chip tone="ink" icon={<LoopGlyph className="h-3 w-6" tone="current" />}>Shop floor</Chip> : null}
+            {inv.source?.tool === "flow" ? (
+              <Link href={`/flow/${inv.source.mapId}/map${inv.source.stepId ? `?step=${inv.source.stepId}` : ""}`} className="rounded-[3px] focus-visible:outline-2 focus-visible:outline-copper" title="Open the step in LoopFlow">
+                <Chip tone="copper" icon={<LoopGlyph className="h-3 w-6" tone="current" />}>From LoopFlow {inv.source.label ?? inv.source.mapNumber ?? ""}</Chip>
+              </Link>
+            ) : null}
           </>
         }
         title={<InlineTitle value={inv.title} placeholder="Untitled investigation" ariaLabel="Investigation title" onChange={(title) => dispatch({ type: "set_meta", patch: { title } })} />}
