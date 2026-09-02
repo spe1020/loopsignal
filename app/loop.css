@@ -167,3 +167,12 @@ body[data-loop-workspace="1"] > footer {
     max-height: none !important;
   }
 }
+
+/* LoopFlow map */
+.loop-hatch {
+  background-image: repeating-linear-gradient(45deg, rgba(122, 122, 122, 0.16) 0 2px, transparent 2px 9px);
+}
+.loop-map-scroll {
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
