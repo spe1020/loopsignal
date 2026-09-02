@@ -98,12 +98,12 @@ export default function SolutionsPage() {
                   See it in action → {solution.demoName}
                 </Link>
                 <SolutionInterestLink
-                  href={cta.talkAboutProcess.href}
+                  href={cta.startLoopScan.href}
                   solution={solution.interest}
                   interactionType="cta_click"
                   className="text-[13px] font-medium tracking-[0.02em] text-stone hover:text-ink"
                 >
-                  {cta.talkAboutProcess.label} →
+                  {cta.startLoopScan.label} →
                 </SolutionInterestLink>
               </div>
             </Reveal>

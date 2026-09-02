@@ -1,6 +1,7 @@
 export const nav = [
   { href: "/", label: "Home" },
   { href: "/solutions", label: "Solutions" },
+  { href: "/services", label: "Services" },
   { href: "/loopscan", label: "LoopScan" },
   { href: "/demo", label: "Demo" },
   { href: "/how-it-works", label: "How It Works" },
@@ -8,22 +9,11 @@ export const nav = [
   { href: "/insights", label: "Insights" },
 ] as const;
 
+/** The one site-wide call to action. Opens the LoopScan contact form. */
 export const cta = {
-  nav: { href: "/loopscan?intent=talk#intake", label: "Fit check" },
-  talkAboutProcess: {
-    href: "/loopscan?intent=talk#intake",
-    label: "Talk Through a Process",
-  },
+  startLoopScan: { href: "/loopscan#intake", label: "Start with LoopScan" },
   seeDemos: { href: "/demo", label: "See the Demos" },
-  startLoopScan: { href: "/loopscan?intent=book#intake", label: "Start a LoopScan" },
-  learnLoopScan: { href: "/loopscan", label: "Learn About LoopScan" },
-  fitCheck: {
-    href: "/loopscan?intent=talk#intake",
-    label: "Book a 30-minute fit check",
-  },
 } as const;
-
-export const fitCheckNote = "No charge. No obligation.";
 
 export const painPoints = [
   "Buyers chasing overdue POs by hand.",
@@ -34,146 +24,50 @@ export const painPoints = [
 
 export const homepageFinding = {
   text: "Supplier mail for the same past-due rows until a date is pasted into Excel — then the next morning's export does not have that date, so the row looks late again.",
-  source: "From the sample LoopScan, Section 05.",
+  source:
+    "From a sample LoopScan read-back, built on the fictional Northfield dataset behind the demos.",
 } as const;
 
-export const loopScanOffer = {
-  whatItIs:
-    "A two-day on-site review of how a process actually runs — the work, the information, the handoffs, and the friction.",
-  whatHappens:
-    "We walk the work with your team, map the current state, and return findings within 10 business days.",
-  reviewed: [
-    "Workflows",
-    "Systems",
-    "Reports",
-    "Spreadsheets",
-    "Handoffs",
-    "Manual tasks",
-  ],
-  price: "$7,500",
-  duration: "Two days on site",
-  findingsIn: "Findings within 10 business days",
-  priceLine: "$7,500 · Two days on site · Findings within 10 business days",
-  samplePdf: {
-    href: "/LoopScan-sample-Northfield.pdf",
-    filename: "LoopScan-sample-Northfield.pdf",
-    eyebrow: "Sample LoopScan",
-    body: "A complete sample LoopScan, start to finish — six pages, built on the same fictional Northfield dataset behind the demos. Current-state map, friction, information gaps, system connections, repetitive work, what to automate and what not to, and one prioritized next step with the arithmetic shown. Nothing gated.",
-    cta: "Download the sample (PDF, 6 pages)",
-  },
-  guarantee:
-    "Unconditional. If the findings aren't worth what you paid, tell us within seven days and we refund it.",
-  travel:
-    "Based in central Pennsylvania. On-site anywhere — travel within the region is included, and quoted separately beyond it.",
-  declineThePull:
-    "A LoopScan needs no access to your systems. If you’d rather not export anything, we still do the scan.",
-  afterLoopScan: {
-    beforeLink:
-      "What comes after depends on what we find. Some LoopBuilds are a process change and a report — days, not weeks, and nothing to approve. Others are a real integration project with a real budget. We tell you which at the readout, before you commit to anything, and sometimes the answer is that ",
-    link: "the process change is enough on its own",
-    afterLink: ".",
-  },
-  whyFixedTitle: "A defined engagement.",
-  whyFixed:
-    "The fit check is simply a conversation. If LoopScan is appropriate, the scope, price, timing, and deliverable are already defined.",
-  firstClient:
-    "LoopSignal is new. You would be among the first LoopScan clients, which is why the price is fixed, the deliverable is defined in advance, and the guarantee is unconditional.",
-  dataHandling:
-    "We’re hired to look at your process — the data is yours. If sizing the problem needs a pull, it is read-only, we ask before anything is exported, and we take the smallest set that answers the question. One person does this work. We delete our copy when the analysis is done, and no later than 30 days after your readout.",
-  // TODO: confirm these seven items against Dr. Sats' pricing work.
-  deliverables: [
-    "Current-state workflow map",
-    "Friction points",
-    "Information gaps",
-    "System connections",
-    "Repetitive work",
-    "What to automate, and what not to",
-    "Prioritized next step with business impact",
-  ],
+/** LoopScan as it appears on the home page, the services overview, and the solutions cards. */
+export const loopScanBlock = {
+  name: "LoopScan",
+  text: "We evaluate how your plant actually runs and come back with what we see and what we'd recommend next.",
 } as const;
 
-export const loopScanTeamHoursByRole = [
-  { role: "Sponsor", hours: "~3 hrs" },
-  { role: "Buyer or planner", hours: "~5 hrs" },
-  { role: "One operator", hours: "~2 hrs" },
-  { role: "IT", hours: "~1 hr" },
-] as const;
-
-export const loopScanEngagementSteps = [
-  "Fit check (30-min call)",
-  "Intake and data request",
-  "Remote pre-work",
-  "Two days on site",
-  "Analysis",
-  "Findings and readout within 10 business days",
-] as const;
-
-export const loopScanIntents = [
-  {
-    value: "book",
-    label: "I want to discuss a LoopScan",
-    description:
-      "You understand the offer and want to see whether this process is a good fit.",
-  },
-  {
-    value: "talk",
-    label: "I want to talk through a process",
-    description:
-      "You have an operational problem and aren’t sure yet whether LoopScan is the right next step.",
-  },
-] as const;
-
-export type LoopScanIntent = (typeof loopScanIntents)[number]["value"];
-
-export const loopScanFitCheck = {
-  eyebrow: "Fit check",
-  headline: "Let’s talk through the process.",
-  body: "The first conversation is 30 minutes. We’ll look at the process you are trying to improve, the systems involved, and whether LoopScan is the right next step.",
-  expectations: [
+export const loopScanPage = {
+  headline: "Understand the process.",
+  sections: [
     {
-      title: "Bring the problem",
-      text: "No presentation or preparation required.",
+      title: "What it is",
+      text: "An evaluation of your operation. It starts with a conversation, includes a walk-through when it makes sense, and ends with a written read-back of what we found.",
     },
     {
-      title: "We’ll map the situation",
-      text: "How the work happens today, where it gets stuck, and who is involved.",
+      title: "What you get",
+      text: "A plain-language summary of where the friction is, what it's likely costing, and our recommendation on next steps — whether that's something you handle yourselves, a tool like LoopSolve, or a scoped engagement with us.",
     },
     {
-      title: "Decide the next step",
-      text: "LoopScan may make sense. A simpler process change may make sense. Sometimes the answer is no engagement at all.",
+      title: "How it starts",
+      text: "Share your contact details and we'll set up a call.",
     },
   ],
-  skipLink: "Prefer to talk first? Schedule a 30-minute fit check →",
-  successHeadline: "Thanks. I’ve got the process.",
-  successBody:
-    "The next step is a 30-minute fit check. We’ll walk through how the process works today, where the friction is, and whether LoopScan makes sense as the next step.",
-  scheduleHeadline: "Schedule Your 30-Minute Fit Check",
-  bookedHeadline: "You’re booked.",
-  bookedBody:
-    "Thanks. I’ll review anything you submitted before the call so we can spend the time on the process rather than introductions.",
-  calendarInvite: "Cal.com will send the calendar invitation.",
-  fallbackHeadline: "Having trouble loading the calendar?",
-  fallbackCta: "Open Scheduling Page →",
+  dataNote:
+    "A LoopScan needs no access to your systems. If sizing a problem ever calls for data, we ask first and take the smallest set that answers the question.",
 } as const;
 
-export const loopScanFit = {
-  good: {
-    title: "A good fit if",
-    items: [
-      "Your buyers work out of spreadsheet exports from an ERP older than they are.",
-      "The same report gets rebuilt every morning.",
-      "One person is the only one who knows how something works.",
-      "Information moves between systems by hand.",
-    ],
+export const loopScanForm = {
+  eyebrow: "Start with LoopScan",
+  heading: "Share your contact details and we'll set up a call.",
+  fields: {
+    name: "Name",
+    company: "Company",
+    role: "Role",
+    contact: "Email or phone",
+    slowing: "What's slowing you down?",
   },
-  not: {
-    title: "Not a fit if",
-    items: [
-      "You need an ERP replacement or upgrade.",
-      "You already run a mature continuous improvement program with dedicated CI staff.",
-      "You want staff augmentation rather than a defined engagement.",
-    ],
-  },
+  slowingPlaceholder:
+    "e.g. buyers chasing overdue POs by hand, or the same report rebuilt every morning",
+  submit: "Start with LoopScan",
+  successHeadline: "Thanks — we'll be in touch to set up a conversation.",
 } as const;
 
 export const informationSources = [
@@ -365,7 +259,7 @@ export const tools = [
 ] as const;
 
 export const demoNote =
-  "Examples of capability, not fixed packages every manufacturer is expected to adopt.";
+  "Examples of capability, not a fixed menu every manufacturer is expected to adopt.";
 
 export const demoPhilosophy = [
   {
@@ -386,42 +280,33 @@ export const demoPhilosophy = [
   },
 ] as const;
 
+export const servicesIntro = {
+  eyebrow: "Services",
+  headline: "Start with the work. Build what’s needed. Sustain what works.",
+  body: "Every engagement starts with LoopScan. What follows depends on what it finds.",
+} as const;
+
 export const services = [
   {
     slug: "loopscan",
+    step: "01",
     name: "LoopScan",
     headline: "Understand the process.",
-    summary: "Understand the process.",
-    detail:
-      "LoopScan is a two-day on-site operational review. We map how the work happens today, name the friction, and hand you a seven-item findings pack within 10 business days.",
-    deliverables: [
-      "Current-state workflow map",
-      "Friction points",
-      "Information gaps",
-      "System connections",
-      "Repetitive work",
-      "What to automate, and what not to",
-      "Prioritized next step with business impact",
-    ],
-    cta: "Start a LoopScan",
+    text: loopScanBlock.text,
   },
   {
     slug: "loopbuild",
+    step: "02",
     name: "LoopBuild",
-    headline: "Improve the process. Build the right system around it.",
-    summary: "Improve and implement it.",
-    detail:
-      "LoopBuild turns a prioritized opportunity into a working solution: process redesign, systems integration, workflow automation, AI, custom software, or a combination.",
-    deliverables: [
-      "Purchasing exception workflow",
-      "Supplier follow-up process",
-      "Reporting automation",
-      "Knowledge system",
-      "Sourcing workflow",
-      "Operations management process",
-      "System-to-system integration",
-    ],
-    cta: "Start a LoopScan",
+    headline: "Improve the process. Build what’s needed.",
+    text: "LoopBuild is the implementation work that follows a LoopScan: the process change, systems integration, automation, or custom software that removes the friction we found. It applies when the read-back points to something worth changing or connecting, and you want it done by people who understand the work it serves. Scope is defined together after LoopScan.",
+  },
+  {
+    slug: "loopops",
+    step: "03",
+    name: "LoopOps",
+    headline: "Keep it working.",
+    text: "LoopOps is the sustainment method installed with the work: the daily management, standard work, and ownership that keep an improvement running after we’re done, run by your team rather than by us. It applies when a change has to hold across shifts, departments, and turnover, not just survive the week it was launched. Scope is defined together after LoopScan.",
   },
 ] as const;
 
@@ -643,27 +528,6 @@ export const loopScanFindings = [
   },
 ] as const;
 
-export const commercialJourney = [
-  {
-    step: "01",
-    name: "LoopScan",
-    headline: "Understand the process.",
-    text: "Map how the work happens today and name the friction.",
-  },
-  {
-    step: "02",
-    name: "LoopBuild",
-    headline: "Improve and implement it.",
-    text: "Turn a prioritized opportunity into a working solution — process redesign, systems integration, automation, software, AI, or a combination.",
-  },
-  {
-    step: "03",
-    name: "LoopOps",
-    headline: "Keep it working.",
-    text: "Improvements decay when nobody owns them. LoopOps is the daily management and standard work that keeps the process running after we're done — run by your team, not by us.",
-  },
-] as const;
-
 export const operatingLoop = [
   {
     name: "See",
@@ -735,31 +599,4 @@ export const loopScanAreas = [
   "Planning",
   "Knowledge / Documentation",
   "Other",
-] as const;
-
-export const loopScanIntakeExamples = [
-  {
-    area: "Procurement",
-    text: "Buyers manually chasing overdue purchase orders.",
-  },
-  {
-    area: "Supply Chain",
-    text: "Shortages being discovered after production is already at risk.",
-  },
-  {
-    area: "Operations",
-    text: "Managers manually assembling production reports.",
-  },
-  {
-    area: "Quality",
-    text: "Teams searching through previous corrective actions every time a problem returns.",
-  },
-  {
-    area: "Engineering",
-    text: "Employees spending too much time locating specifications and historical documents.",
-  },
-  {
-    area: "Knowledge",
-    text: "Critical work depending on one experienced employee who knows where everything is.",
-  },
 ] as const;

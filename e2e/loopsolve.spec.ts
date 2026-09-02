@@ -115,7 +115,7 @@ test("create an investigation and close the loop", async ({ page }) => {
   await closeBtn.click();
   await page.waitForURL(/\/summary/);
   await expect(page.getByText("Closed", { exact: true }).first()).toBeVisible();
-  await expect(page.getByRole("link", { name: "Talk to LoopSignal" })).toBeVisible();
+  await expect(page.getByRole("main").getByRole("link", { name: "Start with LoopScan" })).toBeVisible();
 
   // Home lists it as closed
   await page.goto("/solve");

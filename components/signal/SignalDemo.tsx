@@ -14,7 +14,7 @@ import {
   trackSignalSampleRun,
   type SignalErrorCategory,
 } from "@/lib/analytics";
-import { cta, demos, loopScanOffer } from "@/lib/content";
+import { cta, demos } from "@/lib/content";
 import { analyzeSample } from "@/lib/signal";
 import { formatIsoDate } from "@/lib/signal/dates";
 import type { SignalAnalysisResult } from "@/lib/signal/types";
@@ -137,16 +137,8 @@ export function SignalDemo() {
           </p>
           <DemoFlow steps={supplyDemo.flow} className="mt-3" />
           <p className="mt-3 max-w-2xl text-[14px] leading-6 text-graphite">
-            This is a sample dataset. Running it against your open POs is what
-            a LoopScan is. The complete sample LoopScan on this same fictional
-            Northfield file is six pages.{" "}
-            <a
-              href={loopScanOffer.samplePdf.href}
-              download={loopScanOffer.samplePdf.filename}
-              className="font-medium text-copper hover:text-copper-dark"
-            >
-              {loopScanOffer.samplePdf.cta} →
-            </a>
+            This is a sample dataset. Looking at your open POs this way is part
+            of what a LoopScan does.
           </p>
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <a
@@ -240,38 +232,22 @@ export function SignalDemo() {
             This report started with a CSV.
           </h2>
           <p className="mt-5 max-w-2xl text-[16px] leading-7 text-graphite">
-            This is a sample dataset. Running it against your open POs is what
-            a LoopScan is. The six-page sample LoopScan is built on this same
-            fictional Northfield file.
+            This is a sample dataset. Looking at your open POs this way is part
+            of what a LoopScan does.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-5">
+          <div className="mt-8">
             <TrackedLink
-              href="/loopscan?source=loopsupply#intake"
+              href={cta.startLoopScan.href}
               location="loopsupply"
-              ctaText={cta.talkAboutProcess.label}
+              ctaText={cta.startLoopScan.label}
               onClick={() =>
                 trackSignalLoopScanClick({
-                  cta_text: cta.talkAboutProcess.label,
+                  cta_text: cta.startLoopScan.label,
                 })
               }
               className={marketingPrimary}
             >
-              {cta.talkAboutProcess.label}
-            </TrackedLink>
-            <a
-              href={loopScanOffer.samplePdf.href}
-              download={loopScanOffer.samplePdf.filename}
-              className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
-            >
-              {loopScanOffer.samplePdf.cta} →
-            </a>
-            <TrackedLink
-              href={cta.learnLoopScan.href}
-              location="loopsupply"
-              ctaText={cta.learnLoopScan.label}
-              className="text-[14px] font-medium tracking-[0.02em] text-graphite hover:text-ink"
-            >
-              {cta.learnLoopScan.label} →
+              {cta.startLoopScan.label}
             </TrackedLink>
           </div>
         </Container>

@@ -36,13 +36,10 @@ Website visit
 → LoopScan page visit
 → Form start
 → Form submit
-→ Booking view
-→ Booking start
-→ Booking success
-→ Discovery conversation *(manual)*
-→ LoopScan sold *(manual)*
+→ Conversation *(manual)*
+→ LoopScan *(manual)*
 
-The website can measure everything through `loopscan_booking_success`. Conversation and closed-won stages are recorded by hand until a CRM is in place.
+The website can measure everything through `loopscan_form_submit`. Conversation and later stages are recorded by hand until a CRM is in place.
 
 The longer commercial path is:
 
@@ -54,19 +51,15 @@ All events are categorical. Never send names, emails, company names, phone numbe
 
 ### `loopscan_cta_click`
 
-Fired when a visitor clicks a LoopScan call to action. Labels in use:
+Fired when a visitor clicks the site-wide LoopScan call to action. There is one label in use:
 
-- Fit check (navigation)
-- Book a 30-minute fit check (homepage)
-- Start a LoopScan (ready buyer, `/loopscan`)
-- Talk Through a Process (`/loopscan` and other pages)
-- Learn About LoopScan
+- Start with LoopScan (header, home hero, services, footer, tool pages, and every other page CTA)
 
 Secondary demo label: "See the Demos" → `/demo`.
 
 Allowed metadata:
 
-- `location`: `hero`, `solutions`, `loopscan_section`, `footer`, `article`, `navigation`, `use_cases`, `final_cta`, `about`, `how_it_works`, `not_found`, `signal`, `loopknow`, `loopsource`, `loopbrief`, `demo`
+- `location`: `hero`, `solutions`, `services`, `loopscan_section`, `footer`, `article`, `navigation`, `use_cases`, `final_cta`, `about`, `how_it_works`, `not_found`, `loopsupply`, `loopknow`, `loopsource`, `loopbrief`, `demo`
 - `page`: current pathname
 - `cta_text`: button label only
 
@@ -85,21 +78,12 @@ Fired on the first meaningful interaction with the LoopScan form. Once per page 
 
 No metadata.
 
-### `loopscan_area_selected`
-
-Fired when the visitor selects an operational area.
-
-Allowed metadata:
-
-- `area`: `procurement`, `supply_chain`, `operations`, `quality`, `engineering`, `planning`, `knowledge`, `other`
-
 ### `loopscan_form_submit`
 
 Fired only after a successful submission.
 
 Allowed metadata:
 
-- `area` (same controlled values as above)
 - first-touch UTM fields
 
 ### `loopscan_form_error`
@@ -110,45 +94,8 @@ Allowed metadata:
 
 - `error_category`: `server` or `network`
 - `page`: `/loopscan`
-- `area` if already selected
 
 Do not send raw error messages.
-
-### `loopscan_booking_view`
-
-Fired when the Cal.com fit-check embed becomes visible. Once per page session.
-
-Allowed metadata:
-
-- `source`: `loopscan`
-- `intent`: `discuss_loopscan` or `talk_process`
-- `intake_submitted`: `true` if the LoopScan form succeeded first, otherwise `false`
-
-Do not send name, email, company, process description, or booking notes.
-
-### `loopscan_booking_start`
-
-Fired when the visitor begins interacting with the booking flow (`navigatedToBooker`). Once per page session.
-
-Allowed metadata: same as `loopscan_booking_view`.
-
-### `loopscan_booking_success`
-
-Fired after Cal.com confirms a booking (`bookingSuccessfulV2`). Once per page session.
-
-Allowed metadata: same as `loopscan_booking_view`.
-
-Do not send the raw booking payload, attendee fields, or calendar notes.
-
-### `schedule_click`
-
-Fired when the visitor opens the external Cal.com page from the embed fallback.
-
-Allowed metadata:
-
-- `source`: `loopscan_embed_fallback` or `loopscan_confirmation`
-- `utm_source`
-- `utm_campaign`
 
 ### `solution_interest`
 
@@ -590,9 +537,6 @@ Avoid optimizing vanity metrics until there is enough traffic to learn from.
 | CTA click rate | LoopScan CTA clicks / relevant website visits |
 | Form start rate | Form starts / LoopScan page views |
 | Form completion rate | Successful submissions / form starts |
-| Booking view rate | Booking views / LoopScan page views |
-| Booking start rate | Booking starts / booking views |
-| Booking success rate | Confirmed bookings / booking starts |
 
 Drop-off between these steps is the LoopScan funnel diagnosis.
 
@@ -618,16 +562,13 @@ Drop-off between these steps is the LoopScan funnel diagnosis.
 - LoopScan page views
 - Form starts
 - Form submissions
-- Booking views
-- Booking starts
-- Confirmed bookings
 
 ## Manual business outcomes
 
 Record these by hand for now, in a spreadsheet or CRM:
 
-| Date | Company | Source / campaign | Discovery conversation held | Qualified opportunity | LoopScan proposal sent | LoopScan sold | LoopBuild sold | Notes |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Date | Company | Source / campaign | Conversation held | Qualified opportunity | LoopScan started | LoopBuild started | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
 |  |  |  |  |  |  |  |  |  |
 
 Do not automate this until the volume of conversations makes it worth the complexity.

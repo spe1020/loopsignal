@@ -12,7 +12,6 @@
     "typecheck": "tsc --noEmit -p ."
   },
   "dependencies": {
-    "@calcom/embed-react": "^1.5.3",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "idb-keyval": "^6.3.0",

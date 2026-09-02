@@ -139,8 +139,8 @@ export default function HowItWorksPage() {
               next constraint. Improve again.
             </p>
             <div className="mt-8">
-              <Button href={cta.talkAboutProcess.href} variant="dark" location="how_it_works">
-                {cta.talkAboutProcess.label}
+              <Button href={cta.startLoopScan.href} variant="dark" location="how_it_works">
+                {cta.startLoopScan.label}
               </Button>
             </div>
           </Container>
