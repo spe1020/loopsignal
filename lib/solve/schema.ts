@@ -238,6 +238,17 @@ export const HistoryEventSchema = z.object({
 });
 export type HistoryEvent = z.infer<typeof HistoryEventSchema>;
 
+/** Where an investigation was opened from. Shown as a chip that links back. */
+export const InvestigationSourceSchema = z.object({
+  tool: z.literal("flow"),
+  mapId: z.string(),
+  mapNumber: z.string().optional(),
+  stepId: z.string().optional(),
+  painPointId: z.string().optional(),
+  label: z.string().optional(),
+});
+export type InvestigationSource = z.infer<typeof InvestigationSourceSchema>;
+
 export const InvestigationSchema = z.object({
   ...entity,
   schemaVersion: z.number().int().default(SCHEMA_VERSION),
@@ -260,6 +271,7 @@ export const InvestigationSchema = z.object({
   history: z.array(HistoryEventSchema).default([]),
   closedAt: z.string().optional(),
   reopenedCount: z.number().int().default(0),
+  source: InvestigationSourceSchema.optional(),
 });
 export type Investigation = z.infer<typeof InvestigationSchema>;
 

@@ -90,7 +90,7 @@ export function computeMetrics(version: MapVersion, lanes: Lane[]): VersionMetri
     wait += w;
     if (isTimed(s)) {
       if (s.cycleTimeMin === undefined) unknownTimeStepIds.push(s.id);
-      if (s.valueClass === "unclassified") unclassifiedStepIds.push(s.id);
+      if (s.valueClass === "unclassified" && !isWaiting(s)) unclassifiedStepIds.push(s.id);
       // Wait steps are waiting regardless of the class the user picked.
       const cls: ValueClass = isWaiting(s) ? "nva" : s.valueClass;
       value[cls].min += t + (isWaiting(s) ? s.cycleTimeMin ?? 0 : 0);

@@ -73,9 +73,11 @@ export type MapLayout = {
   lanesBottom: number;
 };
 
-/** Pixels per minute by display unit so that one "typical" unit is ~60 px. */
+/** Pixels per minute by display unit: 30 min, 1 h, or 1 d of waiting is ~60 px. */
 export function waitScale(unit: TimeUnit): number {
-  return 60 / unitMinutes[unit] / (unit === "minutes" ? 0.5 : 1);
+  if (unit === "minutes") return 2;
+  if (unit === "hours") return 1;
+  return 60 / unitMinutes.days;
 }
 
 export function waitWidth(minutes: number, unit: TimeUnit): { width: number; capped: boolean } {
