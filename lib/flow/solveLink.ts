@@ -30,7 +30,8 @@ export function investigationFromMap(input: {
   };
   inv.problem.generatedStatement = generateStatement(inv.problem);
   inv.source = { tool: "flow", mapId: map.id, mapNumber: map.mapNumber, stepId: step.id, painPointId: pain?.id, label: `${map.mapNumber} · step ${step.order + 1}` };
-  inv.history = [...inv.history, { id: newId(), at, type: "created", note }];
+  // createInvestigation already records the "created" event; attach the origin note to it.
+  inv.history = inv.history.map((h) => (h.type === "created" ? { ...h, note } : h));
   const link: LinkedInvestigation = { id: newId(), investigationId: inv.id, stepId: step.id, painPointId: pain?.id, openedAt: at, lastKnownStatus: inv.status };
   return { investigation: inv, link, note };
 }

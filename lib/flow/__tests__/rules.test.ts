@@ -86,3 +86,19 @@ describe("status and completion", () => {
     expect(completionPercent(noFuture)).toBe(70);
   });
 });
+
+describe("solve link", () => {
+  it("creates one created event with the origin note", async () => {
+    const { investigationFromMap } = await import("../solveLink");
+    const { buildSampleMap } = await import("../sample");
+    const map = buildSampleMap("MAP-2026-001");
+    const step = map.versions.current.steps.find((s) => s.name.startsWith("Order Entry re-keys"))!;
+    const pain = map.versions.current.painPoints.find((p) => p.stepId === step.id)!;
+    const { investigation, link } = investigationFromMap({ map, step, pain, rcaNumber: "RCA-2026-009" });
+    expect(investigation.history.filter((h) => h.type === "created")).toHaveLength(1);
+    expect(investigation.history[0].note).toMatch(/Opened from LoopFlow MAP-2026-001 · step 13/);
+    expect(investigation.problem.whatHappened).toBe(pain.text);
+    expect(investigation.source?.stepId).toBe(step.id);
+    expect(link.painPointId).toBe(pain.id);
+  });
+});

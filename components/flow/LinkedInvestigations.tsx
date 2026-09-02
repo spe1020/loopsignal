@@ -47,12 +47,15 @@ export function useLinkedInvestigations(): Map<string, Investigation> {
     }
     void load();
     const onFocus = () => void load();
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void load();
+    };
     window.addEventListener("focus", onFocus);
-    document.addEventListener("visibilitychange", onFocus);
+    document.addEventListener("visibilitychange", onVisible);
     return () => {
       cancelled = true;
       window.removeEventListener("focus", onFocus);
-      document.removeEventListener("visibilitychange", onFocus);
+      document.removeEventListener("visibilitychange", onVisible);
     };
   }, [ids, dispatch]);
   return byId;

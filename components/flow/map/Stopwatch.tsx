@@ -18,7 +18,8 @@ function fmt(ms: number): string {
 /**
  * Tap start, tap stop. Stop appends a TimeObservation; the reducer sets the
  * step's cycle time to the median of its observations and marks it observed.
- * Sub-minute timings round up to one minute so a fast step is never "0".
+ * Durations round to the nearest minute with a floor of one, so a fast step
+ * is never recorded as "0".
  */
 export function Stopwatch({ stepId, version, size = "md", label = "Start timing this step" }: { stepId: string; version: VersionKind; size?: "md" | "lg"; label?: string }) {
   const { map, dispatch } = useMap();
