@@ -148,7 +148,7 @@ export function AnalyzeStage() {
                   ) : (
                     <LoopButton size="sm" onClick={() => open({ kind: "pain", painId: p.id, version: "current" })} icon={<LoopGlyph className="h-3 w-6" tone="current" />}>Start investigation</LoopButton>
                   )}
-                  {s ? <Link href={stepHref(s.id)} aria-label={`Go to step ${s.order + 1}`} className="inline-flex min-h-[36px] items-center gap-1 rounded-[3px] px-2 text-[12.5px] text-graphite hover:bg-ink/5 focus-visible:outline-2 focus-visible:outline-copper">Map <IconArrowRight size={12} /></Link> : null}
+                  {s ? <Link href={stepHref(s.id)} aria-label={`Map: go to step ${s.order + 1}`} className="inline-flex min-h-[36px] items-center gap-1 rounded-[3px] px-2 text-[12.5px] text-graphite hover:bg-ink/5 focus-visible:outline-2 focus-visible:outline-copper">Map <IconArrowRight size={12} /></Link> : null}
                 </Card>
               );
             })}

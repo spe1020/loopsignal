@@ -20,7 +20,7 @@ function fmt(ms: number): string {
  * step's cycle time to the median of its observations and marks it observed.
  * Sub-minute timings round up to one minute so a fast step is never "0".
  */
-export function Stopwatch({ stepId, version, size = "md", label = "Time this step" }: { stepId: string; version: VersionKind; size?: "md" | "lg"; label?: string }) {
+export function Stopwatch({ stepId, version, size = "md", label = "Start timing this step" }: { stepId: string; version: VersionKind; size?: "md" | "lg"; label?: string }) {
   const { map, dispatch } = useMap();
   const [startedAt, setStartedAt] = useState<number | null>(null);
   const [elapsed, setElapsed] = useState(0);
@@ -58,13 +58,13 @@ export function Stopwatch({ stepId, version, size = "md", label = "Time this ste
       type="button"
       onClick={toggle}
       aria-pressed={running}
-      aria-label={running ? `Stop timing (${fmt(elapsed)})` : label}
+      aria-label={running ? `Stop timing at ${fmt(elapsed)}` : label}
       className={`inline-flex items-center justify-center gap-2 rounded-[3px] border font-mono font-medium tabular-nums transition-colors focus-visible:outline-2 focus-visible:outline-copper ${
         running ? "border-copper bg-copper text-white" : "border-ink/25 bg-cream text-ink hover:border-ink"
       } ${big ? "min-h-[64px] min-w-[160px] px-5 text-[22px]" : "min-h-(--loop-control) min-w-[120px] px-3 text-[14px]"}`}
     >
       {running ? <IconPause size={big ? 20 : 15} /> : <IconPlay size={big ? 20 : 15} />}
-      {running ? fmt(elapsed) : "Start"}
+      {running ? <>Stop {fmt(elapsed)}</> : "Start"}
     </button>
   );
 }

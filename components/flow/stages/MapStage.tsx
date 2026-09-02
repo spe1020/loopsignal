@@ -22,7 +22,10 @@ export function MapStage() {
   const { open, state } = useFlowPanel();
   const { addAfter } = useStepActions(kind);
   const wide = useMediaQuery("(min-width: 768px)", true);
-  const [view, setView] = useState<"diagram" | "list">(map.shopFloorMode ? "list" : "diagram");
+  // Shop Floor Mode defaults to the list even on tablet; an explicit choice wins.
+  const [viewChoice, setViewChoice] = useState<"diagram" | "list" | null>(null);
+  const view: "diagram" | "list" = viewChoice ?? (map.shopFloorMode ? "list" : "diagram");
+  const setView = (v: "diagram" | "list") => setViewChoice(v);
   const rootRef = useRef<HTMLDivElement>(null);
   const focused = useRef<string | null>(null);
 

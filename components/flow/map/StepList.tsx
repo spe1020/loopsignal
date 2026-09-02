@@ -71,7 +71,7 @@ export function StepList({
                 </button>
                 {timed ? (
                   <div className="flex shrink-0 items-center pr-2">
-                    <Stopwatch stepId={s.id} version={kind} size={bigStopwatch ? "lg" : "md"} label={`Time ${s.name || "this step"}`} />
+                    <Stopwatch stepId={s.id} version={kind} size={bigStopwatch ? "lg" : "md"} label={`Start timing ${s.name || "this step"}`} />
                   </div>
                 ) : null}
               </div>

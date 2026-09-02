@@ -145,7 +145,7 @@ test("stopwatch on the mobile list records an observation", async ({ page }, inf
   await page.goto("/flow");
   await page.getByRole("button", { name: "Explore Sample Map" }).first().click();
   await page.waitForURL(/\/map/);
-  const btn = page.getByRole("button", { name: "Time Customer emails RFQ with drawing" });
+  const btn = page.getByRole("button", { name: "Start timing Customer emails RFQ with drawing" });
   await btn.click();
   await expect(page.getByRole("button", { name: /Stop timing/ })).toBeVisible();
   await page.waitForTimeout(1200);
@@ -165,5 +165,30 @@ test("sample map renders every stage without console errors", async ({ page }) =
     await page.waitForLoadState("networkidle");
   }
   await expect(page.getByText(/Lead/).first()).toBeVisible();
+  expect(errors, errors.join("\n")).toEqual([]);
+});
+
+test("walk mode adds steps with the keyboard and a pain point", async ({ page }) => {
+  const errors = collectErrors(page);
+  const base = await newMapToScope(page);
+  await page.goto(`${base}/map?walk=1`);
+  const name = page.getByLabel("Step name");
+  await expect(name).toBeFocused();
+  await page.keyboard.type("RFQ arrives");
+  await page.keyboard.press("Enter");
+  await expect(page.getByText("New step 2")).toBeVisible();
+  await page.keyboard.type("Sales logs it");
+  await page.getByRole("radio", { name: "Sales" }).click();
+  await page.getByLabel("Cycle time").fill("15");
+  await page.getByRole("radio", { name: /NNVA/ }).click();
+  await page.getByLabel("Pain point").fill("Sits in the inbox all day.");
+  await page.getByRole("button", { name: "Save · next" }).click();
+  await expect(page.getByText("New step 3")).toBeVisible();
+  await page.getByRole("button", { name: "Back" }).click();
+  await expect(page.getByLabel("Step name")).toHaveValue("Sales logs it");
+  await expect(page.getByText("Sits in the inbox all day.")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await page.waitForURL((u) => !u.searchParams.has("walk"));
+  await expect(page.getByText("2 steps")).toBeVisible();
   expect(errors, errors.join("\n")).toEqual([]);
 });
