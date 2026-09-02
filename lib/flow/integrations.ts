@@ -22,7 +22,6 @@ export function toLoopScanFindings(map: ProcessMap): LoopScanFinding {
   const cur = map.versions.current;
   const m = computeMetrics(cur, map.lanes);
   const lanes = new Map(map.lanes.map((l) => [l.id, l.name]));
-  const steps = new Map(cur.steps.map((s) => [s.id, s]));
   const worstWaits = [...cur.steps]
     .filter((s) => (s.waitBeforeMin ?? 0) > 0)
     .sort((a, b) => (b.waitBeforeMin ?? 0) - (a.waitBeforeMin ?? 0))
@@ -36,7 +35,7 @@ export function toLoopScanFindings(map: ProcessMap): LoopScanFinding {
     pce: m.pce,
     handoffs: m.handoffCount,
     worstWaits,
-    painPoints: cur.painPoints.map((p) => ({ text: p.text, category: p.category, severity: p.severity })).filter((p) => steps.size > 0),
+    painPoints: cur.painPoints.map((p) => ({ text: p.text, category: p.category, severity: p.severity })),
     futureLeadTimeMin: map.versions.future ? computeMetrics(map.versions.future, map.lanes).leadTimeMin : undefined,
   };
 }

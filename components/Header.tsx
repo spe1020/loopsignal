@@ -49,7 +49,8 @@ export function Header() {
                     pathname.startsWith("/know") ||
                     pathname.startsWith("/source") ||
                     pathname.startsWith("/brief") ||
-                    pathname.startsWith("/solve")
+                    pathname.startsWith("/solve") ||
+                    pathname.startsWith("/flow")
                   : pathname.startsWith(item.href);
             return (
               <Link
