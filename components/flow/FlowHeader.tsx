@@ -38,11 +38,28 @@ export function FlowHeader({ stage, onWalk }: { stage: Stage; onWalk?: () => voi
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   async function onDuplicate() {
-    await flush();
-    const copy = duplicateMap(map, nextMapNumber());
-    await saveMap(copy);
-    toast.show(`Duplicated as ${copy.mapNumber}.`);
-    router.push(`/flow/${copy.id}/scope`);
+    const result = await flush();
+    if (!result.ok) {
+      toast.show("Duplicate paused. Save or export your current edits before leaving.", { tone: "red" });
+      return;
+    }
+    try {
+      const copy = duplicateMap(result.doc, nextMapNumber());
+      const receipt = await saveMap(copy);
+      if (!receipt.durable) {
+        toast.show("Duplicate is only in temporary memory. Export your current document before leaving.", { tone: "red" });
+        return;
+      }
+      // Keep edits made while the copy was saving on the original document too.
+      if (!(await flush()).ok) {
+        toast.show("Duplicate saved, but navigation paused because newer edits are unsaved. Retry save or export them.", { tone: "red" });
+        return;
+      }
+      toast.show(`Duplicated as ${copy.mapNumber}.`);
+      router.push(`/flow/${copy.id}/scope`);
+    } catch {
+      toast.show("Could not save the duplicate. Your current document is still open; retry or export it.", { tone: "red" });
+    }
   }
   function onExport() {
     downloadText(exportFilename(map), serialize(map));

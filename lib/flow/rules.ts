@@ -67,7 +67,7 @@ export function softFindings(map: ProcessMap): Finding[] {
   }
 
   if (m.pce !== null && m.pce < 0.05 && m.leadTimeMin > 0) {
-    out.push({ code: "low_pce", level: "info", stage: "analyze", version: "current", message: `Process cycle efficiency is ${(m.pce * 100).toFixed(1)}%. Under 5% is common. Most of the time is waiting, not working.` });
+    out.push({ code: "low_pce", level: "info", stage: "analyze", version: "current", message: `Process cycle efficiency is ${(m.pce * 100).toFixed(1)}%. This is value-added time divided by recorded lead time. Review estimates, missing times, and value classifications before drawing conclusions.` });
   }
 
   const future = map.versions.future;

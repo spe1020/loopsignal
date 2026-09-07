@@ -19,7 +19,7 @@ export function SavedIndicator({ savedAt, saving }: { savedAt: string | null; sa
   return (
     <span key={savedAt ?? "none"} className="loop-saved-pulse inline-flex items-center gap-1.5 text-[12px] text-stone" aria-live="polite">
       <IconCheck size={12} />
-      {saving ? "Saving…" : savedAt ? `Saved locally · ${formatTime(savedAt)}` : "Saved locally"}
+      {saving ? "Saving…" : savedAt ? `Saved locally · ${formatTime(savedAt)}` : "Not saved"}
     </span>
   );
 }

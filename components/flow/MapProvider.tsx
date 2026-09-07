@@ -1,10 +1,10 @@
 "use client";
 
 import { type ReactNode } from "react";
-import { createDocumentContext } from "@/components/loop/DocumentProvider";
+import { createDocumentContext, type FlushResult } from "@/components/loop/DocumentProvider";
 import { reduce, type FlowAction } from "@/lib/flow/reducer";
 import type { ProcessMap } from "@/lib/flow/schema";
-import { loadMap, saveMap } from "@/lib/flow/storage";
+import { loadMap, saveMap, storageKind } from "@/lib/flow/storage";
 
 type Ctx = {
   map: ProcessMap;
@@ -13,7 +13,7 @@ type Ctx = {
   restore: (map: ProcessMap) => void;
   savedAt: string | null;
   saving: boolean;
-  flush: () => Promise<void>;
+  flush: () => Promise<FlushResult<ProcessMap>>;
 };
 
 const ctx = createDocumentContext<ProcessMap, FlowAction>({
@@ -21,12 +21,13 @@ const ctx = createDocumentContext<ProcessMap, FlowAction>({
   reduce,
   load: loadMap,
   save: saveMap,
+  kind: storageKind,
   replace: (map) => ({ type: "replace", map }),
 });
 
 export function useMap(): Ctx {
   const d = ctx.useDocument();
-  return { map: d.doc, dispatch: d.dispatch, restore: d.restore, savedAt: d.savedAt, saving: d.saving, flush: d.flush };
+  return { map: d.doc, dispatch: d.dispatch, restore: d.restore, savedAt: d.dirty ? null : d.savedAt, saving: d.saving, flush: d.flush };
 }
 
 export function MapProvider(props: { id: string; children: ReactNode; fallback: ReactNode; missing: ReactNode }) {

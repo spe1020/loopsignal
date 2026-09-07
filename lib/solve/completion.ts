@@ -1,4 +1,5 @@
 import type { Investigation, Stage } from "./schema";
+import { hardFindings } from "./rules";
 import { problemChecks } from "./text";
 
 export type StageScore = 0 | 0.5 | 1;
@@ -35,11 +36,7 @@ export function stageScore(inv: Investigation, stage: Stage): StageScore {
     }
     case "verify": {
       if (inv.verifications.length === 0) return 0;
-      const corrective = inv.actions.filter((a) => a.kind === "corrective");
-      const allVerified =
-        corrective.length > 0 &&
-        corrective.every((a) => inv.verifications.some((v) => v.actionId === a.id));
-      return allVerified ? 1 : 0.5;
+      return hardFindings(inv).length === 0 ? 1 : 0.5;
     }
     case "summary":
       return inv.lessons.length > 0 ? 1 : 0;

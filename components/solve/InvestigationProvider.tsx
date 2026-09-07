@@ -1,10 +1,10 @@
 "use client";
 
 import { type ReactNode } from "react";
-import { createDocumentContext } from "@/components/loop/DocumentProvider";
+import { createDocumentContext, type FlushResult } from "@/components/loop/DocumentProvider";
 import { reduce, type SolveAction } from "@/lib/solve/reducer";
 import type { Investigation } from "@/lib/solve/schema";
-import { loadInvestigation, saveInvestigation } from "@/lib/solve/storage";
+import { loadInvestigation, saveInvestigation, storageKind } from "@/lib/solve/storage";
 
 type Ctx = {
   investigation: Investigation;
@@ -13,7 +13,7 @@ type Ctx = {
   restore: (inv: Investigation) => void;
   savedAt: string | null;
   saving: boolean;
-  flush: () => Promise<void>;
+  flush: () => Promise<FlushResult<Investigation>>;
 };
 
 const ctx = createDocumentContext<Investigation, SolveAction>({
@@ -21,12 +21,13 @@ const ctx = createDocumentContext<Investigation, SolveAction>({
   reduce,
   load: loadInvestigation,
   save: saveInvestigation,
+  kind: storageKind,
   replace: (investigation) => ({ type: "replace", investigation }),
 });
 
 export function useInvestigation(): Ctx {
   const d = ctx.useDocument();
-  return { investigation: d.doc, dispatch: d.dispatch, restore: d.restore, savedAt: d.savedAt, saving: d.saving, flush: d.flush };
+  return { investigation: d.doc, dispatch: d.dispatch, restore: d.restore, savedAt: d.dirty ? null : d.savedAt, saving: d.saving, flush: d.flush };
 }
 
 export function InvestigationProvider(props: { id: string; children: ReactNode; fallback: ReactNode; missing: ReactNode }) {

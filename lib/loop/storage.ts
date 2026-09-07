@@ -6,6 +6,8 @@ import { createStore as createIdbStore, del, entries, get, set } from "idb-keyva
  */
 
 export type BackendKind = "indexeddb" | "localstorage" | "memory";
+export type SaveReceipt = { kind: BackendKind; durable: boolean };
+
 
 type Backend<T> = {
   kind: BackendKind;
@@ -29,7 +31,7 @@ export type StoreConfig<T extends { id: string; updatedAt: string }> = {
 export type DocumentStore<T extends { id: string; updatedAt: string }> = {
   kind(): Promise<BackendKind>;
   load(id: string): Promise<T | undefined>;
-  save(doc: T): Promise<void>;
+  save(doc: T): Promise<SaveReceipt>;
   remove(id: string): Promise<void>;
   /** Sorted by updatedAt, newest first. */
   list(): Promise<T[]>;
@@ -149,7 +151,9 @@ export function createDocumentStore<T extends { id: string; updatedAt: string }>
       return (await resolve()).get(id);
     },
     async save(doc) {
-      return (await resolve()).set(doc);
+      const target = await resolve();
+      await target.set(doc); // Never downgrade a failed write to a success in memory.
+      return { kind: target.kind, durable: target.kind !== "memory" };
     },
     async remove(id) {
       return (await resolve()).del(id);

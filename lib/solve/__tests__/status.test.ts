@@ -4,7 +4,7 @@ import { createInvestigation, reduce, stamp } from "../reducer";
 import { deriveStatus } from "../status";
 
 describe("deriveStatus", () => {
-  it("walks draft → investigating → action_open → verification → closed", () => {
+  it("walks draft → investigating → action_open → verification and refuses unsupported closure", () => {
     let inv = createInvestigation({ rcaNumber: "RCA-2026-001" });
     expect(deriveStatus(inv)).toBe("draft");
     inv = reduce(inv, { type: "add_cause", cause: { ...stamp(), text: "x", parentId: null, origin: "why", evidenceState: "assumption", classification: "unclassified", challenged: false, candidate: false, collapsed: false, order: 0 } });
@@ -15,9 +15,9 @@ describe("deriveStatus", () => {
     inv = reduce(inv, { type: "add_verification", item: { ...stamp(), actionId: inv.actions[0].id, expected: "", observed: "", result: "effective", evidenceIds: [] } });
     expect(inv.status).toBe("verification");
     inv = reduce(inv, { type: "close" });
-    expect(inv.status).toBe("closed");
-    expect(inv.closedAt).toBeTruthy();
-    expect(inv.history.at(-1)?.type).toBe("closed");
+    expect(inv.status).toBe("verification");
+    expect(inv.closedAt).toBeUndefined();
+    expect(inv.history.at(-1)?.type).not.toBe("closed");
   });
 
   it("reopen sets reopened until a new verification is recorded", async () => {

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { TrackedLink } from "./TrackedLink";
-import { cta, nav } from "@/lib/content";
+import { nav } from "@/lib/content";
 
 export function Header() {
   const pathname = usePathname();
@@ -26,6 +26,7 @@ export function Header() {
     };
   }, [open]);
 
+  if (pathname === "/workspace") return null;
   return (
     <header
       className={`sticky top-0 z-50 border-b transition-colors ${
@@ -39,19 +40,7 @@ export function Header() {
 
         <nav className="hidden items-center gap-5 xl:gap-7 lg:flex">
           {nav.map((item) => {
-            const active =
-              item.href === "/"
-                ? pathname === "/"
-                : item.href === "/demo"
-                  ? pathname === "/demo" ||
-                    pathname.startsWith("/supply") ||
-                    pathname.startsWith("/signal") ||
-                    pathname.startsWith("/know") ||
-                    pathname.startsWith("/source") ||
-                    pathname.startsWith("/brief") ||
-                    pathname.startsWith("/solve") ||
-                    pathname.startsWith("/flow")
-                  : pathname.startsWith(item.href);
+            const active = pathname.startsWith(item.href);
             return (
               <Link
                 key={item.href}
@@ -70,12 +59,12 @@ export function Header() {
 
         <div className="flex items-center gap-4">
           <TrackedLink
-            href={cta.startLoopScan.href}
+            href={"/pilot"}
             location="navigation"
-            ctaText={cta.startLoopScan.label}
+            ctaText={"Join the pilot"}
             className="hidden rounded-[2px] bg-copper px-4 py-2.5 text-[13px] font-medium tracking-[0.02em] text-white transition-colors hover:bg-copper-dark sm:inline-flex"
           >
-            {cta.startLoopScan.label}
+            {"Join the pilot"}
           </TrackedLink>
           <button
             type="button"
@@ -114,13 +103,13 @@ export function Header() {
               </Link>
             ))}
             <TrackedLink
-              href={cta.startLoopScan.href}
+              href={"/pilot"}
               location="navigation"
-              ctaText={cta.startLoopScan.label}
+              ctaText={"Join the pilot"}
               onClick={() => setOpen(false)}
               className="mt-6 inline-flex items-center justify-center rounded-[2px] bg-copper px-4 py-3 text-[13px] font-medium text-white"
             >
-              {cta.startLoopScan.label}
+              {"Join the pilot"}
             </TrackedLink>
           </nav>
         </div>

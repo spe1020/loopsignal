@@ -15,14 +15,14 @@ describe("completion", () => {
     expect(stageScore(inv, "investigate")).toBe(1);
     expect(stageScore(inv, "root-cause")).toBe(1);
     expect(stageScore(inv, "actions")).toBe(0.5);
-    expect(stageScore(inv, "verify")).toBe(1);
+    expect(stageScore(inv, "verify")).toBe(0.5);
     expect(stageScore(inv, "summary")).toBe(1);
-    expect(completionPercent(inv)).toBe(93);
+    expect(completionPercent(inv)).toBe(86);
   });
   it("stage states", () => {
     const inv = buildSample("RCA-2026-001");
     expect(stageState(inv, "problem")).toBe("complete");
-    expect(stageState(inv, "actions")).toBe("in_progress");
+    expect(stageState(inv, "actions")).toBe("needs_attention");
     expect(stageState(createInvestigation({ rcaNumber: "x" }), "problem")).toBe("empty");
   });
 });

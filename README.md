@@ -1,8 +1,10 @@
 # LoopSignal
 
-Improve the process. Connect the systems.
+Turn daily problems into improvements that last.
 
-A website for LoopSignal — a manufacturing consulting and systems integration company focused on process improvement, automation, and practical AI.
+LoopSignal manufacturing problem-solving software: a functional, fictional browser preview plus individual LoopSolve investigations and LoopFlow process maps. Consulting is optional onboarding and integration support. Company accounts, trusted shared storage, and subscriptions are the next milestone.
+
+See the [Prompt 1 implementation, validation, and hosted roadmap](docs/product-preview/README.md).
 
 Live site: [https://www.loopsignal.co](https://www.loopsignal.co)
 
@@ -17,7 +19,9 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Pages
 
-- `/` — Home
+- `/` — Software-first home
+- `/workspace` — Fictional manufacturing workflow (separate browser store)
+- `/pilot` — Software pilot interest form; no account or billing
 - `/solutions` — Work we take on
 - `/how-it-works` — See → Simplify → Connect → Automate → Measure → Improve
 - `/about` — Company

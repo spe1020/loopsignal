@@ -39,13 +39,29 @@ export function ProjectHeader({ stage, onFacilitate }: { stage: Stage; onFacilit
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   async function onDuplicate() {
-    await flush();
-    const copy = duplicateInvestigation(inv, nextRcaNumber());
-    await saveInvestigation(copy);
-    toast.show(`Duplicated as ${copy.rcaNumber}.`);
-    router.push(`/solve/${copy.id}/problem`);
+    const result = await flush();
+    if (!result.ok) {
+      toast.show("Duplicate paused. Save or export your current edits before leaving.", { tone: "red" });
+      return;
+    }
+    try {
+      const copy = duplicateInvestigation(result.doc, nextRcaNumber());
+      const receipt = await saveInvestigation(copy);
+      if (!receipt.durable) {
+        toast.show("Duplicate is only in temporary memory. Export your current document before leaving.", { tone: "red" });
+        return;
+      }
+      // Keep edits made while the copy was saving on the original document too.
+      if (!(await flush()).ok) {
+        toast.show("Duplicate saved, but navigation paused because newer edits are unsaved. Retry save or export them.", { tone: "red" });
+        return;
+      }
+      toast.show(`Duplicated as ${copy.rcaNumber}.`);
+      router.push(`/solve/${copy.id}/problem`);
+    } catch {
+      toast.show("Could not save the duplicate. Your current document is still open; retry or export it.", { tone: "red" });
+    }
   }
-
   function onExport() {
     downloadText(exportFilename(inv), serialize(inv));
     trackSolve("loopsolve_export", { stage, causes: inv.causes.length });

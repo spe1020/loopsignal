@@ -1,3 +1,4 @@
+import { normalizeClosure } from "./status";
 import { createDocumentStore, nextSequenceNumber } from "@/lib/loop/storage";
 import type { Investigation } from "./schema";
 import { InvestigationSchema } from "./schema";
@@ -10,7 +11,7 @@ const store = createDocumentStore<Investigation>({
   lsPrefix: "loopsolve:inv:",
   parse(raw) {
     const r = InvestigationSchema.safeParse(raw);
-    return r.success ? r.data : undefined;
+    return r.success ? normalizeClosure(r.data) : undefined;
   },
 });
 

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useStorageFeedback } from "@/components/loop/StorageFeedback";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { trackSolve } from "@/lib/solve/analytics";
@@ -16,6 +17,7 @@ import { useToast } from "@/components/loop/Toast";
 import { SolveButton } from "@/components/loop/ui";
 
 export function SolveHome() {
+  const { run, feedback } = useStorageFeedback();
   const router = useRouter();
   const toast = useToast();
   const [items, setItems] = useState<RecentItem[] | null>(null);
@@ -27,13 +29,14 @@ export function SolveHome() {
 
   useEffect(() => {
     let cancelled = false;
-    listRecent().then((list) => {
+    void run(async () => {
+      const list = await listRecent();
       if (!cancelled) setItems(list);
     });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [run]);
 
   async function onNew() {
     const inv = createInvestigation({ rcaNumber: nextRcaNumber() });
@@ -88,6 +91,7 @@ export function SolveHome() {
 
   return (
     <div className="loop-root">
+      {feedback}
       <section className="border-b border-line bg-cream">
         <div className="mx-auto grid max-w-[1120px] gap-10 px-6 py-14 md:grid-cols-12 md:py-20 lg:px-8">
           <div className="md:col-span-7">
@@ -100,16 +104,16 @@ export function SolveHome() {
               effectiveness verification in one workspace — so the fix is proven, not assumed.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <SolveButton variant="primary" size="lg" onClick={onNew} icon={<IconPlus size={16} />}>
+              <SolveButton variant="primary" size="lg" onClick={() => void run(onNew)} icon={<IconPlus size={16} />}>
                 New Investigation
               </SolveButton>
-              <SolveButton size="lg" onClick={onSample}>
+              <SolveButton size="lg" onClick={() => void run(onSample)}>
                 Explore Sample Investigation
               </SolveButton>
             </div>
             <p className="mt-6 flex items-start gap-2 text-[13px] leading-5 text-stone">
               <LoopGlyph className="mt-0.5 h-3.5 w-7" />
-              Free. Runs in your browser. Nothing leaves your device. Export important investigations for backup.
+              Individual browser-local tool. Investigation content is not uploaded. Export important investigations for backup.
             </p>
           </div>
           <div className="hidden md:col-span-5 md:block">
@@ -133,7 +137,7 @@ export function SolveHome() {
               className="sr-only"
               onChange={(e) => {
                 const f = e.target.files?.[0];
-                if (f) void onImportFile(f);
+                if (f) void run(() => onImportFile(f));
                 e.target.value = "";
               }}
             />
@@ -149,17 +153,17 @@ export function SolveHome() {
           <div className="mt-8 flex flex-col items-center gap-5 rounded-[3px] border border-dashed border-ink/20 bg-cream px-6 py-14 text-center">
             <LoopGlyph className="h-10 w-20" animated />
             <p className="max-w-md text-[15px] leading-7 text-graphite">
-              No investigations yet. Start with a real problem, or open the sample to see a completed loop.
+              No investigations yet. Start with a real problem, or open the sample to explore an investigation still needing verification.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              <SolveButton variant="primary" onClick={onNew} icon={<IconPlus size={16} />}>
+              <SolveButton variant="primary" onClick={() => void run(onNew)} icon={<IconPlus size={16} />}>
                 New Investigation
               </SolveButton>
-              <SolveButton onClick={onSample}>Explore Sample Investigation</SolveButton>
+              <SolveButton onClick={() => void run(onSample)}>Explore Sample Investigation</SolveButton>
             </div>
           </div>
         ) : (
-          <RecentList items={items} onDuplicate={onDuplicate} onExport={onExport} onDelete={onDelete} />
+          <RecentList items={items} onDuplicate={(item) => run(() => onDuplicate(item))} onExport={onExport} onDelete={(item) => run(() => onDelete(item))} />
         )}
       </section>
 

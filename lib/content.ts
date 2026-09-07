@@ -1,12 +1,7 @@
 export const nav = [
-  { href: "/", label: "Home" },
-  { href: "/solutions", label: "Solutions" },
-  { href: "/services", label: "Services" },
-  { href: "/loopscan", label: "LoopScan" },
-  { href: "/demo", label: "Demo" },
-  { href: "/how-it-works", label: "How It Works" },
+  { href: "/workspace", label: "Live example" },
+  { href: "/solve", label: "Local tools" },
   { href: "/about", label: "About" },
-  { href: "/insights", label: "Insights" },
 ] as const;
 
 /** The one site-wide call to action. Opens the LoopScan contact form. */

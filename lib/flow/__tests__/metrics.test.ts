@@ -31,7 +31,7 @@ describe("metrics", () => {
     expect(m.touchTimeMin).toBe(10 + 5 + 20);
     expect(m.waitTimeMin).toBe(60 + 30 + 120);
     expect(m.leadTimeMin).toBe(245);
-    expect(m.pce).toBeCloseTo(35 / 245);
+    expect(m.pce).toBeCloseTo(10 / 245);
     expect(m.value.va.min).toBe(10);
     expect(m.value.nnva.min).toBe(5);
     // nva: step Two 20 + wait step 120 + queue time 90

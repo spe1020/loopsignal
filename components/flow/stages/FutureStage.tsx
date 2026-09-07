@@ -93,6 +93,7 @@ export function FutureStage() {
       </div>
       {findings.length ? <div className="mt-3"><Coaching items={findings.map((f) => f.message)} /></div> : null}
 
+      <p className="mt-5 text-[12px] text-graphite">Recorded-time comparison. Efficiency is value-added time ÷ lead time. Future times are proposals; missing times are excluded. Review estimates and value classifications before treating a difference as a verified result.</p>
       <Card className="mt-6 overflow-x-auto">
         <table className="w-full text-left text-[13px]">
           <thead className="border-b border-line bg-paper text-[10.5px] font-medium uppercase tracking-[0.14em] text-stone">

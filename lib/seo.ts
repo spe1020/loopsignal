@@ -39,9 +39,9 @@ type RouteMeta = {
 export const routeMeta = {
   home: {
     path: "/",
-    title: `${company.name} — ${company.tagline}`,
+    title: "LoopSignal — Manufacturing problem-solving software",
     description:
-      "LoopSignal helps manufacturers improve processes, connect disconnected systems, and automate the work that should not require manual effort.",
+      "Turn daily problems into improvements that last. Explore a manufacturing investigation with connected evidence, actions, verification, and lessons.",
     absoluteTitle: true,
   },
   solutions: {
@@ -223,7 +223,7 @@ export function pageMeta({
 }
 
 export function routePageMeta(
-  route: (typeof routeMeta)[keyof typeof routeMeta],
+  route: RouteMeta,
 ): Metadata {
   return pageMeta(route);
 }

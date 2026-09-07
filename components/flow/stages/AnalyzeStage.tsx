@@ -66,6 +66,7 @@ export function AnalyzeStage() {
 
   return (
     <div>
+      <p className="mb-4 text-[13px] text-graphite">Recorded-time totals: {metrics.unknownTimeStepIds.length} unknown step times and {metrics.estimatedTimeStepIds.length} estimated step times. Missing times are excluded; efficiency remains provisional until times and value classifications are confirmed.</p>
       <SectionTitle eyebrow="Analyze" title="Where the time and the handoffs are.">
         No math on your side. Lead time is what the customer waits; touch time is what people actually do. Every row jumps to its step.
       </SectionTitle>
@@ -73,7 +74,7 @@ export function AnalyzeStage() {
       <div className="mt-6 grid gap-3 sm:grid-cols-3">
         <Big label="Lead time" value={formatMinutes(metrics.leadTimeMin)} hint="start to end" />
         <Big label="Touch time" value={formatMinutes(metrics.touchTimeMin)} hint="hands-on work" />
-        <Big label="Process cycle efficiency" value={metrics.pce === null ? "—" : `${(metrics.pce * 100).toFixed(1)}%`} hint="touch ÷ lead" tone={metrics.pce !== null && metrics.pce < 0.05 ? "amber" : undefined} />
+        <Big label="Process cycle efficiency" value={metrics.pce === null ? "—" : `${(metrics.pce * 100).toFixed(1)}%`} hint="value-added ÷ lead · recorded times" tone={metrics.pce !== null && metrics.pce < 0.05 ? "amber" : undefined} />
       </div>
       <Card className="mt-3 p-4">
         <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-graphite">Time ladder</p>

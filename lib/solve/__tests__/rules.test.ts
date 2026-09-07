@@ -7,10 +7,10 @@ import { jaccard } from "../text";
 describe("hard rules", () => {
   it("the sample cannot close until the monitoring verification is resolved", () => {
     const inv = buildSample("RCA-2026-001");
-    // sample: act1 effective, act2 monitoring → monitoring is allowed (≠ not_effective)
+    // Historical sample must not earn closure while required proof is incomplete.
     const hard = hardFindings(inv);
-    expect(hard.map((f) => f.code)).toEqual([]);
-    expect(canClose(inv)).toBe(true);
+    expect(hard.map((f) => f.code)).toContain("action_unverified");
+    expect(canClose(inv)).toBe(false);
   });
 
   it("blocks when a root has no supporting evidence or an action is unverified", () => {

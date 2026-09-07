@@ -67,9 +67,9 @@ export function reportMarkdown(map: ProcessMap, opts: { investigationStatus?: (i
   L.push(`- Lead time: ${formatMinutes(m.leadTimeMin)}`);
   L.push(`- Touch time: ${formatMinutes(m.touchTimeMin)}`);
   L.push(`- Waiting: ${formatMinutes(m.waitTimeMin)}`);
-  L.push(`- Process cycle efficiency: ${m.pce === null ? "—" : `${(m.pce * 100).toFixed(1)}%`}`);
+  L.push(`- Process cycle efficiency (value-added ÷ lead; recorded times): ${m.pce === null ? "—" : `${(m.pce * 100).toFixed(1)}%`}`);
   L.push(`- Value-adding ${formatMinutes(m.value.va.min)} · Necessary non-value ${formatMinutes(m.value.nnva.min)} · Non-value ${formatMinutes(m.value.nva.min)}`);
-  L.push(`- Handoffs: ${m.handoffCount} · Rework loops: ${m.reworkLoops.length} · Steps with unknown time: ${m.unknownTimeStepIds.length}`);
+  L.push(`- Handoffs: ${m.handoffCount} · Rework loops: ${m.reworkLoops.length} · Estimated step times: ${m.estimatedTimeStepIds.length} · Steps with unknown time: ${m.unknownTimeStepIds.length}`);
   L.push("");
   L.push(h("waits"));
   const waits = orderedSteps(cur).filter((s) => (s.waitBeforeMin ?? 0) > 0).sort((a, b) => (b.waitBeforeMin ?? 0) - (a.waitBeforeMin ?? 0)).slice(0, 5);

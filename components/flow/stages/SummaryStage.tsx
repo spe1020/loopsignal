@@ -139,10 +139,10 @@ export function SummaryStage() {
               <dt className="text-graphite">Lead time</dt><dd className="font-mono">{formatMinutes(m.leadTimeMin)}</dd>
               <dt className="text-graphite">Touch time</dt><dd className="font-mono">{formatMinutes(m.touchTimeMin)}</dd>
               <dt className="text-graphite">Waiting</dt><dd className="font-mono">{formatMinutes(m.waitTimeMin)}</dd>
-              <dt className="text-graphite">Process cycle efficiency</dt><dd className="font-mono">{m.pce === null ? "—" : `${(m.pce * 100).toFixed(1)}%`}</dd>
+              <dt className="text-graphite">Process cycle efficiency (value-added ÷ lead; recorded times)</dt><dd className="font-mono">{m.pce === null ? "—" : `${(m.pce * 100).toFixed(1)}%`}</dd>
               <dt className="text-graphite">Value split</dt><dd>{(["va", "nnva", "nva"] as const).map((k) => `${valueClassMeta[k].short} ${formatMinutes(m.value[k].min)}`).join(" · ")}</dd>
               <dt className="text-graphite">Handoffs · rework loops</dt><dd className="font-mono">{m.handoffCount} · {m.reworkLoops.length}</dd>
-              <dt className="text-graphite">Steps with unknown time</dt><dd className="font-mono">{m.unknownTimeStepIds.length} of {m.stepCount}</dd>
+              <dt className="text-graphite">Estimated step times: {m.estimatedTimeStepIds.length}. Steps with unknown time</dt><dd className="font-mono">{m.unknownTimeStepIds.length} of {m.stepCount}</dd>
             </dl>
           </Section>
           <Section id="waits" title={label("waits")}>
