@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode } from "react";
-import { createDocumentContext } from "@/components/loop/DocumentProvider";
+import { createDocumentContext, type FlushResult } from "@/components/loop/DocumentProvider";
 import { reduce, type FlowAction } from "@/lib/flow/reducer";
 import type { ProcessMap } from "@/lib/flow/schema";
 import { loadMap, saveMap, storageKind } from "@/lib/flow/storage";
@@ -13,7 +13,7 @@ type Ctx = {
   restore: (map: ProcessMap) => void;
   savedAt: string | null;
   saving: boolean;
-  flush: () => Promise<void>;
+  flush: () => Promise<FlushResult<ProcessMap>>;
 };
 
 const ctx = createDocumentContext<ProcessMap, FlowAction>({

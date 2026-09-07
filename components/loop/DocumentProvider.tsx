@@ -15,6 +15,9 @@ import type { BackendKind, SaveReceipt } from "@/lib/loop/storage";
 import { createSaveQueue } from "@/lib/loop/saveQueue";
 import { downloadText } from "@/lib/loop/download";
 
+/** Success means this exact current snapshot is durable. Failures remain recoverable in the editor. */
+export type FlushResult<T> = { ok: true; doc: T } | { ok: false };
+
 export type DocumentApi<T, A> = {
   doc: T;
   dispatch: (action: A) => void;
@@ -24,7 +27,7 @@ export type DocumentApi<T, A> = {
   dirty: boolean;
   saveError: string | null;
   storageKind: BackendKind | null;
-  flush: () => Promise<void>;
+  flush: () => Promise<FlushResult<T>>;
 };
 export type DocumentContextConfig<
   T extends { id: string; updatedAt: string },
@@ -129,10 +132,11 @@ export function createDocumentContext<
       };
     }, [id, retry]);
 
-    const persist = useCallback(async () => {
+    const persist = useCallback(async (): Promise<FlushResult<T>> => {
       if (inFlight.current) await inFlight.current;
       const current = latest.current;
-      if (!current.doc || !current.dirty) return;
+      if (!current.doc) return { ok: false };
+      if (!current.dirty) return { ok: true, doc: current.doc };
       const doc = current.doc;
       const job = (async () => {
         setSaving(true);
@@ -163,6 +167,11 @@ export function createDocumentContext<
       inFlight.current = job;
       await job;
       if (inFlight.current === job) inFlight.current = null;
+      // An older successful write must not let navigation discard an edit made while it was pending.
+      const settled = latest.current;
+      return settled.doc && !settled.dirty
+        ? { ok: true, doc: settled.doc }
+        : { ok: false };
     }, []);
     useEffect(() => {
       if (!state.dirty || phase !== "ready") return;
@@ -210,8 +219,8 @@ export function createDocumentContext<
           return;
         event.preventDefault();
         event.stopPropagation();
-        void persist().then(() => {
-          if (!latest.current.dirty) window.location.assign(destination.href);
+        void persist().then((result) => {
+          if (result.ok && !latest.current.dirty) window.location.assign(destination.href);
           else setPendingDestination(destination.href);
         });
       };

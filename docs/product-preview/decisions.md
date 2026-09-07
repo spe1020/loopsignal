@@ -44,3 +44,9 @@ LoopKnow and LoopSource were inspected but kept out of the promoted journey. The
 ## Explicit review follow-up
 
 See [review semantics and material-field policy](reviews.md) for the PR #26 correction. Approval now binds to a retained dependency snapshot and reopening event identity. Generic verification edits never establish approval. The same reducer command serves the guided demo and the ordinary VerificationPanel.
+
+## Durable flush and Duplicate
+
+The shared document provider returns `{ ok: true, doc }` from `flush()` only when the current snapshot is durably saved (or is already clean). It returns `{ ok: false }` for failed writes, temporary memory, or a newer edit still pending after a save. Autosave and the Save now button can ignore the result because they stay in the document and retain the provider's retry/export feedback. Navigation callers must inspect it.
+
+LoopSolve and LoopFlow Duplicate both require flush success before creating a copy, use the returned saved snapshot, check the copy's durable receipt and flush any edits made to the original while the copy saved before navigating. A failed copy write is caught and reported with the original still open. A late source-write failure can leave an already-saved copy in the list, but navigation stays paused so the newer original edits remain recoverable. Duplication still creates a point-in-time copy; edits made during the copy write belong to the original.

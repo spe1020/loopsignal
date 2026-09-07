@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode } from "react";
-import { createDocumentContext } from "@/components/loop/DocumentProvider";
+import { createDocumentContext, type FlushResult } from "@/components/loop/DocumentProvider";
 import { reduce, type SolveAction } from "@/lib/solve/reducer";
 import type { Investigation } from "@/lib/solve/schema";
 import { loadInvestigation, saveInvestigation, storageKind } from "@/lib/solve/storage";
@@ -13,7 +13,7 @@ type Ctx = {
   restore: (inv: Investigation) => void;
   savedAt: string | null;
   saving: boolean;
-  flush: () => Promise<void>;
+  flush: () => Promise<FlushResult<Investigation>>;
 };
 
 const ctx = createDocumentContext<Investigation, SolveAction>({

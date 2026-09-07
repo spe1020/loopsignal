@@ -6,15 +6,15 @@ Validated locally on 7 September 2026, including the PR #26 corrective follow-up
 | --- | --- |
 | `npm run typecheck` | Passed |
 | `npm run lint` | Passed |
-| `npm test -- --reporter=dot` | 86 tests passed in 14 files |
+| `npm test -- --reporter=dot` | 88 tests passed in 14 files |
 | `npm run build` | Passed; 37 static pages generated; existing dynamic routes retained |
-| Chromium interaction regressions at 375×812, 768×1024, 1440×900 | 46 passed; 2 intentional skips for a mobile-only stopwatch test at larger widths |
+| Chromium interaction regressions at 375×812, 768×1024, 1440×900 | 73 passed; 2 intentional skips for a mobile-only stopwatch test at larger widths |
 | `git diff --check` | Passed |
 
 Browser command:
 
 ```sh
-npm run test:e2e -- e2e/verification-reviews.spec.ts e2e/product-preview.spec.ts e2e/loopsolve.spec.ts e2e/loopflow.spec.ts --project=mobile-375 --project=tablet-768 --project=desktop-1440 --workers=2
+PORT=3000 npm run test:e2e -- e2e/duplicate-persistence.spec.ts e2e/verification-reviews.spec.ts e2e/product-preview.spec.ts e2e/loopsolve.spec.ts e2e/loopflow.spec.ts --project=mobile-375 --project=tablet-768 --project=desktop-1440 --workers=2
 ```
 
 ## PR #26 review reproductions and corrections
@@ -30,6 +30,17 @@ The permanent regression tests now assert the corrected behavior. Explicit appro
 The ordinary LoopSolve browser tests import synthetic investigations, approve and close through the real VerificationPanel, edit nonempty evidence through the EvidencePanel, prove a name edit cannot re-close, deliberately re-review the original observations, materially edit scope through the ActionPanel, reload, and export the preserved review history. Separate browser checks display every reproduced blocker, open its relevant editor and resolve it. A component regression supplies an unknown future finding code to prove it remains visible.
 
 The [review field policy](reviews.md) documents exactly what invalidates approval and the browser-local trust boundary. The homepage/design and future hosted milestone remain unchanged. No merge, deployment or Prompt 2 work was performed.
+
+## Copilot review follow-up
+
+Both comments on head `4bed692` were checked against the actual code:
+
+- [Review blocker scoping](https://github.com/spe1020/loopsignal/pull/26#discussion_r3949839976): a regression reproduced three blockers belonging to another unfinished required action. The current action can now be approved independently. Unit and browser checks retain the other action's blockers for closure, refuse its own premature approval, retain the first review as the second action is completed, and preserve shared root/containment checks.
+- [Flush durability](https://github.com/spe1020/loopsignal/pull/26#discussion_r3949839905): the LoopSolve browser reproduction allowed a duplicate/navigation after the source-only quota failure; the same unguarded call existed in LoopFlow. `flush()` now returns success with the confirmed current snapshot or explicit failure. Both Duplicate callers inspect that result, catch copy-write failures, check copy durability, and preserve subsequent source edits before navigating.
+
+The new browser suite exercises both tools: failed source saves leave the original and sequence unchanged, recovery export contains unsaved edits, retry allows a durable duplicate that survives reload, memory never authorizes navigation, and a failed copy write produces feedback without an unhandled rejection. Delayed IndexedDB acknowledgements prove that a pending flush includes newer source edits in the copy and that edits made while the copy itself saves survive on the original. The original save/recovery and demo-isolation suites also passed again.
+
+The final run reused the existing development server on port 3000 without stopping it. The initial attempt on the default 3117 port could not start because that server was already running; the command above records the actual successful run. No production or hosted changes were made. Existing screenshots were retained; this follow-up changes workflow guards and feedback, without a design change.
 
 ## What the tests establish
 
