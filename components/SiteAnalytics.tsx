@@ -21,12 +21,23 @@ export function SiteAnalytics() {
     <>
       <AttributionCapture />
       <Analytics
-        beforeSend={(event) => new URL(event.url).pathname.startsWith("/company") ? null : ({
-          ...event,
-          url: stripQuery(event.url),
-        })}
+        beforeSend={(event) =>
+          new URL(event.url).pathname.startsWith("/company")
+            ? null
+            : {
+                ...event,
+                url: stripQuery(event.url),
+              }
+        }
       />
-      <SpeedInsights />
+      <SpeedInsights
+        beforeSend={(event) =>
+          typeof window !== "undefined" &&
+          window.location.pathname.startsWith("/company")
+            ? null
+            : { ...event, url: stripQuery(event.url) }
+        }
+      />
     </>
   );
 }

@@ -9,7 +9,12 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "typecheck": "tsc --noEmit -p ."
+    "typecheck": "tsc --noEmit -p .",
+    "company:db:test": "bash scripts/company/test-local.sh",
+    "company:seed": "tsx scripts/company/seed.ts",
+    "company:backup": "tsx scripts/company/recovery.ts backup",
+    "company:maintenance": "tsx scripts/company/maintenance.ts",
+    "company:local": "supabase start"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.6",
@@ -34,10 +39,13 @@
     "@types/nodemailer": "^8.0.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/smtp-server": "^3.5.13",
     "eslint": "^9",
     "eslint-config-next": "16.3.0",
     "fake-indexeddb": "^6.2.5",
     "prettier": "^3.9.6",
+    "smtp-server": "^3.19.9",
+    "supabase": "^2.116.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.13",
     "typescript": "^5",

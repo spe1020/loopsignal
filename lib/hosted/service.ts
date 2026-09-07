@@ -7,6 +7,7 @@ import {
   invalidateHosted,
 } from "./domain";
 import { graph } from "./graph";
+import { hostSnapshot } from "./domain-view";
 import {
   administrator,
   canWrite,
@@ -58,10 +59,13 @@ export async function loadRecord(
   org: string,
   id: string,
   lock = false,
+  includeDeleted = false,
 ): Promise<RecordEnvelope> {
-  const rows = lock
-    ? await sql`select * from company.investigations where org_id=${org} and id=${id} and deleted_at is null for update`
-    : await sql`select * from company.investigations where org_id=${org} and id=${id} and deleted_at is null`;
+  const rows = includeDeleted
+    ? await sql`select * from company.investigations where org_id=${org} and id=${id}`
+    : lock
+      ? await sql`select * from company.investigations where org_id=${org} and id=${id} and deleted_at is null for update`
+      : await sql`select * from company.investigations where org_id=${org} and id=${id} and deleted_at is null`;
   ensure(rows[0], "Investigation unavailable", 404);
   const row = rows[0] as RecordEnvelope;
   row.attachments = await filesFor(sql, org, id);
@@ -118,7 +122,7 @@ export async function audit(
   correlationId = commandId,
   events: unknown[] = [],
 ) {
-  await sql`insert into company.audit_events(id,org_id,actor,command_id,command,record_id,prior_revision,new_revision,events,correlation_id) values(${randomUUID()},${org},${actor.id},${commandId},${command},${record},${prior},${next},${JSON.stringify(events)}::text::jsonb,${correlationId})`;
+  await sql`insert into company.audit_events(id,org_id,actor,command_id,command,record_id,prior_revision,new_revision,events,correlation_id,provenance) values(${randomUUID()},${org},${command.startsWith("stripe_") ? null : actor.id},${commandId},${command},${record},${prior},${next},${JSON.stringify(events)}::text::jsonb,${correlationId},${JSON.stringify({ version: 1, transport: command.startsWith("stripe_") ? "stripe" : "web", kind: command.includes("import") ? "device_import" : "company_command" })}::text::jsonb)`;
 }
 export async function receipt(
   sql: Tx,
@@ -157,7 +161,14 @@ export async function execute(
   return transaction(actor, async (sql) => {
     const { member } = await access(sql, actor, cmd.organizationId, true);
     const r = await receipt(sql, actor, cmd.organizationId, cmd.commandId, cmd);
-    if (r.result) return loadRecord(sql, cmd.organizationId, r.result.id);
+    if (r.result)
+      return loadRecord(
+        sql,
+        cmd.organizationId,
+        r.result.id,
+        false,
+        cmd.command.type === "delete_record",
+      );
     let row: RecordEnvelope;
     if (cmd.command.type === "create_problem") {
       ensure(
@@ -198,7 +209,27 @@ export async function execute(
     ) {
       const { privateObjects } = await import("./files");
       const storage = objects ?? privateObjects();
-      for (const f of row.attachments.filter((f) => f.state === "ready")) {
+      const approvalCommand = cmd.command;
+      const verificationId =
+        approvalCommand.type === "approve_verification"
+          ? approvalCommand.id
+          : approvalCommand.type === "approve_lesson"
+            ? row.document.investigation.verificationReviews.find(
+                (review) => review.id === approvalCommand.reviewId,
+              )?.verificationId
+            : undefined;
+      const reviewedFileIds: string[] | undefined = verificationId
+        ? (
+            JSON.parse(
+              hostSnapshot(row.document, verificationId, row.attachments),
+            ).files as { id: string }[]
+          ).map((file) => file.id)
+        : undefined;
+      for (const f of row.attachments.filter(
+        (f) =>
+          f.state === "ready" &&
+          (!reviewedFileIds || reviewedFileIds.includes(f.id)),
+      )) {
         let bytes: Buffer;
         try {
           bytes = await storage.get(f.object_key);
@@ -216,6 +247,22 @@ export async function execute(
       }
     }
     const original = structuredClone(row.document);
+    if (cmd.command.type === "verify_sources") {
+      ensure(editor(member.role), "Full collaborator access required", 403);
+      const { privateObjects } = await import("./files");
+      const storage = objects ?? privateObjects();
+      for (const f of row.attachments.filter((f) => f.state === "ready")) {
+        let valid = false;
+        try {
+          valid = hash(await storage.get(f.object_key)) === f.checksum;
+        } catch {}
+        if (!valid) {
+          f.state = "missing";
+          await sql`update company.attachments set state='missing' where org_id=${row.org_id} and id=${f.id}`;
+        }
+      }
+      invalidateHosted(row.document, row.attachments);
+    }
     const prior = row.revision;
     const members = await sql<
       Member[]
@@ -242,6 +289,8 @@ export async function execute(
         cmd.correlationId,
         r.digest,
         "duplicate",
+        row.document,
+        row.attachments,
       );
     }
     if (cmd.command.type === "remove_attachment") {
@@ -282,14 +331,26 @@ export async function execute(
     return row;
   });
 }
-export async function companyState(actor: Actor, orgId?: string, query = "") {
+export async function companyState(
+  actor: Actor,
+  orgId?: string,
+  query = "",
+  offset = 0,
+) {
+  ensure(Number.isSafeInteger(offset) && offset >= 0, "Invalid record page");
   return transaction(actor, async (sql) => {
     const organizations =
       await sql`select o.*,m.role,m.reviewer from company.organizations o join company.memberships m on m.org_id=o.id and m.user_id=${actor.id} and m.revoked_at is null order by o.created_at`;
     if (!orgId) return { actor, organizations };
     const { org, member } = await access(sql, actor, orgId);
     const records =
-      await sql`select id,revision,document,team_id,org_id from company.investigations where org_id=${orgId} and deleted_at is null and (document->'investigation'->>'title' ilike ${"%" + query + "%"} or document->'investigation'->'problem'->>'whatHappened' ilike ${"%" + query + "%"}) order by updated_at desc limit 100`;
+      await sql`select id,revision,document,team_id,org_id from company.investigations where org_id=${orgId} and deleted_at is null and (document->'investigation'->>'title' ilike ${"%" + query + "%"} or document->'investigation'->'problem'->>'whatHappened' ilike ${"%" + query + "%"}) order by updated_at desc,id limit 101 offset ${offset}`;
+    const hasMore = records.length > 100;
+    if (hasMore) records.pop();
+    for (const record of records) {
+      const r = record as RecordEnvelope;
+      invalidateHosted(r.document, await filesFor(sql, orgId, r.id));
+    }
     const members =
       await sql`select * from company.memberships where org_id=${orgId}`;
     const invitations = administrator(member.role)
@@ -303,6 +364,7 @@ export async function companyState(actor: Actor, orgId?: string, query = "") {
       org,
       member,
       records,
+      recordPage: { query, nextOffset: hasMore ? offset + 100 : null },
       members,
       invitations,
       team: teams[0],
@@ -382,7 +444,7 @@ export async function changeMember(
       sql,
       actor,
       input.organizationId,
-      true,
+      false,
     );
     ensure(administrator(member.role), "Manager access required", 403);
     const r = await receipt(sql, actor, org.id, input.commandId, input);
@@ -391,6 +453,17 @@ export async function changeMember(
       Member[]
     >`select * from company.memberships where org_id=${org.id} and user_id=${input.userId}`;
     ensure(target, "Member unavailable", 404);
+    if (
+      !input.revoke &&
+      (target.revoked_at ||
+        input.role !== target.role ||
+        (input.reviewer && !target.reviewer))
+    )
+      ensure(
+        canWrite(org),
+        "New access grants require an active entitlement",
+        402,
+      );
     ensure(
       target.role !== "owner" ||
         (!input.revoke &&

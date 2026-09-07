@@ -1,7 +1,7 @@
 import { test, expect, type BrowserContext } from "@playwright/test";
 import postgres from "postgres";
 import { randomUUID } from "node:crypto";
-import { mkdir } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import {
   execute,
   createCompany,
@@ -11,6 +11,11 @@ import {
 } from "../lib/hosted/service";
 import { invite, acceptInvite } from "../lib/hosted/invitations";
 import type { Actor } from "../lib/hosted/types";
+import {
+  stageUpload,
+  finalizeUpload,
+  type ObjectStore,
+} from "../lib/hosted/files";
 // Real company UI and PostgreSQL commands. Auth/SMTP are deliberately substituted
 // ONLY in this Playwright fixture. This is not a Supabase Auth acceptance test.
 const databaseUrl = process.env.COMPANY_TEST_ADMIN_URL;
@@ -58,6 +63,23 @@ test("two browser sessions share authored company work, preserve a conflicted dr
       reducedMotion: "reduce",
     });
   let failNext = false;
+  let failUpload = false;
+  let delayRecord = false;
+  const storedBytes = new Map<string, Buffer>();
+  const store: ObjectStore = {
+    put: async (key, bytes) => {
+      if (storedBytes.has(key)) throw new Error("No overwrite");
+      storedBytes.set(key, bytes);
+    },
+    get: async (key) => {
+      const bytes = storedBytes.get(key);
+      if (!bytes) throw new Error("Missing source");
+      return bytes;
+    },
+    remove: async (key) => {
+      storedBytes.delete(key);
+    },
+  };
   let orgId = "";
   async function attach(context: BrowserContext, actor: Actor) {
     let signedIn = false;
@@ -65,7 +87,10 @@ test("two browser sessions share authored company work, preserve a conflicted dr
       const req = route.request(),
         url = new URL(req.url()),
         path = url.pathname.slice("/api/company/".length),
-        data = req.method() === "POST" ? req.postDataJSON() : null;
+        data =
+          req.method() === "POST" && path !== "upload/finalize"
+            ? req.postDataJSON()
+            : null;
       try {
         if (path === "auth/sign-in") {
           signedIn = true;
@@ -85,17 +110,20 @@ test("two browser sessions share authored company work, preserve a conflicted dr
             actor,
             url.searchParams.get("organizationId") ?? undefined,
             url.searchParams.get("q") ?? "",
+            Number(url.searchParams.get("offset") ?? 0),
           );
         else if (path === "organizations") {
           result = await createCompany(actor, data);
           orgId = (result as { id: string }).id;
-        } else if (path === "record")
+        } else if (path === "record") {
+          if (delayRecord)
+            await new Promise((resolve) => setTimeout(resolve, 400));
           result = await getRecord(
             actor,
             url.searchParams.get("organizationId")!,
             url.searchParams.get("recordId")!,
           );
-        else if (path === "members") result = await changeMember(actor, data);
+        } else if (path === "members") result = await changeMember(actor, data);
         else if (path === "invitations") result = await invite(actor, data);
         else if (path === "invitations/accept")
           result = await acceptInvite(actor, data.token);
@@ -106,7 +134,28 @@ test("two browser sessions share authored company work, preserve a conflicted dr
               "Synthetic backend outage. Your draft remains unsaved.",
             );
           }
-          result = await execute(actor, data);
+          result = await execute(actor, data, store);
+        } else if (path === "upload/stage")
+          result = await stageUpload(actor, data);
+        else if (path === "upload/finalize") {
+          if (failUpload) {
+            failUpload = false;
+            throw new Error("Synthetic upload outage");
+          }
+          result = await finalizeUpload(
+            actor,
+            {
+              organizationId: url.searchParams.get("organizationId")!,
+              recordId: url.searchParams.get("recordId")!,
+              attachmentId: url.searchParams.get("attachmentId")!,
+              commandId: url.searchParams.get("commandId")!,
+              expectedRevision: Number(
+                url.searchParams.get("expectedRevision"),
+              ),
+            },
+            req.postDataBuffer()!,
+            store,
+          );
         } else throw new Error(`Fixture does not implement ${path}`);
         await route.fulfill({ json: result });
       } catch (error) {
@@ -179,6 +228,19 @@ test("two browser sessions share authored company work, preserve a conflicted dr
       .getByLabel("What happened?", { exact: true })
       .fill("Setup produced a measurable shift at the fixture");
     await page.getByLabel("Where?", { exact: true }).fill("Press 4");
+    await page.getByRole("button", { name: "Actions", exact: true }).click();
+    await page.getByRole("button", { name: "Problems", exact: true }).click();
+    await expect(page.getByLabel("Short title", { exact: true })).toHaveValue(
+      "Locating fixture moves",
+    );
+    failNext = true;
+    await page.getByRole("button", { name: "Save first problem" }).click();
+    await expect(page.locator(".co-error[role=alert]")).toContainText(
+      "Synthetic backend outage",
+    );
+    await expect(
+      page.getByLabel("What happened?", { exact: true }),
+    ).toHaveValue("Setup produced a measurable shift at the fixture");
     await page.getByRole("button", { name: "Save first problem" }).click();
     await expect(
       page.getByRole("heading", {
@@ -200,6 +262,39 @@ test("two browser sessions share authored company work, preserve a conflicted dr
       .getByLabel("Source / reference")
       .fill("Synthetic measurement log Q4");
     await save();
+    const sourceBytes = Buffer.from("Synthetic sample,0.2,mm\n");
+    failUpload = true;
+    await page.getByLabel(/Attach private evidence/).setInputFiles({
+      name: "synthetic-source.csv",
+      mimeType: "text/csv",
+      buffer: sourceBytes,
+    });
+    await expect(page.locator(".co-error[role=alert]")).toContainText(
+      "Synthetic upload outage",
+    );
+    await page
+      .getByRole("button", { name: "Duplicate saved investigation" })
+      .click();
+    await expect(page.locator(".co-error[role=alert]")).toContainText(
+      "Finish the selected upload",
+    );
+    const recoveryDownload = page.waitForEvent("download");
+    await page
+      .getByRole("button", { name: "Export recovery", exact: true })
+      .click();
+    const download = await recoveryDownload;
+    const recovered = JSON.parse(
+      await readFile((await download.path())!, "utf8"),
+    );
+    expect(recovered.pendingFiles[0].base64).toBe(
+      sourceBytes.toString("base64"),
+    );
+    await page
+      .getByRole("button", { name: "Retry selected upload", exact: true })
+      .click();
+    await expect(
+      page.getByText("synthetic-source.csv · ready", { exact: true }),
+    ).toBeVisible();
     await page.getByRole("button", { name: "Causes", exact: true }).click();
     await page.getByRole("button", { name: "Add cause", exact: true }).click();
     await page
@@ -234,7 +329,11 @@ test("two browser sessions share authored company work, preserve a conflicted dr
       .getByRole("button", { name: "Reload shared records" })
       .click();
     await colleague
-      .getByRole("button", { name: /Locating fixture moves/ })
+      .getByRole("button", { name: "Actions", exact: true })
+      .click();
+    await colleague
+      .getByRole("button", { name: /Install a positive stop/ })
+      .first()
       .click();
     await colleague
       .getByRole("button", { name: "Actions", exact: true })
@@ -301,6 +400,16 @@ test("two browser sessions share authored company work, preserve a conflicted dr
     await expect(
       page.getByText("Approved learning", { exact: true }),
     ).toBeVisible();
+    await page
+      .getByRole("button", { name: "Inspect the supporting review" })
+      .click();
+    await expect(
+      page.getByRole("heading", { name: "Decision history" }),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Source versions and observations reviewed"),
+    ).toBeVisible();
+    await page.getByRole("button", { name: "Lessons", exact: true }).click();
     await mkdir("docs/company/screenshots", { recursive: true });
     await page.screenshot({
       path: `docs/company/screenshots/approved-lesson-${info.project.name}.png`,
@@ -317,7 +426,7 @@ test("two browser sessions share authored company work, preserve a conflicted dr
     await page
       .getByRole("button", { name: "Duplicate saved investigation" })
       .click();
-    await expect(page.getByRole("alert")).toContainText(
+    await expect(page.locator(".co-error[role=alert]")).toContainText(
       "Synthetic backend outage",
     );
     await expect(
@@ -338,9 +447,17 @@ test("two browser sessions share authored company work, preserve a conflicted dr
     await expect(
       page.getByRole("button", { name: "Load latest; keep my draft" }),
     ).toBeVisible();
+    delayRecord = true;
     await page
       .getByRole("button", { name: "Load latest; keep my draft" })
       .click();
+    await expect(
+      page.getByRole("button", { name: "Save changes", exact: true }),
+    ).toBeDisabled();
+    await expect(
+      page.getByRole("button", { name: "Load latest; keep my draft" }),
+    ).toHaveCount(0);
+    delayRecord = false;
     await expect(
       page.getByLabel("Observed impact", { exact: true }),
     ).toHaveValue("Unsaved recovery text");
@@ -353,6 +470,33 @@ test("two browser sessions share authored company work, preserve a conflicted dr
         Object.keys(localStorage).filter((k) => k.includes("company")),
       ),
     ).toEqual([]);
+    await page.getByRole("button", { name: "← Problems", exact: true }).click();
+    for (const billingState of [
+      "unentitled",
+      "pending",
+      "active",
+      "past_due",
+      "cancelled",
+    ]) {
+      await sql`update company.organizations set billing_state=${billingState},grace_ends_at=now()+interval '30 days' where id=${orgId}`;
+      await page.reload();
+      await page.getByRole("button", { name: "Billing", exact: true }).click();
+      await expect(
+        page.getByText("Current state:", { exact: false }),
+      ).toContainText(billingState);
+      if (billingState === "past_due") {
+        await expect(
+          page.getByRole("button", { name: "Open Stripe test checkout" }),
+        ).toHaveCount(0);
+        await expect(
+          page.getByText("This workspace is read-only.", { exact: false }),
+        ).toBeVisible();
+        await page.screenshot({
+          path: `docs/company/screenshots/billing-grace-${info.project.name}.png`,
+          fullPage: true,
+        });
+      }
+    }
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= window.innerWidth,

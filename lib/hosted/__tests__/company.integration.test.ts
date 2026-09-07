@@ -178,6 +178,16 @@ describeDb("actual PostgreSQL policies and company commands", () => {
     });
     expect(result).toHaveLength(0);
   });
+  it("accepts current PostgREST JSON claims for authorized reads and denies foreign claims", async () => {
+    const read = async (who: Actor) =>
+      admin.begin(async (tx) => {
+        await tx`set local role authenticated`;
+        await tx`select set_config('request.jwt.claims',${JSON.stringify({ sub: who.id, role: "authenticated" })},true)`;
+        return tx`select id from company.investigations where org_id=${org}`;
+      });
+    expect((await read(owner)).map((r) => r.id)).toContain(row.id);
+    expect(await read(outsider)).toHaveLength(0);
+  });
   it("denies direct forged writes, role escalation, audit modification and whole-document replacement", async () => {
     await expect(
       admin.begin(async (sql) => {
@@ -427,6 +437,45 @@ describeDb("actual PostgreSQL policies and company commands", () => {
     ).toBeDefined();
     await expect(send({ type: "close" })).rejects.toThrow();
   });
+  it("checks only this result's byte dependencies during per-action approval", async () => {
+    const evidenceId = row.document.investigation.evidence[1].id;
+    const bytes = Buffer.from("Unrelated sample\n");
+    const staged = await stageUpload(peer, {
+      organizationId: org,
+      recordId: row.id,
+      evidenceId,
+      expectedRevision: row.revision,
+      commandId: randomUUID(),
+      filename: "unrelated.txt",
+      mediaType: "text/plain",
+      size: bytes.length,
+    });
+    row = await finalizeUpload(
+      peer,
+      {
+        organizationId: org,
+        recordId: row.id,
+        attachmentId: staged.attachment!.id,
+        expectedRevision: staged.record.revision,
+        commandId: randomUUID(),
+      },
+      bytes,
+      store,
+    );
+    await store.remove(staged.attachment!.object_key);
+    await send({
+      type: "approve_verification",
+      id: row.document.investigation.verifications[0].id,
+      selfReviewAcknowledged: true,
+    });
+    expect(
+      currentReview(
+        row.document.investigation,
+        row.document.investigation.verifications[0],
+      ),
+    ).toBeDefined();
+    await send({ type: "remove_attachment", id: staged.attachment!.id });
+  });
   it("stages immutable bytes, verifies checksums, denies foreign access and binds file versions into approval", async () => {
     const source = row.document.investigation.evidence[0].id,
       bytes = Buffer.from("synthetic measurement,0.2,mm\n");
@@ -463,6 +512,18 @@ describeDb("actual PostgreSQL policies and company commands", () => {
     expect(
       (await downloadFile(peer, org, row.id, attachmentId, store)).bytes,
     ).toEqual(bytes);
+    const storedFile = row.attachments.find(
+      (file) => file.id === attachmentId,
+    )!;
+    await admin`insert into storage.objects(bucket_id,name) values('company-evidence',${storedFile.object_key})`;
+    const storageRead = (who: Actor) =>
+      admin.begin(async (tx) => {
+        await tx`set local role authenticated`;
+        await tx`select set_config('request.jwt.claims',${JSON.stringify({ sub: who.id, role: "authenticated" })},true)`;
+        return tx`select name from storage.objects where name=${storedFile.object_key}`;
+      });
+    expect(await storageRead(owner)).toHaveLength(1);
+    expect(await storageRead(outsider)).toHaveLength(0);
     await send({
       type: "approve_verification",
       id: row.document.investigation.verifications[0].id,
@@ -470,7 +531,7 @@ describeDb("actual PostgreSQL policies and company commands", () => {
     });
     const review = row.document.investigation.verificationReviews.at(-1)!;
     expect(row.document.reviewDependencies[review.id].snapshot).toContain(
-      row.attachments[0].checksum,
+      row.attachments.find((file) => file.id === attachmentId)!.checksum,
     );
     const bundle = await exportRecord(owner, org, row.id, store);
     expect(bundle.files[0].base64).toBe(bytes.toString("base64"));
@@ -505,9 +566,8 @@ describeDb("actual PostgreSQL policies and company commands", () => {
       [],
     );
     expect(restored.filesRestored).toBeGreaterThan(0);
-    expect(await restoredStore.get(row.attachments[0].object_key)).toEqual(
-      bytes,
-    );
+    const readyFile = row.attachments.find((file) => file.id === attachmentId)!;
+    expect(await restoredStore.get(readyFile.object_key)).toEqual(bytes);
     const restoredSql = postgres(restoreUrl.href, { max: 1 });
     try {
       const [recovered] =
@@ -530,6 +590,26 @@ describeDb("actual PostgreSQL policies and company commands", () => {
     } finally {
       await restoredSql.end();
     }
+    const deletedTarget =
+      "loopsignal_deleted_restore_" + randomUUID().replaceAll("-", "");
+    await admin.unsafe("create database " + deletedTarget);
+    const deletedUrl = new URL(process.env.COMPANY_TEST_ADMIN_URL!);
+    deletedUrl.pathname = "/" + deletedTarget;
+    const afterDeletion = await restore(
+      deletedUrl.href,
+      backupDir,
+      restoredStore,
+      [{ org_id: org, record_id: row.id }],
+    );
+    expect(afterDeletion.filesRestored).toBe(0);
+    const deletedSql = postgres(deletedUrl.href, { max: 1 });
+    try {
+      const [tombstone] =
+        await deletedSql`select deleted_at from company.investigations where org_id=${org} and id=${row.id}`;
+      expect(tombstone.deleted_at).toBeTruthy();
+    } finally {
+      await deletedSql.end();
+    }
     await mkdir("docs/company/evidence", { recursive: true });
     await writeFile(
       "docs/company/evidence/restore.json",
@@ -544,6 +624,7 @@ describeDb("actual PostgreSQL policies and company commands", () => {
             "exact review relationship",
             "foreign keys",
             "cross-company RLS denial after restore",
+            "newer deletion ledger suppresses old record and file restoration",
           ],
           providerStorageRestore: "not run: Supabase stack unavailable",
         },
@@ -552,6 +633,36 @@ describeDb("actual PostgreSQL policies and company commands", () => {
       ),
     );
 
+    const copied = await execute(
+      owner,
+      envelope(row, { type: "duplicate" }),
+      store,
+    );
+    expect(copied.document.observations).toHaveLength(
+      row.document.observations.length,
+    );
+    expect(copied.document.provenance?.missingFiles).toContain(
+      copied.document.investigation.evidence[0].id,
+    );
+    expect(copied.document.investigation.verificationReviews).toHaveLength(0);
+    await store.remove(readyFile.object_key);
+    await send({ type: "verify_sources" });
+    expect(
+      row.attachments.find((file) => file.id === attachmentId)!.state,
+    ).toBe("missing");
+    expect(
+      row.document.investigation.verificationReviews.find(
+        (r) => r.id === review.id,
+      )?.invalidatedAt,
+    ).toBeDefined();
+    await store.put(readyFile.object_key, bytes, "text/csv");
+    await expect(
+      send({
+        type: "approve_verification",
+        id: row.document.investigation.verifications[0].id,
+        selfReviewAcknowledged: true,
+      }),
+    ).rejects.toThrow();
     await send({ type: "remove_attachment", id: attachmentId });
     expect(
       row.document.investigation.verificationReviews.find(

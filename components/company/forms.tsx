@@ -53,7 +53,6 @@ export function Fields({ fields }: { fields: Field[] }) {
                   <input
                     aria-label={o.label}
                     type="checkbox"
-                    aria-label={f.label}
                     name={f.name}
                     value={o.value}
                     defaultChecked={
@@ -96,15 +95,18 @@ export function SimpleForm({
   fields,
   label,
   onSubmit,
+  onChange,
   children,
 }: {
   fields: Field[];
   label: string;
   onSubmit: (f: FormData) => Promise<void>;
+  onChange?: (f: FormData) => void;
   children?: ReactNode;
 }) {
   return (
     <form
+      onChange={(e) => onChange?.(new FormData(e.currentTarget))}
       onSubmit={async (e) => {
         e.preventDefault();
         const form = e.currentTarget;

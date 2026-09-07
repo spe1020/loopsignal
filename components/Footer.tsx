@@ -54,8 +54,7 @@ export function Footer() {
             </li>
           </ul>
           <p className="mt-6 text-xs leading-6 text-white/55">
-            Public examples use fictional data. Company workspaces and
-            subscriptions are planned.
+            Public examples use fictional data. Company workspaces are in synthetic evaluation; live subscriptions are not available.
           </p>
         </div>
       </div>

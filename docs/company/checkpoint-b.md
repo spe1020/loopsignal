@@ -1,0 +1,7 @@
+# Checkpoint B — test Team subscriptions
+
+One server-defined Team plan: USD 299/month as a pricing hypothesis, one site/team, 10 full collaborator seats, lightweight internal reporting/viewing/assigned-action participation. Base access includes authorization, private storage and recovery. Evaluation is 14 days with the same limits, no production bypass or unlimited-development entitlement.
+
+Implemented test-only checkout, portal, signed raw-body webhook verification, durable billing-operation registration, idempotent processing, current-provider reconciliation under the company lock, event replay/order handling, failed payment, cancellation, reactivation, and a 30-day read/export grace. Customer/price/subscription ownership is checked on the server. The checkout-return query has no entitlement authority. Operation attempts older than 23 hours stop for reconciliation rather than assuming provider idempotency keys last forever.
+
+Validation uses the actual Stripe SDK signature verifier, synthetic provider API responses and real PostgreSQL state. Live keys/events, foreign-company billing, unexpected price/quantity and stale-event reactivation are rejected. Concurrent checkout calls reuse the same open session. UI billing states are exercised in the two-session browser suite. No real Stripe test API/portal/CLI operation has run because no Stripe test credentials were supplied. That remains a paid-pilot blocker, separate from the passing local implementation tests.

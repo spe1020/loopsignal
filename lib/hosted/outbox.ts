@@ -17,7 +17,7 @@ export async function runOutbox(
       403,
     );
     const jobs =
-      await sql`select * from company.outbox where org_id=${orgId} and completed_at is null order by created_at for update skip locked limit 20`;
+      await sql`select * from company.outbox where org_id=${orgId} and completed_at is null order by attempts,created_at,id for update skip locked limit 20`;
     let complete = 0;
     for (const job of jobs) {
       const [initiator] =

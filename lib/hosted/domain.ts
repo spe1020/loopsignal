@@ -396,6 +396,7 @@ export function applyCommand(
     case "delete_record":
       ensure(administrator(member.role), "Manager access required", 403);
       break;
+    case "verify_sources":
     case "duplicate":
       break;
   }

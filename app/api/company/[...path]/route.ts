@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { checkout, portal, reconcile } from "@/lib/hosted/billing";
 import { siteUrl } from "@/lib/site";
 import { authenticated, authClient } from "@/lib/hosted/auth";
 import {
@@ -120,6 +121,8 @@ async function handle(req: Request, path: string[]) {
     const { data: user, error } = await auth.auth.getUser();
     ensure(!error && user.user, "Sign in first", 401);
     if (route === "auth/mfa-enroll") {
+      // Adding a factor cannot bypass a verified factor already on the account.
+      await authenticated();
       const result = await auth.auth.mfa.enroll({
         factorType: "totp",
         friendlyName: "LoopSignal authenticator",
@@ -148,6 +151,12 @@ async function handle(req: Request, path: string[]) {
             ? uuid.parse(url.searchParams.get("organizationId"))
             : undefined,
           (url.searchParams.get("q") ?? "").slice(0, 200),
+          z.coerce
+            .number()
+            .int()
+            .min(0)
+            .max(1000000)
+            .parse(url.searchParams.get("offset") ?? 0),
         ),
       );
     const org = uuid.parse(url.searchParams.get("organizationId")),
@@ -284,6 +293,20 @@ async function handle(req: Request, path: string[]) {
             .parse(input),
         ),
       );
+    if (route === "billing/checkout" || route === "billing/portal") {
+      const v = z.object(context).strict().parse(input);
+      return json(
+        await (route === "billing/checkout" ? checkout : portal)(
+          actor,
+          v.organizationId,
+          v.commandId,
+        ),
+      );
+    }
+    if (route === "billing/reconcile") {
+      const v = z.object({ organizationId: uuid }).strict().parse(input);
+      return json(await reconcile(actor, v.organizationId));
+    }
     if (route === "jobs") {
       const v = z.object({ organizationId: uuid }).strict().parse(input);
       return json(await runOutbox(actor, v.organizationId));

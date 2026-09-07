@@ -88,7 +88,7 @@ create table company.billing (
 );
 create table company.billing_events (id text primary key, org_id uuid not null references company.organizations, processed_at timestamptz not null default now(), event_type text not null);
 
-create function company.actor() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub', true),'')::uuid $$;
+create function company.actor() returns uuid language sql stable as $$ select coalesce(nullif(current_setting('request.jwt.claim.sub', true),''), nullif(current_setting('request.jwt.claims', true),'')::jsonb->>'sub')::uuid $$;
 create function company.member_role(o uuid) returns text language sql stable security definer set search_path='' as $$
  select role from company.memberships where org_id=o and user_id=company.actor() and revoked_at is null
 $$;

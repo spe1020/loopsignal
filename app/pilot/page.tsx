@@ -6,7 +6,7 @@ export const metadata: Metadata = routePageMeta({
   path: "/pilot",
   title: "Join the pilot",
   description:
-    "Discuss a LoopSignal manufacturing software pilot. Company accounts, shared storage, and subscriptions are planned; the browser preview is available today.",
+    "Discuss a LoopSignal manufacturing software pilot. Explore the public example or discuss the separate synthetic company evaluation. Live subscriptions are not available.",
 });
 export default function PilotPage() {
   return (
@@ -32,12 +32,10 @@ export default function PilotPage() {
             What’s available—and what’s next
           </h2>
           <p className="mt-3 text-sm leading-7 text-graphite">
-            Today: a fictional browser example and individual local tools. Next:
-            private company accounts, trusted shared storage, permissions,
-            recovery, and subscription access. These hosted capabilities are not
-            active yet.
+            The fictional browser example and individual local tools are available now. The separate company workspace is a synthetic evaluation with test-mode billing. Provider security, recovery, and billing checks must be completed before a paid pilot can hold real customer data.
           </p>
         </div>
+        <Link href="/company" className="product-link mt-8 mr-6 inline-block">Company test sign-in →</Link>
         <Link href="/workspace" className="product-link mt-8 inline-block">
           Explore the example first →
         </Link>

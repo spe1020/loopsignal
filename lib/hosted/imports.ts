@@ -15,6 +15,7 @@ import {
   editor,
   ensure,
   type Actor,
+  type Attachment,
   type HostedDocument,
   type Member,
   type RecordEnvelope,
@@ -126,6 +127,8 @@ export async function importDocument(
   correlationId: string,
   digest: string,
   kind: "device_import" | "duplicate" = "device_import",
+  hostedSource?: HostedDocument,
+  sourceFiles: Attachment[] = [],
 ) {
   const manifest = importManifest(raw);
   const members = await sql<
@@ -167,6 +170,8 @@ export async function importDocument(
     ...inv.timeline,
   ];
   const idMap = Object.fromEntries(all.map((e) => [e.id, randomUUID()]));
+  for (const observation of hostedSource?.observations ?? [])
+    idMap[observation.id] = randomUUID();
   const remap = (id: string) => idMap[id];
   for (const e of all) e.id = remap(e.id);
   inv.actions.forEach((a) => {
@@ -218,17 +223,32 @@ export async function importDocument(
   const doc: HostedDocument = {
     version: 1,
     investigation: inv,
-    observations: [],
+    observations: (hostedSource?.observations ?? []).map((o) => ({
+      ...o,
+      id: remap(o.id),
+      verificationId: remap(o.verificationId),
+      evidenceId: remap(o.evidenceId),
+    })),
     reviewDependencies: {},
     lessonDecisions: [],
     provenance: {
       kind,
-      checksum: manifest.checksum,
+      checksum: hostedSource
+        ? hash(JSON.stringify(hostedSource))
+        : manifest.checksum,
       originalId: manifest.originalId,
       schemaVersion: manifest.schemaVersion,
-      original: raw,
+      original: hostedSource ?? raw,
       idMap,
-      missingFiles: manifest.files.map((f) => remap(f.evidenceId)),
+      missingFiles: [
+        ...new Set([
+          ...manifest.files.map((f) => f.evidenceId),
+          ...sourceFiles
+            .filter((f) => f.state !== "deleted")
+            .map((f) => f.evidence_id),
+          ...(hostedSource?.provenance?.missingFiles ?? []),
+        ]),
+      ].map(remap),
     },
   };
   const [team] = await sql`select id from company.teams where org_id=${org}`;

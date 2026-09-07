@@ -27,23 +27,28 @@ function recovery(value: unknown, name = "loopsignal-recovery.json") {
 export { recovery };
 export function RecordEditor({
   initial,
+  initialSection = "problem",
   members,
   me,
+  readOnly,
   api,
   onBack,
   onRecord,
   onDuplicate,
 }: {
   initial: RecordEnvelope;
+  initialSection?: string;
   members: Member[];
   me: Member;
+  readOnly: boolean;
   api: Api;
   onBack: () => void;
   onRecord: (r: RecordEnvelope) => void;
   onDuplicate: (r: RecordEnvelope) => void;
 }) {
   const [row, setRow] = useState(initial),
-    [section, setSection] = useState("problem"),
+    [section, setSection] = useState(initialSection),
+    [sourceReview, setSourceReview] = useState<string | null>(null),
     [edit, setEdit] = useState<Editor | null>(null),
     [dirty, setDirty] = useState(false),
     [busy, setBusy] = useState(false),
@@ -81,8 +86,9 @@ export function RecordEditor({
       )
       .map((m) => ({ value: m.user_id, label: m.display_name })),
   ];
-  const canEdit = ["owner", "manager", "collaborator"].includes(me.role),
-    canEvidence = canEdit || me.role === "participant";
+  const canEdit =
+      !readOnly && ["owner", "manager", "collaborator"].includes(me.role),
+    canEvidence = canEdit || (!readOnly && me.role === "participant");
   const name = (id?: string) =>
     members.find((m) => m.user_id === id)?.display_name ?? id ?? "Unassigned";
   function update(r: RecordEnvelope) {
@@ -92,7 +98,7 @@ export function RecordEditor({
   }
   useEffect(() => {
     const fn = (e: BeforeUnloadEvent) => {
-      if (dirtyRef.current || busyRef.current) {
+      if (dirtyRef.current || busyRef.current || files.current.size) {
         e.preventDefault();
         e.returnValue = "";
       }
@@ -126,6 +132,7 @@ export function RecordEditor({
       update(next);
       pending.current = null;
       setSaved("Saved to company");
+      if (command.type === "delete_record") onBack();
       return next;
     } catch (e) {
       setError(e instanceof Error ? e.message : "Save failed");
@@ -137,7 +144,13 @@ export function RecordEditor({
       busyRef.current = false;
     }
   }
-  async function flush() {
+  async function flush(allowPendingFiles = false) {
+    if (!allowPendingFiles && files.current.size) {
+      setError(
+        "Finish the selected upload before leaving or duplicating. Retry it in Evidence, or export recovery with the selected bytes.",
+      );
+      return false;
+    }
     if (!dirtyRef.current) return !busyRef.current;
     if (!edit || !form.current || !form.current.reportValidity()) return false;
     const command = edit.command(new FormData(form.current));
@@ -625,7 +638,7 @@ export function RecordEditor({
     });
   }
   async function upload(evidenceId: string, file?: File) {
-    if (!(await flush())) return;
+    if (!(await flush(true))) return;
     if (file)
       files.current.set(evidenceId, {
         file,
@@ -671,6 +684,7 @@ export function RecordEditor({
       setSaved("File verified and saved to company");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Upload failed");
+      setConflict(e instanceof Error && e.message.includes("revision"));
       setSaved("Upload unfinished · selected bytes retained for retry");
     } finally {
       setBusy(false);
@@ -679,12 +693,16 @@ export function RecordEditor({
     }
   }
   async function reload() {
+    if (busyRef.current) return;
+    busyRef.current = true;
+    setBusy(true);
     try {
       const next = (await api(
         `record?organizationId=${row.org_id}&recordId=${row.id}`,
       )) as RecordEnvelope;
       update(next);
       setConflict(false);
+      setError("");
       setSaved(
         dirty
           ? "Latest company revision loaded · your draft is still unsaved"
@@ -693,6 +711,9 @@ export function RecordEditor({
       pending.current = null;
     } catch (e) {
       setError(String(e));
+    } finally {
+      busyRef.current = false;
+      setBusy(false);
     }
   }
   useEffect(() => {
@@ -703,7 +724,7 @@ export function RecordEditor({
       if (
         !a ||
         a.href.includes("/api/company/file?") ||
-        (!dirtyRef.current && !busyRef.current)
+        (!dirtyRef.current && !busyRef.current && !files.current.size)
       )
         return;
       event.preventDefault();
@@ -724,13 +745,33 @@ export function RecordEditor({
           {dirty ? "Unsaved draft" : saved} · revision {row.revision}
         </span>
         <button
-          onClick={() =>
+          onClick={async () =>
             recovery({
               format: "loopsignal-editor-recovery",
               saved: row,
+              editor: edit ? { key: edit.key, title: edit.title } : null,
               draft: form.current
-                ? Object.fromEntries(new FormData(form.current))
+                ? Array.from(new FormData(form.current).entries())
                 : null,
+              pendingFiles: await Promise.all(
+                Array.from(files.current, async ([evidenceId, pendingFile]) => {
+                  const bytes = new Uint8Array(
+                    await pendingFile.file.arrayBuffer(),
+                  );
+                  let binary = "";
+                  for (let i = 0; i < bytes.length; i += 8192)
+                    binary += String.fromCharCode(
+                      ...bytes.subarray(i, i + 8192),
+                    );
+                  return {
+                    evidenceId,
+                    filename: pendingFile.file.name,
+                    mediaType: pendingFile.file.type,
+                    attachmentId: pendingFile.attachmentId,
+                    base64: btoa(binary),
+                  };
+                }),
+              ),
             })
           }
         >
@@ -793,7 +834,9 @@ export function RecordEditor({
         <div role="alert" className="co-error">
           {error}
           {conflict && (
-            <button onClick={reload}>Load latest; keep my draft</button>
+            <button disabled={busy} onClick={reload}>
+              Load latest; keep my draft
+            </button>
           )}
         </div>
       )}
@@ -891,6 +934,11 @@ export function RecordEditor({
             <>
               <div className="co-toolbar">
                 <h2>Source evidence</h2>
+                {canEdit && (
+                  <button onClick={() => command({ type: "verify_sources" })}>
+                    Check stored source files
+                  </button>
+                )}
                 {canEvidence && (
                   <button onClick={() => evidence()}>Add evidence</button>
                 )}
@@ -933,7 +981,8 @@ export function RecordEditor({
                             Download source
                           </a>
                         )}
-                        {["owner", "manager"].includes(me.role) &&
+                        {!readOnly &&
+                          ["owner", "manager"].includes(me.role) &&
                           f.state !== "deleted" && (
                             <button
                               onClick={() =>
@@ -1079,7 +1128,9 @@ export function RecordEditor({
                     <button onClick={() => action(a.id)}>Edit action</button>
                   )}
                   {(canEdit ||
-                    (me.role === "participant" && a.owner === me.user_id)) && (
+                    (!readOnly &&
+                      me.role === "participant" &&
+                      a.owner === me.user_id)) && (
                     <label className="co-field">
                       Update action status
                       <select
@@ -1178,7 +1229,7 @@ export function RecordEditor({
                         </button>
                       </>
                     )}
-                    {me.reviewer && !review && (
+                    {me.reviewer && !readOnly && !review && (
                       <button
                         className="co-primary"
                         onClick={() =>
@@ -1246,13 +1297,23 @@ export function RecordEditor({
                     </p>
                     {l.sourceReviewId && (
                       <p className="co-muted">
-                        Supporting review: {l.sourceReviewId}
+                        <button
+                          onClick={() =>
+                            navigate(() => {
+                              setSourceReview(l.sourceReviewId!);
+                              setSection("history");
+                              setEdit(null);
+                            })
+                          }
+                        >
+                          Inspect the supporting review
+                        </button>
                       </p>
                     )}
                     {canEdit && (
                       <button onClick={() => lesson(l.id)}>Edit lesson</button>
                     )}
-                    {me.reviewer && (
+                    {me.reviewer && !readOnly && (
                       <button
                         onClick={() =>
                           open({
@@ -1298,7 +1359,10 @@ export function RecordEditor({
             <article className="co-card">
               <h2>Decision history</h2>
               {inv.verificationReviews.map((r) => (
-                <details key={r.id}>
+                <details
+                  key={r.id}
+                  open={sourceReview === r.id ? true : undefined}
+                >
                   <summary>
                     {r.invalidatedAt ? "Withdrawn" : "Recorded"} approval ·{" "}
                     {name(r.approvedBy)} · {r.approvedAt}
@@ -1308,6 +1372,16 @@ export function RecordEditor({
                     {r.reopenedEventId ?? "none"}
                   </p>
                   <pre>{r.snapshot}</pre>
+                  {row.document.reviewDependencies[r.id] && (
+                    <details>
+                      <summary>
+                        Source versions and observations reviewed
+                      </summary>
+                      <pre>
+                        {row.document.reviewDependencies[r.id].snapshot}
+                      </pre>
+                    </details>
+                  )}
                 </details>
               ))}
               {inv.history.map((h) => (
@@ -1348,7 +1422,7 @@ export function RecordEditor({
           ) : (
             <p>The current work satisfies closure requirements.</p>
           )}
-          {me.reviewer && inv.status !== "closed" && (
+          {me.reviewer && !readOnly && inv.status !== "closed" && (
             <button
               className="co-primary"
               disabled={busy || blockers.length > 0}
@@ -1390,7 +1464,7 @@ export function RecordEditor({
               Duplicate saved investigation
             </button>
           )}
-          {["owner", "manager"].includes(me.role) && (
+          {!readOnly && ["owner", "manager"].includes(me.role) && (
             <button
               onClick={() =>
                 open({

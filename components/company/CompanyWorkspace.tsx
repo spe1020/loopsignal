@@ -2,11 +2,12 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/Logo";
+import { canWrite } from "@/lib/hosted/types";
 import type { Actor, Member, Org, RecordEnvelope } from "@/lib/hosted/types";
 import { currentReview } from "@/lib/solve/reviews";
 import { InvestigationSchema } from "@/lib/solve/schema";
 import { SimpleForm, val, type Field } from "./forms";
-import { RecordEditor } from "./RecordEditor";
+import { RecordEditor, recovery } from "./RecordEditor";
 type State = {
   actor: Actor;
   organizations: (Org & { role: string })[];
@@ -14,6 +15,7 @@ type State = {
   member?: Member;
   members?: Member[];
   records?: RecordEnvelope[];
+  recordPage?: { query: string; nextOffset: number | null };
   invitations?: {
     id: string;
     email: string;
@@ -32,6 +34,7 @@ export function CompanyWorkspace() {
     [notice, setNotice] = useState(""),
     [mode, setMode] = useState("problems"),
     [record, setRecord] = useState<RecordEnvelope | null>(null),
+    [recordSection, setRecordSection] = useState("problem"),
     [signUp, setSignUp] = useState(false),
     [signedOut, setSignedOut] = useState(false),
     [inviteToken, setInviteToken] = useState(""),
@@ -49,6 +52,34 @@ export function CompanyWorkspace() {
     title: string;
     files: number;
   } | null>(null);
+  const [problemDrafts, setProblemDrafts] = useState<
+    Record<string, Record<string, string>>
+  >({});
+  const hasProblemDraft = Object.values(problemDrafts).some((draft) =>
+    Object.values(draft).some((value) => value.trim()),
+  );
+  useEffect(() => {
+    if (!hasProblemDraft) return;
+    const beforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    const click = (event: MouseEvent) => {
+      const link = (event.target as Element).closest?.("a[href]");
+      if (!link || link.getAttribute("href")?.startsWith("#")) return;
+      event.preventDefault();
+      event.stopPropagation();
+      setNotice(
+        "Your first-problem draft is unsaved. Return to Problems to save it, or export and discard the draft before leaving.",
+      );
+    };
+    window.addEventListener("beforeunload", beforeUnload);
+    document.addEventListener("click", click, true);
+    return () => {
+      window.removeEventListener("beforeunload", beforeUnload);
+      document.removeEventListener("click", click, true);
+    };
+  }, [hasProblemDraft]);
   const companyId = useRef<string | undefined>(undefined),
     keys = useRef(new Map<string, string>());
   const commandId = (key: string) => {
@@ -154,10 +185,7 @@ export function CompanyWorkspace() {
         `record?organizationId=${companyId.current}&recordId=${id}`,
       );
       setRecord(r);
-      if (section)
-        setNotice(
-          `Open ${section} in the investigation to work on this record.`,
-        );
+      setRecordSection(section?.toLowerCase() ?? "problem");
     });
   }
   useEffect(() => {
@@ -190,8 +218,12 @@ export function CompanyWorkspace() {
     me = state?.member,
     members = state?.members ?? [],
     records = state?.records ?? [];
-  const canEdit = me && ["owner", "manager", "collaborator"].includes(me.role),
-    canReport = canEdit || me?.role === "participant",
+  const canEdit =
+      org &&
+      canWrite(org) &&
+      me &&
+      ["owner", "manager", "collaborator"].includes(me.role),
+    canReport = canEdit || (org && canWrite(org) && me?.role === "participant"),
     isAdmin = me && ["owner", "manager"].includes(me.role);
   const planFields: Field[] = [
     { name: "name", label: "Company name", required: true },
@@ -213,6 +245,10 @@ export function CompanyWorkspace() {
           <button
             onClick={() =>
               run(async () => {
+                if (hasProblemDraft)
+                  throw new Error(
+                    "Save or explicitly discard your first-problem draft before signing out.",
+                  );
                 await api("auth/sign-out", {});
                 setState(null);
                 setSignedOut(true);
@@ -236,11 +272,14 @@ export function CompanyWorkspace() {
           <RecordEditor
             key={record.id}
             initial={record}
+            initialSection={recordSection}
             me={me}
+            readOnly={!org || !canWrite(org)}
             members={members}
             api={api}
             onBack={() => {
               setRecord(null);
+              setRecordSection("problem");
               void run(() => refresh());
             }}
             onRecord={(r) => {
@@ -255,7 +294,10 @@ export function CompanyWorkspace() {
                   : s,
               );
             }}
-            onDuplicate={(r) => setRecord(r)}
+            onDuplicate={(r) => {
+              setRecordSection("problem");
+              setRecord(r);
+            }}
           />
         ) : (
           <>
@@ -454,6 +496,13 @@ export function CompanyWorkspace() {
                         </label>
                       )}
                     </div>
+                    {!canWrite(org) && (
+                      <p className="co-notice">
+                        This workspace is read-only. Existing work is preserved.
+                        Authorized export is available during the 30-day grace
+                        period; a billing administrator can restore Team access.
+                      </p>
+                    )}
                     <nav className="co-tabs" aria-label="Company views">
                       {[
                         "problems",
@@ -468,12 +517,74 @@ export function CompanyWorkspace() {
                         <button
                           key={m}
                           aria-current={mode === m ? "page" : undefined}
-                          onClick={() => setMode(m)}
+                          onClick={() => {
+                            setMode(m);
+                            if (
+                              ["actions", "results", "lessons"].includes(m) &&
+                              state.recordPage?.query
+                            )
+                              void run(() => refresh());
+                          }}
                         >
                           {m[0].toUpperCase() + m.slice(1)}
                         </button>
                       ))}
                     </nav>
+                    {hasProblemDraft && (
+                      <div className="co-notice" role="status">
+                        Unsaved first-problem draft retained in this session.
+                        Return to Problems to save it.
+                        <button
+                          onClick={() =>
+                            recovery({
+                              format: "loopsignal-capture-recovery",
+                              draftsByCompany: problemDrafts,
+                            })
+                          }
+                        >
+                          Export first-problem recovery
+                        </button>
+                        <button
+                          onClick={() => {
+                            setProblemDrafts({});
+                            setNewProblem(false);
+                          }}
+                        >
+                          Discard first-problem drafts
+                        </button>
+                      </div>
+                    )}
+                    {["problems", "actions", "results", "lessons"].includes(
+                      mode,
+                    ) &&
+                      state.recordPage?.nextOffset !== null &&
+                      state.recordPage?.nextOffset !== undefined && (
+                        <div className="co-notice">
+                          Showing work from {records.length} investigations.
+                          Older investigations are available.
+                          <button
+                            disabled={busy}
+                            onClick={() =>
+                              run(async () => {
+                                const next = (await api(
+                                  `state?organizationId=${org.id}&q=${encodeURIComponent(state.recordPage?.query ?? "")}&offset=${state.recordPage!.nextOffset}`,
+                                )) as State;
+                                const merged = new Map(
+                                  records.map((r) => [r.id, r]),
+                                );
+                                for (const r of next.records ?? [])
+                                  merged.set(r.id, r);
+                                setState({
+                                  ...next,
+                                  records: [...merged.values()],
+                                });
+                              })
+                            }
+                          >
+                            Load older investigations
+                          </button>
+                        </div>
+                      )}
                     <fieldset disabled={busy}>
                       {mode === "problems" && (
                         <>
@@ -510,20 +621,38 @@ export function CompanyWorkspace() {
                             <section className="co-card">
                               <h2>Start with what happened</h2>
                               <SimpleForm
+                                key={org.id}
                                 label="Save first problem"
+                                onChange={(f) =>
+                                  setProblemDrafts((drafts) => ({
+                                    ...drafts,
+                                    [org.id]: Object.fromEntries(
+                                      Array.from(
+                                        f.entries(),
+                                        ([key, value]) => [key, String(value)],
+                                      ),
+                                    ),
+                                  }))
+                                }
                                 fields={[
                                   {
                                     name: "title",
                                     label: "Short title",
+                                    value: problemDrafts[org.id]?.title,
                                     required: true,
                                   },
                                   {
                                     name: "whatHappened",
                                     label: "What happened?",
+                                    value: problemDrafts[org.id]?.whatHappened,
                                     type: "textarea",
                                     required: true,
                                   },
-                                  { name: "where", label: "Where?" },
+                                  {
+                                    name: "where",
+                                    label: "Where?",
+                                    value: problemDrafts[org.id]?.where,
+                                  },
                                 ]}
                                 onSubmit={(f) =>
                                   run(async () => {
@@ -545,6 +674,11 @@ export function CompanyWorkspace() {
                                       command: { type: "create_problem", data },
                                     });
                                     setRecord(r);
+                                    setProblemDrafts((drafts) => {
+                                      const next = { ...drafts };
+                                      delete next[org.id];
+                                      return next;
+                                    });
                                     setNewProblem(false);
                                     await refresh();
                                   })
@@ -1061,22 +1195,31 @@ export function CompanyWorkspace() {
                           {me &&
                             ["owner", "billing_admin"].includes(me.role) && (
                               <>
-                                <button
-                                  className="co-primary"
-                                  onClick={() =>
-                                    run(async () => {
-                                      const r = await api("billing/checkout", {
-                                        organizationId: org.id,
-                                        commandId: commandId(
-                                          `checkout-${org.id}`,
-                                        ),
-                                      });
-                                      window.location.assign(r.url);
-                                    })
-                                  }
-                                >
-                                  Open Stripe test checkout
-                                </button>
+                                {!["active", "past_due"].includes(
+                                  org.billing_state,
+                                ) && (
+                                  <button
+                                    className="co-primary"
+                                    onClick={() =>
+                                      run(async () => {
+                                        const r = await api(
+                                          "billing/checkout",
+                                          {
+                                            organizationId: org.id,
+                                            commandId: commandId(
+                                              `checkout-${org.id}-${org.billing_state}`,
+                                            ),
+                                          },
+                                        );
+                                        window.location.assign(r.url);
+                                      })
+                                    }
+                                  >
+                                    {org.billing_state === "pending"
+                                      ? "Resume Stripe test checkout"
+                                      : "Open Stripe test checkout"}
+                                  </button>
+                                )}
                                 <button
                                   onClick={() =>
                                     run(async () => {

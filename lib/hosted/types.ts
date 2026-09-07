@@ -283,6 +283,7 @@ export const Command = z.discriminatedUnion("type", [
     .strict(),
   z.object({ type: z.literal("close") }).strict(),
   z.object({ type: z.literal("reopen"), note: textField.min(1) }).strict(),
+  z.object({ type: z.literal("verify_sources") }).strict(),
   z.object({ type: z.literal("duplicate") }).strict(),
   z
     .object({
