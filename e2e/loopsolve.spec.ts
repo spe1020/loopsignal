@@ -121,6 +121,7 @@ test("create an investigation and close the loop", async ({ page }) => {
   await page.getByRole("dialog").getByLabel("Verifier", { exact: true }).fill("Fictional quality reviewer");
   await page.getByRole("dialog").getByRole("checkbox", { name: /Locator pin measurement/ }).check();
   await page.getByRole("dialog").getByRole("radio", { name: "Effective", exact: true }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Approve effective verification" }).click();
   await openPanelDone(page);
   const closeBtn = page.getByRole("button", { name: "Close investigation" });
   await expect(closeBtn).toBeEnabled();

@@ -1,5 +1,8 @@
 "use client";
 
+import { currentReview } from "@/lib/solve/reviews";
+import { reviewBlockers } from "@/lib/solve/rules";
+import { formatDate } from "@/lib/solve/format";
 import type { Verification, VerificationResult } from "@/lib/solve/schema";
 import { verificationResults } from "@/lib/solve/schema";
 import { evidenceTypeMeta } from "../causeMeta";
@@ -17,6 +20,9 @@ export function VerificationPanel({ actionId, verificationId }: { actionId: stri
   const action = inv.actions.find((a) => a.id === actionId);
   const v = inv.verifications.find((x) => x.id === verificationId);
   if (!action || !v) return null;
+  const review = currentReview(inv, v);
+  const blockers = reviewBlockers(inv, v.id);
+  const reviews = inv.verificationReviews.filter((r) => r.verificationId === v.id);
   const set = (patch: Partial<Verification>) => dispatch({ type: "update_verification", id: v.id, patch });
   const toggleEvidence = (id: string) => set({ evidenceIds: v.evidenceIds.includes(id) ? v.evidenceIds.filter((x) => x !== id) : [...v.evidenceIds, id] });
   function remove() {
@@ -63,6 +69,60 @@ export function VerificationPanel({ actionId, verificationId }: { actionId: stri
           ) : (
             <p className="mt-1 text-[12.5px] text-stone">No evidence recorded yet. Add it on Investigate → Evidence.</p>
           )}
+        </section>
+        <section
+          className="rounded-[3px] border border-line bg-cream p-3"
+          aria-label="Explicit review"
+        >
+          <h3 className="text-[14px] font-medium text-ink">
+            Approve the evidence you reviewed
+          </h3>
+          <p className="mt-1 text-[13px] leading-5 text-graphite">
+            Read the linked sources, cause, completed action and observations
+            before approving. Editing fields saves a draft; it does not approve
+            it. You can deliberately re-review existing evidence after
+            reopening.
+          </p>
+          <p
+            className={`mt-2 text-[13px] font-medium ${review ? "text-risk-track" : "text-risk-amber"}`}
+            role="status"
+          >
+            {review
+              ? `Current review approved by ${review.approvedBy}.`
+              : "Explicit review required. Prior approvals and learning remain in history."}
+          </p>
+          {!review && blockers.length > 0 ? (
+            <ul className="mt-2 list-disc pl-4 text-[12.5px] leading-5 text-graphite">
+              {blockers.map((b, i) => (
+                <li key={i}>{b}</li>
+              ))}
+            </ul>
+          ) : null}
+          <SolveButton
+            className="mt-3"
+            variant="primary"
+            disabled={Boolean(review) || blockers.length > 0}
+            onClick={() => dispatch({ type: "approve_verification", id: v.id })}
+          >
+            Approve effective verification
+          </SolveButton>
+          {reviews.length > 0 ? (
+            <details className="mt-3 text-[12.5px] text-graphite">
+              <summary className="cursor-pointer py-2">
+                Review history ({reviews.length})
+              </summary>
+              <ol className="mt-1 list-decimal space-y-2 pl-4">
+                {reviews.map((r) => (
+                  <li key={r.id}>
+                    {r.approvedBy} · {formatDate(r.approvedAt)} ·{" "}
+                    {r.id === review?.id
+                      ? "Current approval"
+                      : "Historical approval; review required for current work"}
+                  </li>
+                ))}
+              </ol>
+            </details>
+          ) : null}
         </section>
         <div className="flex items-center gap-2 border-t border-line pt-4">
           <SolveButton variant="dark" onClick={close}>Done</SolveButton>

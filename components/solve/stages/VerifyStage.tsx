@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { trackSolve } from "@/lib/solve/analytics";
 import { stamp } from "@/lib/solve/reducer";
-import { canClose, hardFindings } from "@/lib/solve/rules";
+import { currentReview } from "@/lib/solve/reviews";
+import { ClosureBlockers } from "./ClosureBlockers";
+import { hardFindings, latestVerification, type Finding } from "@/lib/solve/rules";
 import type { Action, Verification, VerificationResult } from "@/lib/solve/schema";
 import { formatDate } from "@/lib/solve/format";
 import { usePanel } from "../ContextPanel";
@@ -44,7 +46,7 @@ export function VerifyStage() {
   const corrective = inv.actions.filter((a) => a.kind === "corrective" || a.requiredForClosure);
   const preventive = inv.actions.filter((a) => a.kind === "preventive" && !a.requiredForClosure);
   const hard = useMemo(() => hardFindings(inv), [inv]);
-  const closable = canClose(inv);
+  const closable = inv.status !== "closed" && hard.length === 0;
   const lastReopen = [...inv.history].reverse().find((h) => h.type === "reopened");
   const failed = inv.verifications.filter((v) => v.result === "not_effective" && (!lastReopen || v.createdAt > lastReopen.at));
   const anyFailed = failed.length > 0 && inv.status !== "reopened" && inv.status !== "closed";
@@ -54,6 +56,36 @@ export function VerifyStage() {
     firstUnverified ? { label: `Verify: ${firstUnverified.title || "action"}`, onClick: () => add(firstUnverified), icon: <IconShield size={16} /> } : null,
     [firstUnverified?.id],
   );
+
+  function fix(f: Finding) {
+    if (f.entityType === "action" && f.entityId) {
+      const action = inv.actions.find((a) => a.id === f.entityId);
+      if (action && f.stage === "verify") {
+        const v = latestVerification(inv, action.id);
+        if (v)
+          open({
+            kind: "verification",
+            actionId: action.id,
+            verificationId: v.id,
+          });
+        else add(action);
+        return;
+      }
+      if (action) {
+        open({ kind: "action", actionId: action.id });
+        return;
+      }
+    }
+    if (f.entityType === "cause" && f.entityId && f.stage === "root-cause") {
+      open({ kind: "cause", causeId: f.entityId });
+      return;
+    }
+    if (f.entityType === "containment" && f.entityId) {
+      open({ kind: "containment", containmentId: f.entityId });
+      return;
+    }
+    router.push(`/solve/${inv.id}/${f.stage}`);
+  }
 
   function reopen() {
     dispatch({ type: "reopen", note: "Reopened after a Not Effective verification." });
@@ -72,7 +104,7 @@ export function VerifyStage() {
   return (
     <div>
       <SectionTitle eyebrow="Verify" title="Prove the problem stayed solved.">
-        For each corrective action: what did you expect, what did you observe, and was it effective? Action effectiveness is different from cause evidence and containment checks.
+        For each required countermeasure: what did you expect, what did you observe, and was it effective? Action effectiveness is different from cause evidence and containment checks.
       </SectionTitle>
 
       {anyFailed ? (
@@ -104,7 +136,7 @@ export function VerifyStage() {
             const vs = inv.verifications.filter((v) => v.actionId === a.id).sort((x, y) => x.createdAt.localeCompare(y.createdAt));
             const latest = vs[vs.length - 1];
             return (
-              <Card as="li" key={a.id} rule={latest ? (latest.result === "effective" ? "green" : latest.result === "not_effective" ? "red" : "amber") : "copper"} className="p-4">
+              <Card as="li" key={a.id} rule={latest ? (latest.result === "effective" && currentReview(inv, latest) ? "green" : latest.result === "not_effective" ? "red" : "amber") : "copper"} className="p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
                     <p className="flex flex-wrap items-center gap-2">
@@ -125,7 +157,7 @@ export function VerifyStage() {
                         <li key={v.id}>
                           <button type="button" onClick={() => open({ kind: "verification", actionId: a.id, verificationId: v.id })} className={`block w-full min-h-[44px] rounded-[3px] border px-3 py-2 text-left focus-visible:outline-2 focus-visible:outline-copper ${sel ? "border-copper ring-2 ring-copper/30" : "border-line hover:border-ink/40"}`}>
                             <span className="flex flex-wrap items-center gap-2">
-                              <Chip tone={rm.tone} icon={rm.icon}>{rm.label}</Chip>
+                              <Chip tone={v.result === "effective" && !currentReview(inv, v) ? "amber" : rm.tone} icon={rm.icon}>{rm.label}{v.result === "effective" ? currentReview(inv, v) ? " · approved" : " · review required" : ""}</Chip>
                               {v.checkAt ? <span className="text-[12.5px] text-graphite">{formatDate(v.checkAt)}</span> : null}
                               {v.verifier ? <span className="text-[12.5px] text-graphite">· {v.verifier}</span> : null}
                               {reopenedAfter ? <Chip tone="neutral" icon={<LoopGlyph className="h-2.5 w-5" tone="current" />}>Reopened after this result</Chip> : null}
@@ -157,28 +189,11 @@ export function VerifyStage() {
           <p className="mt-2 text-[14px] text-graphite">Closed {formatDate(inv.closedAt)}. The summary and report are on the next stage.</p>
         ) : (
           <>
-            <p className="mt-1 text-[13.5px] text-graphite">Closure needs every item below. Coaching hints elsewhere never block; these do.</p>
-            <ul className="mt-3 flex flex-col gap-1.5">
-              {[
-                { code: "no_root_cause", label: "At least one root cause with a rationale" },
-                { code: "root_without_evidence", label: "Every root cause has supporting evidence linked" },
-                { code: "no_corrective_action", label: "At least one corrective action" },
-                { code: "action_unlinked", label: "Every corrective action is linked to a cause" },
-                { code: "action_unverified", label: "Every corrective action verified, none Not Effective" },
-                { code: "containment_open", label: "Every containment action Verified or Released" },
-              ].map((rule) => {
-                const bad = hard.filter((f) => f.code === rule.code);
-                return (
-                  <li key={rule.code} className="flex items-start gap-2 text-[13.5px]">
-                    <span className={`mt-0.5 ${bad.length ? "text-risk-amber" : "text-risk-track"}`}>{bad.length ? <IconAlert size={14} /> : <IconCheck size={14} />}</span>
-                    <span>
-                      <span className={bad.length ? "text-ink" : "text-graphite"}>{rule.label}</span>
-                      {bad.length ? <span className="block text-[12.5px] text-stone">{bad.map((b) => b.message).join(" ")}</span> : null}
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
+            <p className="mt-1 text-[13.5px] leading-5 text-graphite">Closure requires supported roots, completed and assigned required countermeasures, effective explicit reviews of current source evidence, and resolved containment.</p>
+            {hard.length ? <>
+              <p className="mt-3 text-[14px] font-medium text-ink" role="status">{hard.length} closure blocker{hard.length === 1 ? "" : "s"} to resolve</p>
+              <ClosureBlockers findings={hard} onFix={fix} />
+            </> : <p className="mt-3 flex items-center gap-2 text-[13.5px] text-risk-track"><IconCheck size={16} /> All closure requirements satisfied. Current effective reviews are recorded.</p>}
             <div className="mt-4">
               <SolveButton variant="dark" size="lg" disabled={!closable} onClick={close} icon={<IconCheck size={16} />}>Close investigation</SolveButton>
             </div>
