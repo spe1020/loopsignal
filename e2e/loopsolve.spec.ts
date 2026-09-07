@@ -69,6 +69,8 @@ test("create an investigation and close the loop", async ({ page }) => {
   await page.getByRole("button", { name: "Add evidence" }).first().click();
   const dialog = page.getByRole("dialog");
   await dialog.getByLabel("Title").fill("Locator pin measurement");
+  await dialog.getByLabel("What does it show?").fill("Locator wear exceeded 0.15 mm; a controlled replacement trial held all 30 parts in tolerance.");
+  await dialog.getByLabel("Source", { exact: true }).fill("Fictional QA measurement and replacement trial, rows 1–30");
   await dialog.getByLabel("Search causes").fill("locator");
   await dialog.getByRole("button", { name: "Supports" }).first().click();
   await openPanelDone(page);
@@ -81,11 +83,18 @@ test("create an investigation and close the loop", async ({ page }) => {
   await card.getByLabel("Rationale").fill("Wear allowed the part to shift. Removing it prevents the drift.");
   await card.getByRole("radio", { name: "Yes" }).click();
   await expect(page.getByText("1 root cause")).toBeVisible();
+  await card.getByRole("button", { name: "The fixture locator was worn beyond its limit", exact: true }).click();
+  await page.getByRole("dialog").getByRole("radio", { name: "Data-supported", exact: true }).click();
+  await openPanelDone(page);
 
   // Action
   await page.goto(`${base}/actions`);
   await page.getByRole("button", { name: "Corrective action" }).first().click();
   await page.getByRole("dialog").getByLabel("Title").fill("Replace worn fixture locator");
+  await page.getByRole("dialog").getByRole("checkbox", { name: /fixture locator was worn/ }).check();
+  await page.getByRole("dialog").getByLabel("Owner", { exact: true }).fill("Fictional engineer");
+  await page.getByRole("dialog").getByLabel("Status", { exact: true }).selectOption("complete");
+  await page.getByRole("dialog").getByLabel("Expected result", { exact: true }).fill("All 30 follow-up parts in tolerance.");
   await openPanelDone(page);
   await expect(page.getByText("Replace worn fixture locator").first()).toBeVisible();
 
@@ -107,7 +116,10 @@ test("create an investigation and close the loop", async ({ page }) => {
   await page.goto(`${base}/verify`);
   await expect(page.getByText("Reopened after this result")).toBeVisible();
   await page.getByRole("button", { name: "Re-verify" }).first().click();
-  await page.getByRole("dialog").getByLabel("Observed result").fill("30 pieces in tolerance, Cpk 1.6.");
+  await page.getByRole("dialog").getByLabel("Observed result").fill("30 pieces in tolerance in the controlled replacement trial.");
+  await page.getByRole("dialog").getByLabel("Check date").fill("2026-08-30");
+  await page.getByRole("dialog").getByLabel("Verifier", { exact: true }).fill("Fictional quality reviewer");
+  await page.getByRole("dialog").getByRole("checkbox", { name: /Locator pin measurement/ }).check();
   await page.getByRole("dialog").getByRole("radio", { name: "Effective", exact: true }).click();
   await openPanelDone(page);
   const closeBtn = page.getByRole("button", { name: "Close investigation" });

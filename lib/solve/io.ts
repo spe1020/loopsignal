@@ -2,7 +2,7 @@ import { readableZodError, runMigrations, type Migration } from "@/lib/loop/migr
 import { newId, nowIso } from "./ids";
 import type { Investigation } from "./schema";
 import { InvestigationSchema, SCHEMA_VERSION } from "./schema";
-import { deriveStatus } from "./status";
+import { deriveStatus, normalizeClosure } from "./status";
 
 export type ImportResult =
   | { ok: true; investigation: Investigation }
@@ -57,7 +57,7 @@ export function parseImport(text: string, rcaNumber: string): ImportResult {
     ],
   };
   inv.status = deriveStatus(inv);
-  return { ok: true, investigation: inv };
+  return { ok: true, investigation: normalizeClosure(inv) };
 }
 
 export function duplicateInvestigation(source: Investigation, rcaNumber: string): Investigation {

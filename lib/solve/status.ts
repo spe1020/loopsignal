@@ -1,3 +1,4 @@
+import { hardFindings } from "./rules";
 import type { Investigation, InvestigationStatus } from "./schema";
 
 /**
@@ -12,7 +13,8 @@ import type { Investigation, InvestigationStatus } from "./schema";
  */
 export function deriveStatus(inv: Investigation): InvestigationStatus {
   const last = inv.history[inv.history.length - 1];
-  if (inv.closedAt && last?.type === "closed") return "closed";
+  if (inv.closedAt && last?.type === "closed" && hardFindings(inv).length === 0)
+    return "closed";
   if (last?.type === "reopened") {
     const since = last.at;
     const verifiedSince = inv.verifications.some((v) => v.createdAt > since);
@@ -32,3 +34,29 @@ export const statusLabels: Record<InvestigationStatus, string> = {
   reopened: "Reopened",
   closed: "Closed",
 };
+
+/** Read-time compatibility repair, without rewriting the stored original.
+ * Keep the historical close event; require a fresh approval under current rules.
+ */
+export function normalizeClosure(inv: Investigation): Investigation {
+  if (inv.closedAt && hardFindings(inv).length > 0) {
+    return {
+      ...inv,
+      closedAt: undefined,
+      status: "reopened",
+      reopenedCount: inv.reopenedCount + 1,
+      history: [
+        ...inv.history,
+        {
+          id: `${inv.id}:review:${inv.closedAt}`,
+          at: inv.updatedAt,
+          type: "reopened",
+          from: "closed",
+          to: "reopened",
+          note: "Historical closure requires review under current evidence and completion rules. The original close event is preserved.",
+        },
+      ],
+    };
+  }
+  return { ...inv, status: deriveStatus(inv) };
+}

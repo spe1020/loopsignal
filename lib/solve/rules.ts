@@ -1,5 +1,5 @@
 import type { Investigation, Stage } from "./schema";
-import { supportCount } from "./reducer";
+import { supportCount } from "./evidence";
 import { jaccard, problemChecks } from "./text";
 
 export type FindingLevel = "hard" | "soft";
@@ -51,10 +51,49 @@ export function hardFindings(inv: Investigation): Finding[] {
       code: "no_root_cause",
       level: "hard",
       stage: "root-cause",
-      message: "At least one cause must be classified as Root, with a rationale.",
+      message:
+        "At least one cause must be classified as Root, with a rationale.",
     });
   }
   for (const root of roots) {
+    if (!root.rootCauseRationale?.trim())
+      out.push({
+        code: "root_without_rationale",
+        level: "hard",
+        stage: "root-cause",
+        entityType: "cause",
+        entityId: root.id,
+        message: `Root cause "${root.text}" needs its own rationale.`,
+      });
+    if (
+      !["verified", "data_supported"].includes(root.evidenceState) ||
+      root.challenged ||
+      supportCount(inv, root.id).contradicts > 0
+    )
+      out.push({
+        code: "root_unresolved",
+        level: "hard",
+        stage: "root-cause",
+        entityType: "cause",
+        entityId: root.id,
+        message: `Resolve the evidence and any contradiction for "${root.text}" before closure.`,
+      });
+    if (
+      !inv.actions.some(
+        (a) =>
+          a.kind === "corrective" &&
+          a.linkedCauseIds.includes(root.id) &&
+          a.status === "complete",
+      )
+    )
+      out.push({
+        code: "root_unaddressed",
+        level: "hard",
+        stage: "actions",
+        entityType: "cause",
+        entityId: root.id,
+        message: `Root cause "${root.text}" needs a completed corrective action.`,
+      });
     if (supportCount(inv, root.id).supports === 0) {
       out.push({
         code: "root_without_evidence",
@@ -67,8 +106,10 @@ export function hardFindings(inv: Investigation): Finding[] {
     }
   }
   const corrective = inv.actions.filter((a) => a.kind === "corrective");
-  for (const a of corrective) {
-    if (a.linkedCauseIds.length === 0) {
+  for (const a of inv.actions.filter(
+    (a) => a.kind === "corrective" || a.requiredForClosure,
+  )) {
+    if (!a.linkedCauseIds.some((id) => inv.causes.some((c) => c.id === id))) {
       out.push({
         code: "action_unlinked",
         level: "hard",
@@ -78,9 +119,33 @@ export function hardFindings(inv: Investigation): Finding[] {
         message: `Corrective action "${a.title || "untitled"}" is not linked to a cause.`,
       });
     }
-    const verifications = inv.verifications.filter((v) => v.actionId === a.id);
-    const latest = verifications[verifications.length - 1];
-    if (!latest || latest.result === "not_effective") {
+    if (!a.owner?.trim())
+      out.push({
+        code: "action_without_owner",
+        level: "hard",
+        stage: "actions",
+        entityType: "action",
+        entityId: a.id,
+        message: `Required action "${a.title}" needs an owner.`,
+      });
+    if (a.status !== "complete")
+      out.push({
+        code: "action_incomplete",
+        level: "hard",
+        stage: "actions",
+        entityType: "action",
+        entityId: a.id,
+        message: `Required action "${a.title}" must be complete.`,
+      });
+    const latest = latestVerification(inv, a.id);
+    const reopened = [...inv.history]
+      .reverse()
+      .find((h) => h.type === "reopened");
+    if (
+      !latest ||
+      latest.result !== "effective" ||
+      (reopened && latest.updatedAt <= reopened.at)
+    ) {
       out.push({
         code: "action_unverified",
         level: "hard",
@@ -88,8 +153,31 @@ export function hardFindings(inv: Investigation): Finding[] {
         entityType: "action",
         entityId: a.id,
         message: latest
-          ? `Corrective action "${a.title || "untitled"}" was verified Not Effective.`
+          ? `Corrective action "${a.title || "untitled"}" needs an effective verification after the latest reopening.`
           : `Corrective action "${a.title || "untitled"}" has no effectiveness verification.`,
+      });
+    }
+    if (
+      latest &&
+      (!latest.expected.trim() ||
+        !latest.observed.trim() ||
+        !latest.verifier?.trim() ||
+        !latest.checkAt ||
+        !latest.evidenceIds.length ||
+        latest.evidenceIds.some(
+          (id) =>
+            !inv.evidence.some(
+              (e) => e.id === id && e.description.trim() && e.source.trim(),
+            ),
+        ))
+    ) {
+      out.push({
+        code: "verification_without_evidence",
+        level: "hard",
+        stage: "verify",
+        entityType: "action",
+        entityId: a.id,
+        message: `Verification of "${a.title}" needs expected and observed results, reviewer, date, and linked source evidence.`,
       });
     }
   }
@@ -117,7 +205,10 @@ export function hardFindings(inv: Investigation): Finding[] {
 }
 
 /** Soft rules coach; they never block. */
-export function softFindings(inv: Investigation, today = todayIso()): Finding[] {
+export function softFindings(
+  inv: Investigation,
+  today = todayIso(),
+): Finding[] {
   const out: Finding[] = [];
   for (const check of problemChecks(inv.problem)) {
     if (!check.ok) {
@@ -154,26 +245,34 @@ export function softFindings(inv: Investigation, today = todayIso()): Finding[] 
           message: BLAME_COACHING,
         });
       }
-      if (inv.problem.whatHappened.trim() && jaccard(c.text, inv.problem.whatHappened) >= 0.7) {
+      if (
+        inv.problem.whatHappened.trim() &&
+        jaccard(c.text, inv.problem.whatHappened) >= 0.7
+      ) {
         out.push({
           code: "restates_problem",
           level: "soft",
           stage: "root-cause",
           entityType: "cause",
           entityId: c.id,
-          message: "This appears to restate the problem rather than explain why it occurred.",
+          message:
+            "This appears to restate the problem rather than explain why it occurred.",
         });
       }
     }
     if (c.classification === "root") {
-      if (c.evidenceState !== "verified" && c.evidenceState !== "data_supported") {
+      if (
+        c.evidenceState !== "verified" &&
+        c.evidenceState !== "data_supported"
+      ) {
         out.push({
           code: "root_not_supported",
           level: "soft",
           stage: "root-cause",
           entityType: "cause",
           entityId: c.id,
-          message: "This root cause has not yet been supported by verified evidence.",
+          message:
+            "This root cause has not yet been supported by verified evidence.",
         });
       }
     }
@@ -184,7 +283,8 @@ export function softFindings(inv: Investigation, today = todayIso()): Finding[] 
         stage: "investigate",
         entityType: "cause",
         entityId: c.id,
-        message: "Needs further investigation: it is not yet clear that removing this cause would prevent recurrence.",
+        message:
+          "Needs further investigation: it is not yet clear that removing this cause would prevent recurrence.",
       });
     }
   }
@@ -202,7 +302,9 @@ export function softFindings(inv: Investigation, today = todayIso()): Finding[] 
     } else {
       const linked = inv.causes.filter((c) => a.linkedCauseIds.includes(c.id));
       const supported = linked.some(
-        (c) => c.evidenceState === "verified" || c.evidenceState === "data_supported",
+        (c) =>
+          c.evidenceState === "verified" ||
+          c.evidenceState === "data_supported",
       );
       if (linked.length > 0 && !supported) {
         out.push({
@@ -252,5 +354,23 @@ export function findingsFor(
   entityType: Finding["entityType"],
   entityId: string,
 ): Finding[] {
-  return findings.filter((f) => f.entityType === entityType && f.entityId === entityId);
+  return findings.filter(
+    (f) => f.entityType === entityType && f.entityId === entityId,
+  );
+}
+
+/** Same selection rule in the domain and every view, including imported records. */
+export function latestVerification(inv: Investigation, actionId: string) {
+  return inv.verifications
+    .filter((v) => v.actionId === actionId)
+    .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+    .at(-1);
+}
+
+export function isVerifiedImprovement(inv: Investigation): boolean {
+  return (
+    inv.status === "closed" &&
+    Boolean(inv.closedAt) &&
+    hardFindings(inv).length === 0
+  );
 }

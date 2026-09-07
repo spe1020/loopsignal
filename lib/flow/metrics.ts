@@ -30,7 +30,7 @@ export type VersionMetrics = {
   leadTimeMin: number;
   touchTimeMin: number;
   waitTimeMin: number;
-  /** touch / lead, or null when lead time is zero. */
+  /** value-added / lead, or null when lead time is zero. */
   pce: number | null;
   value: ValueBreakdown;
   handoffs: Handoff[];
@@ -38,6 +38,7 @@ export type VersionMetrics = {
   longestWait: { stepId: string; min: number } | null;
   longestStep: { stepId: string; min: number } | null;
   unknownTimeStepIds: string[];
+  estimatedTimeStepIds: string[];
   unclassifiedStepIds: string[];
   reworkLoops: Edge[];
   skipBranches: Edge[];
@@ -136,13 +137,14 @@ export function computeMetrics(version: MapVersion, lanes: Lane[]): VersionMetri
     leadTimeMin: lead,
     touchTimeMin: touch,
     waitTimeMin: wait,
-    pce: lead > 0 ? touch / lead : null,
+    pce: lead > 0 ? value.va.min / lead : null,
     value,
     handoffs,
     handoffCount: handoffs.length,
     longestWait,
     longestStep,
     unknownTimeStepIds,
+    estimatedTimeStepIds: steps.filter((s) => isTimed(s) && s.timeSource === "estimated").map((s) => s.id),
     unclassifiedStepIds,
     reworkLoops,
     skipBranches,
@@ -172,5 +174,6 @@ export function metricsDelta(current: VersionMetrics, future: VersionMetrics): M
     row("steps", "Steps", current.stepCount, future.stepCount, "count"),
     row("rework", "Rework loops", current.reworkLoops.length, future.reworkLoops.length, "count"),
     row("unknown", "Steps with unknown time", current.unknownTimeStepIds.length, future.unknownTimeStepIds.length, "count"),
+    row("estimated", "Steps with estimated time", current.estimatedTimeStepIds.length, future.estimatedTimeStepIds.length, "count"),
   ];
 }

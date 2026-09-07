@@ -43,6 +43,7 @@ export function ActionPanel({ actionId }: { actionId: string | null; kindPreset?
             </Select>
           </Field>
         </div>
+        {a.kind === "preventive" ? <Checkbox label="Required for closure (completion and effective verification)" checked={a.requiredForClosure ?? false} onChange={() => set({ requiredForClosure: !a.requiredForClosure })} /> : null}
         <Field label="Description" htmlFor="act-desc"><TextArea id="act-desc" rows={3} value={a.description} onChange={(e) => set({ description: e.target.value })} /></Field>
         <section>
           <h3 className="text-[13px] font-medium text-ink">Addresses which causes? <span className="text-copper">*</span></h3>

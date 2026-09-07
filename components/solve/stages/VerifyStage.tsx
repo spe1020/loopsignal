@@ -41,8 +41,8 @@ export function VerifyStage() {
   const { add } = useVerifyActions();
   const router = useRouter();
   const toast = useToast();
-  const corrective = inv.actions.filter((a) => a.kind === "corrective");
-  const preventive = inv.actions.filter((a) => a.kind === "preventive");
+  const corrective = inv.actions.filter((a) => a.kind === "corrective" || a.requiredForClosure);
+  const preventive = inv.actions.filter((a) => a.kind === "preventive" && !a.requiredForClosure);
   const hard = useMemo(() => hardFindings(inv), [inv]);
   const closable = canClose(inv);
   const lastReopen = [...inv.history].reverse().find((h) => h.type === "reopened");
@@ -147,7 +147,7 @@ export function VerifyStage() {
 
       {preventive.length ? (
         <p className="loop-secondary mt-4 text-[12.5px] text-stone">
-          {preventive.length} preventive action{preventive.length === 1 ? "" : "s"} tracked on the Actions stage. Preventive actions can be verified here too, but only corrective actions gate closure.
+          {preventive.length} preventive action{preventive.length === 1 ? "" : "s"} tracked on the Actions stage. Optional preventive actions do not gate closure. Mark them required in the action editor when they must be completed and verified before closing.
         </p>
       ) : null}
 

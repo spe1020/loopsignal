@@ -181,6 +181,7 @@ export const ActionSchema = z.object({
   dueDate: z.string().optional(),
   priority: z.enum(actionPriorities).default("normal"),
   status: z.enum(actionStatuses).default("open"),
+  requiredForClosure: z.boolean().optional(),
   verificationMethod: z.string().optional(),
   expectedResult: z.string().optional(),
 });
@@ -212,6 +213,10 @@ export type VerificationResult = Verification["result"];
 export const LessonLearnedSchema = z.object({
   ...entity,
   lesson: z.string().default(""),
+  // Additive v1 fields: legacy lessons remain unapproved, never auto-credited.
+  sourceVerificationId: z.string().optional(),
+  approvedAt: z.string().optional(),
+  approvedBy: z.string().optional(),
   relatedProcess: z.string().default(""),
   standardWorkUpdate: z.boolean().default(false),
   trainingUpdate: z.boolean().default(false),

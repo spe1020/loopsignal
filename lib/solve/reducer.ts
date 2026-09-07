@@ -1,3 +1,5 @@
+import { supportCount } from "./evidence";
+import { hardFindings } from "./rules";
 import { newId, nowIso, patchIn, stamp } from "@/lib/loop/ids";
 import type {
   Action,
@@ -146,16 +148,7 @@ export function descendantIds(causes: CauseNode[], rootId: string): Set<string> 
   return ids;
 }
 
-export function supportCount(inv: Investigation, causeId: string) {
-  let supports = 0;
-  let contradicts = 0;
-  for (const l of inv.evidenceLinks) {
-    if (l.causeId !== causeId) continue;
-    if (l.relation === "supports") supports += 1;
-    else contradicts += 1;
-  }
-  return { supports, contradicts };
-}
+export { supportCount } from "./evidence";
 
 function historyEvent(type: HistoryEvent["type"], at: string, extra: Partial<HistoryEvent> = {}): HistoryEvent {
   return { id: newId(), at, type, ...extra };
@@ -352,6 +345,7 @@ function core(inv: Investigation, action: SolveAction, at: string): Investigatio
         ],
       };
     case "close":
+      if (inv.status === "closed" || hardFindings(inv).length > 0) return inv;
       return {
         ...inv,
         closedAt: at,
@@ -368,8 +362,12 @@ function core(inv: Investigation, action: SolveAction, at: string): Investigatio
 /** Pure reducer. Re-derives status and bumps updatedAt on every change. */
 export function reduce(inv: Investigation, action: SolveAction): Investigation {
   const at = nowIso();
-  const next = core(inv, action, at);
+  let next = core(inv, action, at);
   if (next === inv) return inv;
+  if (action.type !== "replace" && next.closedAt && hardFindings(next).length > 0) {
+    next = { ...next, closedAt: undefined, reopenedCount: next.reopenedCount + 1,
+      history: [...next.history, historyEvent("reopened", at, { from: "closed", to: "reopened", note: "Evidence or required work changed. Review and verify again; prior learning is preserved." })] };
+  }
   const status = deriveStatus(next);
   const withStatus =
     status !== next.status || next.status !== inv.status
