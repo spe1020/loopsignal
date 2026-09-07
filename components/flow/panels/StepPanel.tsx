@@ -37,11 +37,10 @@ export function StepPanel({ stepId, version, focus }: { stepId: string; version:
   const [branchTarget, setBranchTarget] = useState("");
 
   useEffect(() => {
-    const t = window.setTimeout(() => {
-      if (focus === "time") timeRef.current?.focus();
-      else if (focus === "name") nameRef.current?.focus();
-    }, 30);
-    return () => window.clearTimeout(t);
+    // Focus when the new step commits. A delayed focus can steal the cursor
+    // back from Cycle time after a fast keyboard user has already pressed Tab.
+    if (focus === "time") timeRef.current?.focus();
+    else if (focus === "name") nameRef.current?.focus();
   }, [stepId, focus]);
 
   if (!step) return null;

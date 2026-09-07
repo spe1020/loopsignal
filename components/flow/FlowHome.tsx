@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useStorageFeedback } from "@/components/loop/StorageFeedback";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { IconPlus, IconUpload, LoopGlyph } from "@/components/loop/icons";
@@ -17,6 +18,7 @@ import { deleteRecent, duplicateRecent, exportRecent, listRecent, restoreRecent,
 import { listInvestigations, saveInvestigation } from "@/lib/solve/storage";
 
 export function FlowHome() {
+  const { run, feedback } = useStorageFeedback();
   const router = useRouter();
   const toast = useToast();
   const [items, setItems] = useState<RecentItem[] | null>(null);
@@ -26,13 +28,14 @@ export function FlowHome() {
 
   useEffect(() => {
     let cancelled = false;
-    listRecent().then((list) => {
+    void run(async () => {
+      const list = await listRecent();
       if (!cancelled) setItems(list);
     });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [run]);
 
   async function onNew() {
     const map = createMap({ mapNumber: nextMapNumber() });
@@ -93,6 +96,7 @@ export function FlowHome() {
 
   return (
     <div className="loop-root">
+      {feedback}
       <section className="border-b border-line bg-cream">
         <div className="mx-auto grid max-w-[1120px] gap-10 px-6 py-14 md:grid-cols-12 md:py-20 lg:px-8">
           <div className="md:col-span-7">
@@ -105,16 +109,16 @@ export function FlowHome() {
               on every step. The map shows the waiting and the handoffs. Open a LoopSolve investigation from the pain.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <LoopButton variant="primary" size="lg" onClick={onNew} icon={<IconPlus size={16} />}>
+              <LoopButton variant="primary" size="lg" onClick={() => void run(onNew)} icon={<IconPlus size={16} />}>
                 New Map
               </LoopButton>
-              <LoopButton size="lg" onClick={onSample}>
+              <LoopButton size="lg" onClick={() => void run(onSample)}>
                 Explore Sample Map
               </LoopButton>
             </div>
             <p className="mt-6 flex items-start gap-2 text-[13px] leading-5 text-stone">
               <LoopGlyph className="mt-0.5 h-3.5 w-7" />
-              Free. Runs in your browser. Nothing leaves your device. Export important maps for backup.
+              Individual browser-local tool. Map content is not uploaded. Export important maps for backup.
             </p>
           </div>
           <div className="hidden md:col-span-5 md:block">
@@ -138,7 +142,7 @@ export function FlowHome() {
               className="sr-only"
               onChange={(e) => {
                 const f = e.target.files?.[0];
-                if (f) void onImportFile(f);
+                if (f) void run(() => onImportFile(f));
                 e.target.value = "";
               }}
             />
@@ -157,12 +161,12 @@ export function FlowHome() {
               Nothing here yet. Start with a process that takes too long, or open the sample to see a mapped loop.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              <LoopButton variant="primary" onClick={onNew} icon={<IconPlus size={16} />}>New Map</LoopButton>
-              <LoopButton onClick={onSample}>Explore Sample Map</LoopButton>
+              <LoopButton variant="primary" onClick={() => void run(onNew)} icon={<IconPlus size={16} />}>New Map</LoopButton>
+              <LoopButton onClick={() => void run(onSample)}>Explore Sample Map</LoopButton>
             </div>
           </div>
         ) : (
-          <RecentList items={items} onDuplicate={onDuplicate} onExport={onExport} onDelete={onDelete} />
+          <RecentList items={items} onDuplicate={(item) => run(() => onDuplicate(item))} onExport={onExport} onDelete={(item) => run(() => onDelete(item))} />
         )}
       </section>
 
