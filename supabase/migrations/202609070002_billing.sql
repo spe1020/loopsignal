@@ -1,7 +1,12 @@
 create table company.billing_operations (
- org_id uuid not null references company.organizations,id uuid not null,actor uuid not null,
- kind text not null check(kind in ('checkout','portal')),created_at timestamptz not null default now(),
- result jsonb, primary key(org_id,id), foreign key(org_id,actor) references company.memberships
+ org_id uuid not null references company.organizations(id),
+ id uuid not null,
+ actor uuid not null,
+ kind text not null check(kind in ('checkout','portal')),
+ created_at timestamptz not null default now(),
+ result jsonb,
+ primary key(org_id,id),
+ foreign key(org_id,actor) references company.memberships(org_id,user_id)
 );
 alter table company.billing_operations enable row level security;
 create policy billing_operation_access on company.billing_operations for all to loop_app using(company.member_role(org_id) in ('owner','billing_admin')) with check(company.member_role(org_id) in ('owner','billing_admin'));

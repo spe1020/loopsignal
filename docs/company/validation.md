@@ -2,7 +2,7 @@
 
 Work began from fetched `origin/main` at `2b27076f32bd775c55695c41bfb6a60ff0b83256` (PR #26) in an isolated `/private/tmp/loopsignal-company` worktree, branch `codex/company-workspace`. The user's original `codex/product-preview` checkout remained clean. Installed Next.js 16.3.0 docs and the merged domain/storage implementation were read before editing. No production migration/deployment, real invitation or live billing operation was performed.
 
-## Final local checks
+## Milestone checks at `25ec683`
 
 | Command / environment | Actual result |
 | --- | --- |
@@ -50,7 +50,7 @@ Development findings corrected before the final run included driver JSON double-
 
 The test runs `pg_dump` and `pg_restore` into a different database and restores real bytes into a separate filesystem object store. It verifies the file SHA-256, foreign-key relationships, exact current review, and post-restore cross-company RLS denial. A second isolated restore overlays a newer deletion ledger and verifies that the deleted record stays tombstoned and its file is not restored.
 
-The final measured exercise took **830 ms** for the tiny fixture and restored **one file**. This duration includes backup and both restore/deletion checks; it is not a hosted RTO or scale measurement. See [machine-written evidence](evidence/restore.json) and the [runbook](recovery.md). No daily backup schedule, hosted RPO, encrypted artifact store or Supabase Storage-byte restore is claimed as demonstrated.
+The milestone exercise took **830 ms** for the tiny fixture and restored **one file**. This duration includes backup and both restore/deletion checks; it is not a hosted RTO or scale measurement. See [machine-written evidence](evidence/restore.json) and the [runbook](recovery.md). No daily backup schedule, hosted RPO, encrypted artifact store or Supabase Storage-byte restore is claimed as demonstrated.
 
 ## Exact external gaps and readiness
 
@@ -59,3 +59,10 @@ The pinned Supabase CLI 2.116.0 was installed. Current generated config correcte
 No Stripe test secret, price or webhook credentials were available. Actual test checkout, portal, CLI delivery/retry and provider lifecycle checks remain unrun. Region, backup access/expiry, secret rotation, retention scheduling, monitoring and independent security/design review are also unresolved. See the [complete paid-pilot blockers](pilot-blockers.md).
 
 **Merge readiness:** reviewable draft, not merge-ready until the unresolved integration/security checks and review findings are addressed. **Paid-pilot readiness:** blocked; synthetic data and Stripe test mode only. Passing local commands do not authorize real customer data or live charges.
+
+## PR #27 review corrections — 7 September 2026
+
+- [Analytics URL comment](https://github.com/spe1020/loopsignal/pull/27#discussion_r3951541115): both Vercel SDK callbacks now use the same guarded parser. Public relative URLs resolve against the browser origin and lose query/fragment data. Malformed or non-HTTP(S) URLs are dropped without throwing. An event is also dropped when either its URL or the current page is private, including delayed company events after navigation to a public page. Thirteen regression cases cover these boundaries.
+- [Billing SQL comment](https://github.com/spe1020/loopsignal/pull/27#discussion_r3951541063): PostgreSQL 16.14 accepted the original table definition in a rolled-back `CREATE TABLE` check; omitted referenced columns use the referenced primary key. The migration now places each column on its own line and names `organizations(id)` and `memberships(org_id,user_id)` explicitly. This clarifies the existing schema without changing its constraints.
+
+Follow-up validation: `npm test` **103 passed / 20 database-dependent skipped**; `npm run company:db:test` **22 passed**, applying both migrations to fresh native database `loopsignal_test_1788800554_21192`. There are **123 distinct Vitest cases** across these runs (two signature/configuration cases overlap). `npm run typecheck`, `npm run lint`, `npm run build`, and `git diff --check` passed. The rerun also repeated the records/bytes/deletion-ledger restore successfully; its tiny fixture took **367 ms**, with [separate machine-written evidence](evidence/pr27-review-restore.json). Browser suites were not repeated for these parser/schema-clarity changes; their milestone evidence remains above. Provider acceptance and paid-pilot blockers remain unchanged.

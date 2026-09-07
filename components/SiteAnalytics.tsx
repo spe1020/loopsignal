@@ -4,14 +4,12 @@ import { usePathname } from "next/navigation";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AttributionCapture } from "@/components/AttributionCapture";
+import { filterAnalyticsEvent } from "@/lib/analytics-url";
 
-function stripQuery(url: string) {
-  try {
-    const parsed = new URL(url, window.location.origin);
-    return `${parsed.origin}${parsed.pathname}`;
-  } catch {
-    return url.split("?")[0]?.split("#")[0] ?? url;
-  }
+function beforeSend<T extends { url: string }>(event: T) {
+  return typeof window === "undefined"
+    ? null
+    : filterAnalyticsEvent(event, window.location.href);
 }
 
 export function SiteAnalytics() {
@@ -20,24 +18,8 @@ export function SiteAnalytics() {
   return (
     <>
       <AttributionCapture />
-      <Analytics
-        beforeSend={(event) =>
-          new URL(event.url).pathname.startsWith("/company")
-            ? null
-            : {
-                ...event,
-                url: stripQuery(event.url),
-              }
-        }
-      />
-      <SpeedInsights
-        beforeSend={(event) =>
-          typeof window !== "undefined" &&
-          window.location.pathname.startsWith("/company")
-            ? null
-            : { ...event, url: stripQuery(event.url) }
-        }
-      />
+      <Analytics beforeSend={beforeSend} />
+      <SpeedInsights beforeSend={beforeSend} />
     </>
   );
 }
