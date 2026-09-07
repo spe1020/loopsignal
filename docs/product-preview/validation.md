@@ -1,21 +1,35 @@
 # Validation evidence
 
-Validated locally with the installed Next.js 16.3.0 / React 19.2.8 stack. The installed Next.js routing and server/client component guides were read before implementation. No production deployment was performed.
+Validated locally on 7 September 2026, including the PR #26 corrective follow-up, with the installed Next.js 16.3.0 / React 19.2.8 stack. The installed Next.js routing and server/client component guides were read before implementation. No production deployment was performed.
 
 | Check | Result |
 | --- | --- |
 | `npm run typecheck` | Passed |
 | `npm run lint` | Passed |
-| `npm test -- --reporter=dot` | 65 tests passed in 12 files |
+| `npm test -- --reporter=dot` | 86 tests passed in 14 files |
 | `npm run build` | Passed; 37 static pages generated; existing dynamic routes retained |
-| Chromium interaction regressions at 375×812, 768×1024, 1440×900 | 40 passed; 2 intentional skips for a mobile-only stopwatch test at larger widths |
+| Chromium interaction regressions at 375×812, 768×1024, 1440×900 | 46 passed; 2 intentional skips for a mobile-only stopwatch test at larger widths |
 | `git diff --check` | Passed |
 
 Browser command:
 
 ```sh
-npm run test:e2e -- e2e/product-preview.spec.ts e2e/loopsolve.spec.ts e2e/loopflow.spec.ts --project=mobile-375 --project=tablet-768 --project=desktop-1440 --workers=2
+npm run test:e2e -- e2e/verification-reviews.spec.ts e2e/product-preview.spec.ts e2e/loopsolve.spec.ts e2e/loopflow.spec.ts --project=mobile-375 --project=tablet-768 --project=desktop-1440 --workers=2
 ```
+
+## PR #26 review reproductions and corrections
+
+The local checkout and GitHub PR head were independently verified as `4cc7017e6a7eae47d489f62a242fbe9f3f5fc0ae` against main `89989c605c415b849e3aec8e2c508e0386fe76f3`, with a clean working tree. Three temporary baseline tests reproduced the supplied findings before changes:
+
+1. Changing nonempty follow-up evidence and completed countermeasure scope retained `closed`, `isVerifiedImprovement === true`, and no hard findings.
+2. With controlled time, reopening blocked closure, then editing the old verifier's name enabled it without a new review or observation.
+3. Incomplete required work and a missing reviewer produced hard findings absent from the six-code checklist. The baseline rendering finding was checked against the component's exact allowlist; the corrected rendering was subsequently exercised in Chromium.
+
+The permanent regression tests now assert the corrected behavior. Explicit approval records bind a decision to a retained dependency snapshot and reopening event ID. Generic edits cannot establish approval. Material changes withdraw it, and even reverting the edit requires explicit review. Cosmetic changes preserve current approval. Same-timestamp/backwards-clock reopening cannot bypass review. Re-reviewing existing observations permits closure; prior review snapshots, history and learning remain, while learning credit requires approval tied to the new review. Legacy documents gain no fabricated approval metadata; JSON copies retain history and require review for their new identity.
+
+The ordinary LoopSolve browser tests import synthetic investigations, approve and close through the real VerificationPanel, edit nonempty evidence through the EvidencePanel, prove a name edit cannot re-close, deliberately re-review the original observations, materially edit scope through the ActionPanel, reload, and export the preserved review history. Separate browser checks display every reproduced blocker, open its relevant editor and resolve it. A component regression supplies an unknown future finding code to prove it remains visible.
+
+The [review field policy](reviews.md) documents exactly what invalidates approval and the browser-local trust boundary. The homepage/design and future hosted milestone remain unchanged. No merge, deployment or Prompt 2 work was performed.
 
 ## What the tests establish
 
@@ -41,8 +55,13 @@ Real Chromium screenshots, captured from the local application with motion disab
 | Action | [PNG](screenshots/action-375.png) | [PNG](screenshots/action-768.png) | [PNG](screenshots/action-1440.png) |
 | Result | [PNG](screenshots/result-375.png) | [PNG](screenshots/result-768.png) | [PNG](screenshots/result-1440.png) |
 | Lesson | [PNG](screenshots/lesson-375.png) | [PNG](screenshots/lesson-768.png) | [PNG](screenshots/lesson-1440.png) |
+| Ordinary LoopSolve blocked closure | [PNG](screenshots/closure-blocked-375.png) | [PNG](screenshots/closure-blocked-768.png) | [PNG](screenshots/closure-blocked-1440.png) |
+
+The corrected blocked-closure phone and desktop captures were visually inspected. They show all four blockers, relevant-record navigation, the unapproved Effective label and disabled closure. The fixed phone stage-navigation bar appears at the initial viewport bottom in full-page captures; scrolling keeps the checklist accessible. The existing 15 promoted-workflow captures were regenerated by the passing suite and remained unchanged.
 
 ## Limits of this evidence
+
+The hosted Vercel preview was not inspected in this corrective run; browser validation used the local app. The development server emitted the existing smooth-scroll configuration warning; it did not produce browser test failures.
 
 Automated browser checks use Chromium emulated viewports, not physical phones, Safari/Firefox, or a complete screen-reader audit. Separate historical screenshot-generation suites were not rerun; the new suite captures the promoted experience and the existing interaction suites cover the individual tools. No hosted multi-user, tenant-isolation, file-backup restore, subscription provider, live message delivery, or production checks were performed because those capabilities are outside Prompt 1.
 
