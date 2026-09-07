@@ -236,3 +236,20 @@ test("all closure blockers are visible and navigate to the actual incomplete rec
   await openReview(page);
   await approveAndClose(page);
 });
+
+
+test("a ready action can be approved while a separate required action remains unfinished", async ({page}) => {
+  let inv = verificationCandidate(completedAction(), "effective");
+  inv = reduce(inv, {type: "add_action", item: {...inv.actions[0], id: "unfinished-preventive", title: "Roll out wear checks to other cells", kind: "preventive", requiredForClosure: true, status: "in_progress", owner: ""}});
+  inv = reduce(inv, {type: "add_verification", item: {...inv.verifications[0], id: "unfinished-check", actionId: "unfinished-preventive", observed: "", verifier: "", evidenceIds: []}});
+  const base = await importInvestigation(page, inv);
+  await page.goto(`${base}/verify`);
+  await page.locator('[data-finding-code="action_unverified"]').first().getByRole("button").click();
+  await page.getByRole("dialog").getByRole("button", {name: "Approve effective verification"}).click();
+  await expect(page.getByRole("dialog").getByText(/Current review approved by/)).toBeVisible();
+  await done(page);
+  await expect(page.getByRole("button", {name: "Close investigation", exact: true})).toBeDisabled();
+  await expect(page.locator('[data-finding-code="action_incomplete"]')).toContainText("Roll out wear checks to other cells");
+  await page.locator('[data-finding-code="action_unverified"]').getByRole("button").click();
+  await expect(page.getByRole("dialog").getByRole("button", {name: "Approve effective verification"})).toBeDisabled();
+});

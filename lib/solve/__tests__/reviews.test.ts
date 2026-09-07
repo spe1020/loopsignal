@@ -255,6 +255,35 @@ describe("explicit verification reviews", () => {
       inv = reduce(inv, { type: "approve_verification", id: v.id });
     expect(canClose(inv)).toBe(true);
   });
+  it("approves one ready action while another required action remains incomplete", () => {
+    let inv = verificationCandidate(completedAction(), "effective");
+    const v = inv.verifications[0];
+    inv = reduce(inv, { type: "add_action", item: { ...inv.actions[0], id: "unfinished", kind: "preventive", requiredForClosure: true, status: "in_progress", owner: "" } });
+    inv = reduce(inv, { type: "add_verification", item: { ...v, id: "unfinished-review", actionId: "unfinished", observed: "", verifier: "", evidenceIds: [] } });
+    expect(reviewBlockers(inv, v.id)).toEqual([]);
+    inv = reduce(inv, { type: "approve_verification", id: v.id });
+    expect(currentReview(inv, v)).toBeDefined();
+    expect(canClose(inv)).toBe(false);
+    expect(reviewBlockers(inv, "unfinished-review").length).toBeGreaterThan(0);
+    expect(reduce(inv, { type: "approve_verification", id: "unfinished-review" })).toBe(inv);
+    inv = reduce(inv, { type: "update_action", id: "unfinished", patch: { owner: "Another engineer", status: "complete" } });
+    inv = reduce(inv, { type: "update_verification", id: "unfinished-review", patch: { observed: v.observed, verifier: v.verifier, evidenceIds: v.evidenceIds } });
+    expect(currentReview(inv, v)).toBeDefined();
+    inv = reduce(inv, { type: "approve_verification", id: "unfinished-review" });
+    expect(canClose(inv)).toBe(true);
+  });
+  it("keeps shared root and containment requirements when approving an action", () => {
+    const inv = verificationCandidate(completedAction(), "effective");
+    const id = inv.verifications[0].id;
+    for (const command of [
+      { type: "update_cause", id: ids.cause, patch: { rootCauseRationale: "" } },
+      { type: "update_containment", id: inv.containment[0].id, patch: { status: "open" } },
+    ] as const) {
+      const blocked = reduce(inv, command);
+      expect(reviewBlockers(blocked, id).length).toBeGreaterThan(0);
+      expect(reduce(blocked, { type: "approve_verification", id })).toBe(blocked);
+    }
+  });
   it("rejects reviews of superseded verification records", () => {
     let inv = approved();
     const old = inv.verifications[0];

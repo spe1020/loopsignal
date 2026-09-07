@@ -4,7 +4,7 @@ PR #26 follow-up to Prompt 1. Both the guided demo and ordinary LoopSolve use `a
 
 ## Decision and lifecycle
 
-A person completes the required work, records expected/observed results, a reviewer, a parseable check date and linked source evidence, selects Effective, then explicitly approves. The reducer checks readiness; the panel's disabled button is only feedback. Required actions can receive their approvals in any order. The latest verification for each required action needs a current approval before closure.
+A person completes the action being reviewed, records expected/observed results, a reviewer, a parseable check date and linked source evidence, selects Effective, then explicitly approves. The reducer checks readiness; the panel's disabled button is only feedback. Required actions can receive their approvals in any order. Missing owners, completion or verification fields on a different action do not block this action’s review. Shared root-cause and containment requirements still apply; closure continues to check all required actions. The latest verification for each required action needs a current approval before closure.
 
 Each approval appends a `verificationReviews` entry and a `verification_reviewed` history event. The entry contains the reviewer, decision time, verification ID, latest reopening **event ID**, snapshot format version and a canonical JSON snapshot of the reviewed dependencies. An event relationship establishes freshness; generic edit times and clock ordering do not. A deliberate review can reuse the same observations, evidence IDs and check date after reopening. It does not fabricate another measurement window.
 

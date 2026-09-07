@@ -369,11 +369,14 @@ export function isVerifiedImprovement(inv: Investigation): boolean {
   );
 }
 
-/** Explicit review readiness uses the same closure rules, excluding missing approvals (required actions can be reviewed in any order). */
+/** Review this action against its own requirements and the shared root/containment rules. Closure still checks every action. */
 export function reviewBlockers(inv: Investigation, verificationId: string): string[] {
   const v = inv.verifications.find((v) => v.id === verificationId);
   if (!v) return ["Choose an existing verification to review."];
-  const issues = hardFindings(inv).filter((f) => f.code !== "action_unverified").map((f) => f.message);
+  const issues = hardFindings(inv)
+    .filter((f) => f.code !== "action_unverified" &&
+      (f.entityType !== "action" || f.entityId === v.actionId))
+    .map((f) => f.message);
   if (latestVerification(inv, v.actionId)?.id !== v.id) issues.push("Review the latest verification for this action.");
   if (v.result !== "effective") issues.push("Only an Effective result can receive closure approval. Other results keep the investigation open.");
   if (!inv.actions.some((a) => a.id === v.actionId && (a.kind === "corrective" || a.requiredForClosure))) issues.push("Choose a required action to review.");
