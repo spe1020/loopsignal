@@ -9,7 +9,7 @@ import {
 } from "@/lib/analytics";
 import { getLeadAttribution } from "@/lib/attribution";
 import { company } from "@/lib/company";
-import { loopScanForm } from "@/lib/content";
+import { loopScanForm as defaultForm } from "@/lib/content";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xeajkpoy";
 
@@ -90,7 +90,7 @@ function formatLeadMessage(form: FormState, extra?: string[]) {
     `Role: ${form.role.trim()}`,
     `Email or phone: ${form.contact.trim()}`,
     "",
-    `${loopScanForm.fields.slowing}`,
+    `${defaultForm.fields.slowing}`,
     form.slowing.trim() || "Not provided",
   ];
 
@@ -117,7 +117,8 @@ function FieldError({ name, message }: { name: FieldName; message?: string }) {
   );
 }
 
-export function LoopScanForm() {
+export function LoopScanForm({ intent = "loopscan" }: { intent?: "loopscan" | "pilot" }) {
+  const loopScanForm = intent === "pilot" ? { ...defaultForm, eyebrow: "Join the pilot", heading: "Tell us about your team.", submit: "Join the pilot", successHeadline: "Thanks — your pilot interest has been received. We’ll be in touch.", slowingPlaceholder: "e.g. quality investigations and action updates scattered across shifts" } : defaultForm;
   const [form, setForm] = useState(emptyForm);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState("");
@@ -222,7 +223,7 @@ export function LoopScanForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          _subject: leadSubject(form),
+          _subject: intent === "pilot" ? `LoopSignal software pilot — ${form.company.trim()}` : leadSubject(form),
           ...(contactIsEmail ? { _replyto: contact, email: contact } : { phone: contact }),
           name: form.name.trim(),
           company: form.company.trim(),

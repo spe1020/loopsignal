@@ -13,7 +13,7 @@ export const company = {
   longDescription:
     "LoopSignal is a manufacturing consulting and systems integration company. We start with how the work actually happens, then improve the process and connect the right systems, information, and technology around it.",
   executiveDescription:
-    "LoopSignal is a manufacturing consulting and systems integration company focused on process improvement, automation, and practical AI.",
+    "LoopSignal builds manufacturing problem-solving software, with optional onboarding and integration support. Explore a fictional browser-local product preview today.",
   philosophy: "Start with the work.",
   operatingPhilosophy:
     "Technology follows the problem, not the other way around.",

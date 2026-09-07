@@ -5,6 +5,8 @@ import { absoluteUrl } from "@/lib/site";
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages = [
     "/",
+    "/workspace",
+    "/pilot",
     "/solutions",
     "/services",
     "/how-it-works",

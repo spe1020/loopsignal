@@ -20,7 +20,7 @@ export default function PrivacyPage() {
         </h1>
         <div className="mt-10 max-w-2xl space-y-6 text-[16px] leading-8 text-graphite">
           <p>
-            If you send the LoopScan form, we receive your name, company, role,
+            If you send the pilot or LoopScan form, we receive your name, company, role,
             email or phone, and anything you wrote about what&apos;s slowing you
             down. That submission goes to Formspree, then to us. We use it to
             set up a conversation. We do not sell it.
@@ -31,8 +31,7 @@ export default function PrivacyPage() {
             type into the form. We do not use Google Analytics.
           </p>
           <p>
-            The public demos run on fictional sample data. They do not take a
-            file from you.
+            The public examples run on fictional sample data. The new product preview stores its progress separately in this browser. The individual LoopSolve and LoopFlow tools can import your JSON files and keep those documents on this device; they do not silently upload them. Export copies for recovery, because browser storage is not a cloud backup.
           </p>
           <p>
             To ask a question or request deletion: {company.contactEmail}.

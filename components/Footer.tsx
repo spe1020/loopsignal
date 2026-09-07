@@ -1,160 +1,67 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
-import { TrackedLink } from "./TrackedLink";
 import { company } from "@/lib/company";
-import { cta, nav } from "@/lib/content";
-
 export function Footer() {
+  const pathname = usePathname();
+  if (pathname === "/workspace") return null;
   return (
     <footer className="border-t border-line bg-ink text-cream">
-      <div className="mx-auto grid max-w-[1120px] gap-12 px-6 py-16 lg:grid-cols-12 lg:px-8 lg:py-20">
-        <div className="lg:col-span-5">
-          <Logo inverted showTagline />
-          <p className="mt-5 max-w-sm text-sm leading-6 text-white/45">
-            Improve the process. Connect the systems.
+      <div className="mx-auto grid max-w-[1200px] gap-10 px-6 py-14 md:grid-cols-3">
+        <div>
+          <Logo inverted />
+          <p className="mt-5 max-w-xs text-sm leading-7 text-white/65">
+            Turn daily problems into improvements that last.
           </p>
-          <p className="mt-4 text-sm text-white/70">{company.contactEmail}</p>
-          {company.phone ? (
-            <p className="mt-1 text-sm text-white/70">{company.phone}</p>
-          ) : null}
-          <p className="mt-3 text-sm text-white/55">{company.location}</p>
+          <p className="mt-5 text-xs text-white/60">{company.contactEmail}</p>
         </div>
-
-        <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-7 lg:grid-cols-3">
-          <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/40">
-              Navigate
-            </p>
-            <ul className="mt-4 space-y-2.5">
-              {nav.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="text-sm text-white/70 transition-colors hover:text-cream"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/40">
-              Work with us
-            </p>
-            <ul className="mt-4 space-y-2.5">
-              <li>
-                <TrackedLink
-                  href={cta.startLoopScan.href}
-                  location="footer"
-                  ctaText={cta.startLoopScan.label}
-                  className="text-sm font-medium text-cream transition-colors hover:text-white"
-                >
-                  {cta.startLoopScan.label}
-                </TrackedLink>
-              </li>
-              <li>
-                <Link
-                  href={cta.seeDemos.href}
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  {cta.seeDemos.label}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/supply"
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  LoopSupply
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/know"
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  LoopKnow
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/source"
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  LoopSource
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/brief"
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  LoopBrief
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/solve"
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  LoopSolve
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/flow"
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  LoopFlow
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/40">
-              Approach
-            </p>
-            <ul className="mt-4 space-y-2.5">
-              <li>
-                <Link
-                  href="/loopscan"
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  LoopScan
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/services#loopbuild"
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  LoopBuild
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/services#loopops"
-                  className="text-sm text-white/70 transition-colors hover:text-cream"
-                >
-                  LoopOps
-                </Link>
-              </li>
-            </ul>
-          </div>
+        <div>
+          <h2 className="text-xs uppercase tracking-widest text-white/55">
+            Explore LoopSignal
+          </h2>
+          <ul className="mt-4 space-y-4 text-sm text-white/80">
+            <li>
+              <Link href="/workspace">Try a live example</Link>
+            </li>
+            <li>
+              <Link href="/pilot">Join the pilot</Link>
+            </li>
+            <li>
+              <Link href="/solve">Your local investigations</Link>
+            </li>
+            <li>
+              <Link href="/flow">Your local process maps</Link>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h2 className="text-xs uppercase tracking-widest text-white/55">
+            Company & support
+          </h2>
+          <ul className="mt-4 space-y-4 text-sm text-white/80">
+            <li>
+              <Link href="/about">About LoopSignal</Link>
+            </li>
+            <li>
+              <Link href="/services">Optional onboarding & integration</Link>
+            </li>
+            <li>
+              <Link href="/privacy">Privacy</Link>
+            </li>
+            <li>
+              <Link href="/security">Data handling</Link>
+            </li>
+          </ul>
+          <p className="mt-6 text-xs leading-6 text-white/55">
+            Public examples use fictional data. Company workspaces and
+            subscriptions are planned.
+          </p>
         </div>
       </div>
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-[1120px] flex-wrap items-center gap-x-6 gap-y-2 px-6 py-6 text-xs text-white/35 lg:px-8">
-          <p>© {new Date().getFullYear()} LoopSignal. All rights reserved.</p>
-          <Link href="/privacy" className="transition-colors hover:text-white/60">
-            Privacy
-          </Link>
-          <Link href="/security" className="transition-colors hover:text-white/60">
-            Security
-          </Link>
-        </div>
-      </div>
+      <p className="border-t border-white/10 px-6 py-5 text-center text-xs text-white/50">
+        © {new Date().getFullYear()} LoopSignal
+      </p>
     </footer>
   );
 }

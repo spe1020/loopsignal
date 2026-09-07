@@ -7,7 +7,7 @@ export const metadata: Metadata = pageMeta({
   path: "/security",
   title: "Security",
   description:
-    "How LoopSignal handles operational data: read-only, only if you say yes, the smallest pull that answers the question, deleted when we are done.",
+    "Browser-local product storage, fictional demo isolation, planned company workspaces, and the separate data process for optional LoopSignal consulting.",
 });
 
 export default function SecurityPage() {
@@ -16,10 +16,17 @@ export default function SecurityPage() {
       <Container>
         <Eyebrow>Security and data</Eyebrow>
         <h1 className="mt-5 max-w-3xl text-4xl font-medium tracking-[-0.035em] text-ink md:text-6xl">
-          We’re hired to look at your process. The data is yours.
+          Your work. Clear storage boundaries.
         </h1>
 
         <div className="mt-12 max-w-2xl space-y-12">
+          <div className="space-y-5 text-[16px] leading-8 text-graphite">
+            <h2 className="text-2xl font-medium tracking-[-0.02em] text-ink">The product preview is individual and browser-local</h2>
+            <p>The live example uses fictional records in a separate demo store. Replay resets only that example. LoopSolve investigations and LoopFlow maps stay in this browser on this device; they are never silently uploaded.</p>
+            <p>Browser storage is not company cloud storage or a backup. Clearing site data, changing browsers, or losing this device can remove access. If storage is blocked, temporary memory does not survive reload. Save failures are shown; export important work and keep the files somewhere you control.</p>
+            <p>Company authentication, team permissions, trusted shared storage, audit history, attachment recovery, and subscriptions are planned. They are not active in this preview. Pilot contact details are sent through Formspree; investigation content is not part of that form.</p>
+            <h2 className="text-2xl font-medium tracking-[-0.02em] text-ink">Optional consulting has a separate data process</h2>
+          </div>
           <div className="space-y-5 text-[16px] leading-8 text-graphite">
             <h2 className="text-2xl font-medium tracking-[-0.02em] text-ink">
               Most of a LoopScan doesn’t need your data
