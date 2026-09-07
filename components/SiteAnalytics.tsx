@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AttributionCapture } from "@/components/AttributionCapture";
@@ -14,16 +15,29 @@ function stripQuery(url: string) {
 }
 
 export function SiteAnalytics() {
+  const pathname = usePathname();
+  if (pathname.startsWith("/company")) return null;
   return (
     <>
       <AttributionCapture />
       <Analytics
-        beforeSend={(event) => ({
-          ...event,
-          url: stripQuery(event.url),
-        })}
+        beforeSend={(event) =>
+          new URL(event.url).pathname.startsWith("/company")
+            ? null
+            : {
+                ...event,
+                url: stripQuery(event.url),
+              }
+        }
       />
-      <SpeedInsights />
+      <SpeedInsights
+        beforeSend={(event) =>
+          typeof window !== "undefined" &&
+          window.location.pathname.startsWith("/company")
+            ? null
+            : { ...event, url: stripQuery(event.url) }
+        }
+      />
     </>
   );
 }
