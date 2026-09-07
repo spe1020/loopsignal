@@ -1,13 +1,14 @@
 {
   "kind": "isolated local PostgreSQL and filesystem bytes",
-  "durationMs": 550,
-  "backupCompletedAt": "2026-09-07T14:50:43.285Z",
+  "durationMs": 830,
+  "backupCompletedAt": "2026-09-07T16:35:18.604Z",
   "filesRestored": 1,
   "checks": [
     "byte checksum",
     "exact review relationship",
     "foreign keys",
-    "cross-company RLS denial after restore"
+    "cross-company RLS denial after restore",
+    "newer deletion ledger suppresses old record and file restoration"
   ],
   "providerStorageRestore": "not run: Supabase stack unavailable"
 }
