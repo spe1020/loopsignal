@@ -1,4 +1,5 @@
 import type { Investigation, Stage } from "./schema";
+import { currentReview } from "./reviews";
 import { supportCount } from "./evidence";
 import { jaccard, problemChecks } from "./text";
 
@@ -116,7 +117,7 @@ export function hardFindings(inv: Investigation): Finding[] {
         stage: "actions",
         entityType: "action",
         entityId: a.id,
-        message: `Corrective action "${a.title || "untitled"}" is not linked to a cause.`,
+        message: `Required action "${a.title || "untitled"}" is not linked to a cause.`,
       });
     }
     if (!a.owner?.trim())
@@ -138,14 +139,7 @@ export function hardFindings(inv: Investigation): Finding[] {
         message: `Required action "${a.title}" must be complete.`,
       });
     const latest = latestVerification(inv, a.id);
-    const reopened = [...inv.history]
-      .reverse()
-      .find((h) => h.type === "reopened");
-    if (
-      !latest ||
-      latest.result !== "effective" ||
-      (reopened && latest.updatedAt <= reopened.at)
-    ) {
+    if (!latest || latest.result !== "effective" || !currentReview(inv, latest)) {
       out.push({
         code: "action_unverified",
         level: "hard",
@@ -153,8 +147,8 @@ export function hardFindings(inv: Investigation): Finding[] {
         entityType: "action",
         entityId: a.id,
         message: latest
-          ? `Corrective action "${a.title || "untitled"}" needs an effective verification after the latest reopening.`
-          : `Corrective action "${a.title || "untitled"}" has no effectiveness verification.`,
+          ? `Required action "${a.title || "untitled"}" needs an explicit effective review of the current evidence and work after any reopening.`
+          : `Required action "${a.title || "untitled"}" has no effectiveness verification.`,
       });
     }
     if (
@@ -162,7 +156,7 @@ export function hardFindings(inv: Investigation): Finding[] {
       (!latest.expected.trim() ||
         !latest.observed.trim() ||
         !latest.verifier?.trim() ||
-        !latest.checkAt ||
+        !latest.checkAt || !Number.isFinite(Date.parse(latest.checkAt)) ||
         !latest.evidenceIds.length ||
         latest.evidenceIds.some(
           (id) =>
@@ -373,4 +367,15 @@ export function isVerifiedImprovement(inv: Investigation): boolean {
     Boolean(inv.closedAt) &&
     hardFindings(inv).length === 0
   );
+}
+
+/** Explicit review readiness uses the same closure rules, excluding missing approvals (required actions can be reviewed in any order). */
+export function reviewBlockers(inv: Investigation, verificationId: string): string[] {
+  const v = inv.verifications.find((v) => v.id === verificationId);
+  if (!v) return ["Choose an existing verification to review."];
+  const issues = hardFindings(inv).filter((f) => f.code !== "action_unverified").map((f) => f.message);
+  if (latestVerification(inv, v.actionId)?.id !== v.id) issues.push("Review the latest verification for this action.");
+  if (v.result !== "effective") issues.push("Only an Effective result can receive closure approval. Other results keep the investigation open.");
+  if (!inv.actions.some((a) => a.id === v.actionId && (a.kind === "corrective" || a.requiredForClosure))) issues.push("Choose a required action to review.");
+  return issues;
 }

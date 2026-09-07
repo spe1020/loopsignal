@@ -75,7 +75,7 @@ export function duplicateInvestigation(source: Investigation, rcaNumber: string)
     ],
   };
   inv.status = deriveStatus(inv);
-  return inv;
+  return normalizeClosure(inv);
 }
 
 export function exportFilename(inv: Investigation): string {

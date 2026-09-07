@@ -4,20 +4,26 @@ import type { Investigation, InvestigationStatus } from "./schema";
 /**
  * Derived investigation status. Never edited directly.
  *
- * closed        closedAt set and last history event is `closed`
- * reopened      last history event is `reopened` and no verification since
+ * closed        closedAt set and latest close/reopen event is `closed`
+ * reopened      latest lifecycle event is `reopened` and no new draft/review since
  * verification  ≥1 verification exists
  * action_open   ≥1 action exists
  * investigating ≥1 cause exists
  * draft         otherwise
  */
 export function deriveStatus(inv: Investigation): InvestigationStatus {
-  const last = inv.history[inv.history.length - 1];
+  const last = [...inv.history]
+    .reverse()
+    .find((h) => h.type === "closed" || h.type === "reopened");
   if (inv.closedAt && last?.type === "closed" && hardFindings(inv).length === 0)
     return "closed";
   if (last?.type === "reopened") {
     const since = last.at;
-    const verifiedSince = inv.verifications.some((v) => v.createdAt > since);
+    const verifiedSince =
+      inv.verifications.some((v) => v.createdAt > since) ||
+      inv.verificationReviews.some(
+        (r) => !r.invalidatedAt && r.reopenedEventId === last.id,
+      );
     if (!verifiedSince) return "reopened";
   }
   if (inv.verifications.length > 0) return "verification";

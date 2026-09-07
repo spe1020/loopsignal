@@ -210,11 +210,25 @@ export const VerificationSchema = z.object({
 export type Verification = z.infer<typeof VerificationSchema>;
 export type VerificationResult = Verification["result"];
 
+/** Additive v1 review history. Only the explicit review command creates entries. */
+export const VerificationReviewSchema = z.object({
+  id: z.string().min(1),
+  verificationId: z.string().min(1),
+  approvedAt: z.string().min(1),
+  approvedBy: z.string().min(1),
+  reopenedEventId: z.string().nullable(),
+  snapshotVersion: z.literal(1),
+  snapshot: z.string().min(1),
+  invalidatedAt: z.string().optional(),
+});
+export type VerificationReview = z.infer<typeof VerificationReviewSchema>;
+
 export const LessonLearnedSchema = z.object({
   ...entity,
   lesson: z.string().default(""),
   // Additive v1 fields: legacy lessons remain unapproved, never auto-credited.
   sourceVerificationId: z.string().optional(),
+  sourceReviewId: z.string().optional(),
   approvedAt: z.string().optional(),
   approvedBy: z.string().optional(),
   relatedProcess: z.string().default(""),
@@ -232,6 +246,7 @@ export const historyTypes = [
   "reopened",
   "imported",
   "duplicated",
+  "verification_reviewed",
 ] as const;
 export const HistoryEventSchema = z.object({
   id: z.string(),
@@ -272,6 +287,7 @@ export const InvestigationSchema = z.object({
   timeline: z.array(TimelineEventSchema).default([]),
   actions: z.array(ActionSchema).default([]),
   verifications: z.array(VerificationSchema).default([]),
+  verificationReviews: z.array(VerificationReviewSchema).default([]),
   lessons: z.array(LessonLearnedSchema).default([]),
   history: z.array(HistoryEventSchema).default([]),
   closedAt: z.string().optional(),

@@ -1,13 +1,12 @@
+import { completedAction } from "./fixtures";
 import { describe, expect, it, vi, afterEach } from "vitest";
 import {
   createDemo,
   DemoSchema,
   ids,
   milestones,
-  owners,
   reduceDemo,
   verificationBlockers,
-  type Demo,
 } from "../demo";
 import {
   hardFindings,
@@ -19,21 +18,6 @@ import { InvestigationSchema } from "@/lib/solve/schema";
 import { parseImport, serialize } from "@/lib/solve/io";
 import { deriveStatus, normalizeClosure } from "@/lib/solve/status";
 
-export function completedAction(): Demo {
-  let d = createDemo();
-  for (const id of [
-    ids.baseline,
-    ids.fixture,
-    ids.material,
-    ids.implementation,
-    ids.followup,
-  ])
-    d = reduceDemo(d, { type: "review_evidence", id, reviewed: true });
-  d = reduceDemo(d, { type: "accept_cause" });
-  d = reduceDemo(d, { type: "connect_action" });
-  d = reduceDemo(d, { type: "assign_owner", owner: owners[0] });
-  return reduceDemo(d, { type: "complete_action" });
-}
 function verifiedDemo() {
   return reduceDemo(completedAction(), { type: "verify", result: "effective" });
 }
@@ -194,6 +178,20 @@ describe("manufacturing workflow", () => {
     d = reduceDemo(d, { type: "approve_lesson" });
     expect(d.investigation.lessons).toHaveLength(1);
     expect(milestones(d)[3].complete).toBe(true);
+  });
+  it("re-reviewing the same verification requires a separate new lesson decision", () => {
+    let d = reduceDemo(verifiedDemo(), { type: "approve_lesson" });
+    const lesson = d.investigation.lessons[0];
+    d = reduceDemo(d, { type: "reopen" });
+    let inv = reduce(d.investigation, { type: "approve_verification", id: lesson.sourceVerificationId! });
+    inv = reduce(inv, { type: "close" });
+    d = { ...d, investigation: inv };
+    expect(milestones(d)[2].complete).toBe(true);
+    expect(milestones(d)[3].complete).toBe(false);
+    expect(d.investigation.lessons[0]).toEqual(lesson);
+    d = reduceDemo(d, { type: "approve_lesson" });
+    expect(milestones(d)[3].complete).toBe(true);
+    expect(d.investigation.lessons[0].sourceReviewId).not.toBe(lesson.sourceReviewId);
   });
   it("withdrawing evidence or reopening an action invalidates a previously closed result", () => {
     let d = reduceDemo(verifiedDemo(), { type: "approve_lesson" });

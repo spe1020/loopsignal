@@ -1,3 +1,4 @@
+import { normalizeClosure } from "@/lib/solve/status";
 import { createDocumentStore } from "@/lib/loop/storage";
 import { createDemo, DemoSchema, type Demo } from "./demo";
 
@@ -8,7 +9,9 @@ export const demoStore = createDocumentStore<Demo>({
   lsPrefix: "loopsignal:fictional-preview:",
   parse: (raw) => {
     const r = DemoSchema.safeParse(raw);
-    return r.success ? r.data : undefined;
+    return r.success
+      ? { ...r.data, investigation: normalizeClosure(r.data.investigation) }
+      : undefined;
   },
 });
 export async function loadDemo() {

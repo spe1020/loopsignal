@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { currentReview } from "@/lib/solve/reviews";
 import { createInvestigation, reduce } from "@/lib/solve/reducer";
 import {
   ActionSchema,
@@ -11,7 +12,7 @@ import {
   type VerificationResult,
 } from "@/lib/solve/schema";
 import {
-  hardFindings,
+  reviewBlockers,
   isVerifiedImprovement,
   latestVerification,
 } from "@/lib/solve/rules";
@@ -343,8 +344,10 @@ export function observationMetrics(doc: Demo) {
 }
 
 export function verificationBlockers(doc: Demo): string[] {
-  const problems = hardFindings(verificationCandidate(doc, "effective")).map(
-    (f) => f.message,
+  const candidate = verificationCandidate(doc, "effective");
+  const problems = reviewBlockers(
+    candidate,
+    latestVerification(candidate, ids.action)!.id,
   );
   if (!doc.reviewedEvidenceIds.includes(ids.followup))
     problems.unshift("Inspect and include the three-lot follow-up evidence.");
@@ -383,7 +386,11 @@ export function milestones(doc: Demo) {
     verified &&
     inv.lessons.some(
       (l) =>
-        l.approvedAt && l.approvedBy && l.sourceVerificationId === latest?.id,
+        l.approvedAt &&
+        l.approvedBy &&
+        latest &&
+        l.sourceVerificationId === latest.id &&
+        l.sourceReviewId === currentReview(inv, latest)?.id,
     );
   return [
     { label: "Cause supported by evidence", complete: supported },
@@ -511,11 +518,16 @@ export function reduceDemo(doc: Demo, command: DemoCommand): Demo {
       if (command.result === "effective" && verificationBlockers(doc).length)
         return doc;
       inv = verificationCandidate(doc, command.result, at);
-      if (command.result === "effective")
+      if (command.result === "effective") {
+        inv = reduce(inv, {
+          type: "approve_verification",
+          id: latestVerification(inv, ids.action)!.id,
+        });
         inv = reduce(inv, {
           type: "close",
           note: "Fictional demo approval. Observation dates are supplied; time is compressed for this walkthrough.",
         });
+      }
       break;
     case "approve_lesson": {
       const verification = latestVerification(inv, ids.action);
@@ -532,6 +544,7 @@ export function reduceDemo(doc: Demo, command: DemoCommand): Demo {
         similarProcessesToReview:
           "Review other locating fixtures before applying this lesson. Their wear limits may differ.",
         sourceVerificationId: verification.id,
+        sourceReviewId: currentReview(inv, verification)!.id,
         approvedBy: "Alex Morgan · fictional demo reviewer",
         approvedAt: at,
       });

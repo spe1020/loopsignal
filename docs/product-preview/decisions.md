@@ -40,3 +40,7 @@ Owners and reviewer names in the public example are fictional roles, with no imp
 Homepage and primary navigation promote the implemented software preview. `/pilot` reuses the established Formspree form, with an explicit software-pilot subject and distinct confirmation; no messages were sent during testing. Consulting remains optional and its useful pages stay available. `NEXT_PUBLIC_SITE_URL` / `lib/site.ts` remains the sole canonical origin configuration. Existing social-preview assets are preserved.
 
 LoopKnow and LoopSource were inspected but kept out of the promoted journey. Their source-passage and allocated-volume issues have precise release gates in [follow-ups](follow-ups.md). LoopFlow’s PCE was corrected because it is reused: **value-added time / lead time**, with estimates, unknown times, and provisional recorded-time totals visible.
+
+## Explicit review follow-up
+
+See [review semantics and material-field policy](reviews.md) for the PR #26 correction. Approval now binds to a retained dependency snapshot and reopening event identity. Generic verification edits never establish approval. The same reducer command serves the guided demo and the ordinary VerificationPanel.

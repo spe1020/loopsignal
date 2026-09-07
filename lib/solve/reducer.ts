@@ -1,5 +1,6 @@
 import { supportCount } from "./evidence";
-import { hardFindings } from "./rules";
+import { currentReview, invalidateChangedReviews, latestReopenId, reviewSnapshot } from "./reviews";
+import { reviewBlockers, hardFindings } from "./rules";
 import { newId, nowIso, patchIn, stamp } from "@/lib/loop/ids";
 import type {
   Action,
@@ -92,6 +93,7 @@ export function createInvestigation(input: {
     timeline: [],
     actions: [],
     verifications: [],
+    verificationReviews: [],
     lessons: [],
     history: [{ id: newId(), at, type: "created" }],
     reopenedCount: 0,
@@ -126,6 +128,7 @@ export type SolveAction =
   | { type: "remove_action"; id: string }
   | { type: "add_verification"; item: Verification }
   | { type: "update_verification"; id: string; patch: Partial<Verification> }
+  | { type: "approve_verification"; id: string }
   | { type: "remove_verification"; id: string }
   | { type: "add_lesson"; item: LessonLearned }
   | { type: "update_lesson"; id: string; patch: Partial<LessonLearned> }
@@ -324,6 +327,30 @@ function core(inv: Investigation, action: SolveAction, at: string): Investigatio
       return { ...inv, verifications: [...inv.verifications, action.item] };
     case "update_verification":
       return { ...inv, verifications: patchIn(inv.verifications, action.id, action.patch, at) };
+    case "approve_verification": {
+      const v = inv.verifications.find((v) => v.id === action.id);
+      if (!v || currentReview(inv, v) || reviewBlockers(inv, v.id).length)
+        return inv;
+      const review = {
+        id: newId(),
+        verificationId: v.id,
+        approvedAt: at,
+        approvedBy: v.verifier!.trim(),
+        reopenedEventId: latestReopenId(inv),
+        snapshotVersion: 1 as const,
+        snapshot: reviewSnapshot(inv, v),
+      };
+      return {
+        ...inv,
+        verificationReviews: [...inv.verificationReviews, review],
+        history: [
+          ...inv.history,
+          historyEvent("verification_reviewed", at, {
+            note: `Explicit effective review of ${inv.actions.find((a) => a.id === v.actionId)?.title || v.actionId} by ${review.approvedBy}. Review ${review.id}.`,
+          }),
+        ],
+      };
+    }
     case "remove_verification":
       return { ...inv, verifications: inv.verifications.filter((v) => v.id !== action.id) };
 
@@ -364,6 +391,7 @@ export function reduce(inv: Investigation, action: SolveAction): Investigation {
   const at = nowIso();
   let next = core(inv, action, at);
   if (next === inv) return inv;
+  next = invalidateChangedReviews(next, at);
   if (action.type !== "replace" && next.closedAt && hardFindings(next).length > 0) {
     next = { ...next, closedAt: undefined, reopenedCount: next.reopenedCount + 1,
       history: [...next.history, historyEvent("reopened", at, { from: "closed", to: "reopened", note: "Evidence or required work changed. Review and verify again; prior learning is preserved." })] };
