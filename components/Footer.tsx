@@ -5,7 +5,7 @@ import { Logo } from "./Logo";
 import { company } from "@/lib/company";
 export function Footer() {
   const pathname = usePathname();
-  if (pathname === "/workspace") return null;
+  if (pathname === "/workspace" || pathname.startsWith("/company")) return null;
   return (
     <footer className="border-t border-line bg-ink text-cream">
       <div className="mx-auto grid max-w-[1200px] gap-10 px-6 py-14 md:grid-cols-3">

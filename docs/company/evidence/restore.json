@@ -1,0 +1,13 @@
+{
+  "kind": "isolated local PostgreSQL and filesystem bytes",
+  "durationMs": 550,
+  "backupCompletedAt": "2026-09-07T14:50:43.285Z",
+  "filesRestored": 1,
+  "checks": [
+    "byte checksum",
+    "exact review relationship",
+    "foreign keys",
+    "cross-company RLS denial after restore"
+  ],
+  "providerStorageRestore": "not run: Supabase stack unavailable"
+}
