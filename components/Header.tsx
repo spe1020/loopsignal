@@ -26,7 +26,7 @@ export function Header() {
     };
   }, [open]);
 
-  if (pathname === "/workspace") return null;
+  if (pathname === "/workspace" || pathname.startsWith("/company")) return null;
   return (
     <header
       className={`sticky top-0 z-50 border-b transition-colors ${
@@ -58,6 +58,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-4">
+          <Link href="/company" className="text-sm">Sign in</Link>
           <TrackedLink
             href={"/pilot"}
             location="navigation"

@@ -143,6 +143,7 @@ function compact(
 }
 
 export function trackEvent(event: AnalyticsEvent, props?: AnalyticsProps) {
+  if (typeof window !== "undefined" && window.location.pathname.startsWith("/company")) return;
   if (typeof window === "undefined") return;
 
   const data = compact(props);

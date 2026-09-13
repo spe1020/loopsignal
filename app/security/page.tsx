@@ -7,7 +7,7 @@ export const metadata: Metadata = pageMeta({
   path: "/security",
   title: "Security",
   description:
-    "Browser-local product storage, fictional demo isolation, planned company workspaces, and the separate data process for optional LoopSignal consulting.",
+    "Browser-local product storage, fictional demo isolation, synthetic company evaluation, and the separate data process for optional LoopSignal consulting.",
 });
 
 export default function SecurityPage() {
@@ -24,7 +24,7 @@ export default function SecurityPage() {
             <h2 className="text-2xl font-medium tracking-[-0.02em] text-ink">The product preview is individual and browser-local</h2>
             <p>The live example uses fictional records in a separate demo store. Replay resets only that example. LoopSolve investigations and LoopFlow maps stay in this browser on this device; they are never silently uploaded.</p>
             <p>Browser storage is not company cloud storage or a backup. Clearing site data, changing browsers, or losing this device can remove access. If storage is blocked, temporary memory does not survive reload. Save failures are shown; export important work and keep the files somewhere you control.</p>
-            <p>Company authentication, team permissions, trusted shared storage, audit history, attachment recovery, and subscriptions are planned. They are not active in this preview. Pilot contact details are sent through Formspree; investigation content is not part of that form.</p>
+            <p>The separate /company experience is a synthetic evaluation with server-side permissions, shared records, private-file handling, and test billing. Local database, workflow, and restore tests do not establish hosted-provider security or paid-pilot readiness. Real customer data and live billing are not enabled. Pilot contact details are sent through Formspree; investigation content is not part of that form.</p>
             <h2 className="text-2xl font-medium tracking-[-0.02em] text-ink">Optional consulting has a separate data process</h2>
           </div>
           <div className="space-y-5 text-[16px] leading-8 text-graphite">

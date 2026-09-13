@@ -2,7 +2,9 @@
 
 Turn daily problems into improvements that last.
 
-LoopSignal manufacturing problem-solving software: a functional, fictional browser preview plus individual LoopSolve investigations and LoopFlow process maps. Consulting is optional onboarding and integration support. Company accounts, trusted shared storage, and subscriptions are the next milestone.
+LoopSignal manufacturing problem-solving software: a fictional browser preview, individual LoopSolve investigations and LoopFlow process maps, and a separate private company workspace for synthetic evaluation. Company storage uses PostgreSQL, Supabase Auth/private files, and Stripe test-mode Team subscriptions. Consulting is optional onboarding support. Provider acceptance and paid-pilot readiness remain unverified.
+
+See [company setup, permissions, validation, recovery and pilot blockers](docs/company/README.md) before connecting a provider.
 
 See the [Prompt 1 implementation, validation, and hosted roadmap](docs/product-preview/README.md).
 
@@ -21,7 +23,9 @@ Open [http://localhost:3000](http://localhost:3000).
 
 - `/` — Software-first home
 - `/workspace` — Fictional manufacturing workflow (separate browser store)
-- `/pilot` — Software pilot interest form; no account or billing
+- `/company` — Separate company sign-in, shared records and Stripe test billing; requires configured local infrastructure
+- `/pilot` — Pilot interest and synthetic company evaluation entry
+- `/trust` — Demonstrated controls and remaining pilot requirements
 - `/solutions` — Work we take on
 - `/how-it-works` — See → Simplify → Connect → Automate → Measure → Improve
 - `/about` — Company
