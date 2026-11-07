@@ -1,0 +1,897 @@
+{
+  "id": "aZU4KPu1evkj",
+  "createdAt": "2026-10-18T09:00:00.000Z",
+  "updatedAt": "2026-10-23T15:00:00.000Z",
+  "schemaVersion": 1,
+  "mapNumber": "MAP-2026-001",
+  "title": "Quote to order — custom bracket",
+  "scope": {
+    "startsWith": "Customer sends an RFQ with a drawing",
+    "endsWith": "Customer receives an order acknowledgment"
+  },
+  "unit": "hours",
+  "lanes": [
+    {
+      "id": "rFww32ETDC4n",
+      "createdAt": "2026-10-18T09:00:00.000Z",
+      "updatedAt": "2026-10-18T09:00:00.000Z",
+      "name": "Customer",
+      "kind": "customer",
+      "order": 0
+    },
+    {
+      "id": "DB3rzQn6vcYD",
+      "createdAt": "2026-10-18T09:00:00.000Z",
+      "updatedAt": "2026-10-18T09:00:00.000Z",
+      "name": "Sales",
+      "kind": "department",
+      "order": 1
+    },
+    {
+      "id": "GhJPfIoHrtxN",
+      "createdAt": "2026-10-18T09:00:00.000Z",
+      "updatedAt": "2026-10-18T09:00:00.000Z",
+      "name": "Estimating",
+      "kind": "role",
+      "order": 2
+    },
+    {
+      "id": "JX05RIwp5VsD",
+      "createdAt": "2026-10-18T09:00:00.000Z",
+      "updatedAt": "2026-10-18T09:00:00.000Z",
+      "name": "Engineering",
+      "kind": "department",
+      "order": 3
+    },
+    {
+      "id": "Ub4AF07oswe4",
+      "createdAt": "2026-10-18T09:00:00.000Z",
+      "updatedAt": "2026-10-18T09:00:00.000Z",
+      "name": "Order Entry",
+      "kind": "role",
+      "order": 4
+    }
+  ],
+  "versions": {
+    "current": {
+      "kind": "current",
+      "steps": [
+        {
+          "id": "iKCec5HhHBD0",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 0,
+          "type": "start",
+          "name": "RFQ received",
+          "valueClass": "nnva",
+          "timeSource": "system_record",
+          "observations": [],
+          "laneId": "rFww32ETDC4n",
+          "cycleTimeMin": 0
+        },
+        {
+          "id": "nu_myf8cwR02",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 1,
+          "type": "process",
+          "name": "Customer emails RFQ with drawing",
+          "valueClass": "nnva",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "rFww32ETDC4n",
+          "cycleTimeMin": 15,
+          "system": "Email",
+          "trigger": "Customer need"
+        },
+        {
+          "id": "_G_1pel5N419",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 2,
+          "type": "process",
+          "name": "Sales logs RFQ in CRM",
+          "valueClass": "nnva",
+          "timeSource": "observed",
+          "observations": [
+            {
+              "id": "NOrTY7TQUidl",
+              "at": "2026-10-20T10:05:00.000Z",
+              "durationMin": 9
+            },
+            {
+              "id": "6nsWIYOK4nWG",
+              "at": "2026-10-20T14:20:00.000Z",
+              "durationMin": 12
+            },
+            {
+              "id": "65I1N8BDpvp0",
+              "at": "2026-10-21T10:00:00.000Z",
+              "durationMin": 10
+            }
+          ],
+          "laneId": "DB3rzQn6vcYD",
+          "waitBeforeMin": 480,
+          "cycleTimeMin": 10,
+          "system": "CRM",
+          "trigger": "Daily inbox sweep"
+        },
+        {
+          "id": "GaY_JyikRNuf",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 3,
+          "type": "inspection",
+          "name": "Sales checks drawing completeness",
+          "valueClass": "nnva",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "DB3rzQn6vcYD",
+          "waitBeforeMin": 120,
+          "cycleTimeMin": 15,
+          "system": "Email",
+          "trigger": "CRM record created"
+        },
+        {
+          "id": "B-8SHnD4e39-",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 4,
+          "type": "decision",
+          "name": "Needs engineering review?",
+          "valueClass": "nnva",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "DB3rzQn6vcYD",
+          "cycleTimeMin": 5,
+          "trigger": "Drawing checked"
+        },
+        {
+          "id": "7oI0DEZWul89",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 5,
+          "type": "process",
+          "name": "Engineering reviews manufacturability",
+          "valueClass": "va",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "JX05RIwp5VsD",
+          "waitBeforeMin": 2880,
+          "cycleTimeMin": 90,
+          "system": "Email + CAD"
+        },
+        {
+          "id": "pSfIDfRkaY8w",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 6,
+          "type": "transport",
+          "name": "Engineering returns notes to Sales",
+          "valueClass": "nva",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "JX05RIwp5VsD",
+          "waitBeforeMin": 240,
+          "cycleTimeMin": 10,
+          "system": "Email",
+          "trigger": "Review done"
+        },
+        {
+          "id": "6r6OobeZAnnJ",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 7,
+          "type": "process",
+          "name": "Estimating builds cost model",
+          "valueClass": "va",
+          "timeSource": "observed",
+          "observations": [
+            {
+              "id": "Qw6OnZG6vZ-4",
+              "at": "2026-10-21T13:00:00.000Z",
+              "durationMin": 135
+            },
+            {
+              "id": "6s0oXlK3pZdY",
+              "at": "2026-10-22T09:30:00.000Z",
+              "durationMin": 105
+            },
+            {
+              "id": "l95rdvuw-xmq",
+              "at": "2026-10-22T14:00:00.000Z",
+              "durationMin": 120
+            }
+          ],
+          "laneId": "GhJPfIoHrtxN",
+          "waitBeforeMin": 960,
+          "cycleTimeMin": 120,
+          "system": "Spreadsheet",
+          "trigger": "Email from Sales"
+        },
+        {
+          "id": "ufVppucK2LcF",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 8,
+          "type": "process",
+          "name": "Estimating prices quote",
+          "valueClass": "va",
+          "timeSource": "observed",
+          "observations": [
+            {
+              "id": "WaXlXtcKiYvz",
+              "at": "2026-10-21T15:30:00.000Z",
+              "durationMin": 28
+            },
+            {
+              "id": "DwEKnmvMhR2O",
+              "at": "2026-10-22T11:40:00.000Z",
+              "durationMin": 32
+            }
+          ],
+          "laneId": "GhJPfIoHrtxN",
+          "waitBeforeMin": 30,
+          "cycleTimeMin": 30,
+          "system": "Spreadsheet",
+          "trigger": "Cost model complete"
+        },
+        {
+          "id": "6tLGL4SMFCVS",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 9,
+          "type": "process",
+          "name": "Sales reviews and sends quote",
+          "valueClass": "nnva",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "DB3rzQn6vcYD",
+          "waitBeforeMin": 1440,
+          "cycleTimeMin": 20,
+          "system": "Email",
+          "trigger": "Quote in shared folder"
+        },
+        {
+          "id": "XyHyE-VsQRD9",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 10,
+          "type": "decision",
+          "name": "Quote accepted?",
+          "valueClass": "nnva",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "rFww32ETDC4n",
+          "waitBeforeMin": 5760,
+          "cycleTimeMin": 10,
+          "trigger": "Quote email"
+        },
+        {
+          "id": "op4NtoEm7BSm",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 11,
+          "type": "process",
+          "name": "Customer sends PO",
+          "valueClass": "nnva",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "rFww32ETDC4n",
+          "waitBeforeMin": 480,
+          "cycleTimeMin": 10,
+          "system": "Email",
+          "trigger": "Internal approval"
+        },
+        {
+          "id": "65gXOo52rqgP",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 12,
+          "type": "process",
+          "name": "Order Entry re-keys quote into ERP",
+          "valueClass": "nva",
+          "timeSource": "observed",
+          "observations": [
+            {
+              "id": "BgPwfVLonwxC",
+              "at": "2026-10-22T10:00:00.000Z",
+              "durationMin": 40
+            },
+            {
+              "id": "XDxthqIcRdOT",
+              "at": "2026-10-22T15:10:00.000Z",
+              "durationMin": 50
+            },
+            {
+              "id": "mglTLsQW2DeR",
+              "at": "2026-10-23T09:15:00.000Z",
+              "durationMin": 45
+            }
+          ],
+          "laneId": "Ub4AF07oswe4",
+          "waitBeforeMin": 480,
+          "cycleTimeMin": 45,
+          "system": "ERP",
+          "trigger": "PO email forwarded"
+        },
+        {
+          "id": "8UqGgA_1RnjE",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 13,
+          "type": "process",
+          "name": "Order Entry confirms order to customer",
+          "valueClass": "nnva",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "Ub4AF07oswe4",
+          "waitBeforeMin": 60,
+          "cycleTimeMin": 10,
+          "system": "Email",
+          "trigger": "ERP order number"
+        },
+        {
+          "id": "E-ZFF7wr_ct1",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "order": 14,
+          "type": "end",
+          "name": "Order acknowledged",
+          "valueClass": "nnva",
+          "timeSource": "system_record",
+          "observations": [],
+          "laneId": "Ub4AF07oswe4",
+          "cycleTimeMin": 0
+        }
+      ],
+      "edges": [
+        {
+          "id": "uvXC-AhfZ3mB",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "iKCec5HhHBD0",
+          "toStepId": "nu_myf8cwR02",
+          "isPrimary": true
+        },
+        {
+          "id": "OHqCdGFydGRp",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "nu_myf8cwR02",
+          "toStepId": "_G_1pel5N419",
+          "isPrimary": true
+        },
+        {
+          "id": "Ebue6HxU5bb1",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "_G_1pel5N419",
+          "toStepId": "GaY_JyikRNuf",
+          "isPrimary": true
+        },
+        {
+          "id": "eR-e8TJpaAFN",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "GaY_JyikRNuf",
+          "toStepId": "B-8SHnD4e39-",
+          "isPrimary": true
+        },
+        {
+          "id": "sl0WQa3NY3As",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "B-8SHnD4e39-",
+          "toStepId": "7oI0DEZWul89",
+          "label": "Yes",
+          "isPrimary": true
+        },
+        {
+          "id": "a0cnTjI514Ay",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "7oI0DEZWul89",
+          "toStepId": "pSfIDfRkaY8w",
+          "isPrimary": true
+        },
+        {
+          "id": "bNRD2zJWG7_1",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "pSfIDfRkaY8w",
+          "toStepId": "6r6OobeZAnnJ",
+          "isPrimary": true
+        },
+        {
+          "id": "NIspc30addPY",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "6r6OobeZAnnJ",
+          "toStepId": "ufVppucK2LcF",
+          "isPrimary": true
+        },
+        {
+          "id": "-P8WCRDWoxWL",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "ufVppucK2LcF",
+          "toStepId": "6tLGL4SMFCVS",
+          "isPrimary": true
+        },
+        {
+          "id": "igCEUO3tgDYj",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "6tLGL4SMFCVS",
+          "toStepId": "XyHyE-VsQRD9",
+          "isPrimary": true
+        },
+        {
+          "id": "UhsAENN2DRCI",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "XyHyE-VsQRD9",
+          "toStepId": "op4NtoEm7BSm",
+          "label": "Accepted",
+          "isPrimary": true
+        },
+        {
+          "id": "ePbji7prNm0J",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "op4NtoEm7BSm",
+          "toStepId": "65gXOo52rqgP",
+          "isPrimary": true
+        },
+        {
+          "id": "L-o6d7bAxZbv",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "65gXOo52rqgP",
+          "toStepId": "8UqGgA_1RnjE",
+          "isPrimary": true
+        },
+        {
+          "id": "wHjRFcmZAc0l",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "8UqGgA_1RnjE",
+          "toStepId": "E-ZFF7wr_ct1",
+          "isPrimary": true
+        },
+        {
+          "id": "IT9g_01gjQnQ",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "B-8SHnD4e39-",
+          "toStepId": "6r6OobeZAnnJ",
+          "label": "No",
+          "isPrimary": false
+        },
+        {
+          "id": "VoXHeT5E9Bko",
+          "createdAt": "2026-10-19T09:00:00.000Z",
+          "updatedAt": "2026-10-19T09:00:00.000Z",
+          "fromStepId": "XyHyE-VsQRD9",
+          "toStepId": "6r6OobeZAnnJ",
+          "label": "Revise",
+          "isPrimary": false
+        }
+      ],
+      "painPoints": [
+        {
+          "id": "uU9lLaLmEY9P",
+          "createdAt": "2026-10-21T11:00:00.000Z",
+          "updatedAt": "2026-10-21T11:00:00.000Z",
+          "stepId": "_G_1pel5N419",
+          "text": "RFQs sit in the shared Sales inbox until the daily sweep. Two RFQs last month were found three days late.",
+          "category": "waiting",
+          "severity": "medium"
+        },
+        {
+          "id": "NycLXvjVBGvS",
+          "createdAt": "2026-10-21T11:20:00.000Z",
+          "updatedAt": "2026-10-21T11:20:00.000Z",
+          "stepId": "7oI0DEZWul89",
+          "text": "Manufacturability review does not check drawing tolerances against fixture capability. The BR-2210 oversize hole surfaced in production, not at quote.",
+          "category": "quality",
+          "severity": "high",
+          "investigationId": "HFBbSjIzaAPd"
+        },
+        {
+          "id": "gWBYA-8MC9_U",
+          "createdAt": "2026-10-22T16:00:00.000Z",
+          "updatedAt": "2026-10-22T16:00:00.000Z",
+          "stepId": "65gXOo52rqgP",
+          "text": "Quote is re-keyed into ERP by hand. Two order errors last month traced to typos in quantity and revision.",
+          "category": "rework",
+          "severity": "high"
+        }
+      ],
+      "rationale": {}
+    },
+    "future": {
+      "kind": "future",
+      "steps": [
+        {
+          "id": "W5EnX5OHd7K1",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "order": 0,
+          "type": "start",
+          "name": "RFQ received",
+          "valueClass": "nnva",
+          "timeSource": "system_record",
+          "observations": [],
+          "laneId": "rFww32ETDC4n",
+          "cycleTimeMin": 0
+        },
+        {
+          "id": "cEULcCLG8Dij",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "order": 1,
+          "type": "process",
+          "name": "Customer submits RFQ in portal with drawing",
+          "valueClass": "nnva",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "rFww32ETDC4n",
+          "cycleTimeMin": 15,
+          "system": "Quote portal",
+          "trigger": "Customer need"
+        },
+        {
+          "id": "Izqsn6mdXGRI",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "order": 2,
+          "type": "decision",
+          "name": "Needs engineering review?",
+          "valueClass": "nnva",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "GhJPfIoHrtxN",
+          "cycleTimeMin": 5,
+          "trigger": "Portal queue, checked twice daily",
+          "waitBeforeMin": 60
+        },
+        {
+          "id": "WgMZCsQQXBpq",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "order": 3,
+          "type": "process",
+          "name": "Engineering reviews manufacturability",
+          "valueClass": "va",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "JX05RIwp5VsD",
+          "waitBeforeMin": 480,
+          "cycleTimeMin": 90,
+          "system": "Quote portal + CAD",
+          "trigger": "Portal review queue"
+        },
+        {
+          "id": "s2S8u47SB0Gd",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "order": 4,
+          "type": "process",
+          "name": "Estimating builds cost model",
+          "valueClass": "va",
+          "timeSource": "observed",
+          "observations": [
+            {
+              "id": "HzKxU8DP9OeG",
+              "at": "2026-10-21T13:00:00.000Z",
+              "durationMin": 135
+            },
+            {
+              "id": "2kHIlvqowSc2",
+              "at": "2026-10-22T09:30:00.000Z",
+              "durationMin": 105
+            },
+            {
+              "id": "E5l7tz358CGI",
+              "at": "2026-10-22T14:00:00.000Z",
+              "durationMin": 120
+            }
+          ],
+          "laneId": "GhJPfIoHrtxN",
+          "waitBeforeMin": 120,
+          "cycleTimeMin": 120,
+          "system": "Spreadsheet",
+          "trigger": "Queue notification"
+        },
+        {
+          "id": "qSmpLzCJKTeJ",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "order": 5,
+          "type": "process",
+          "name": "Estimating prices quote",
+          "valueClass": "va",
+          "timeSource": "observed",
+          "observations": [
+            {
+              "id": "I5tXvqrspCT7",
+              "at": "2026-10-21T15:30:00.000Z",
+              "durationMin": 28
+            },
+            {
+              "id": "ctQQHGPOuTC5",
+              "at": "2026-10-22T11:40:00.000Z",
+              "durationMin": 32
+            }
+          ],
+          "laneId": "GhJPfIoHrtxN",
+          "waitBeforeMin": 30,
+          "cycleTimeMin": 30,
+          "system": "Spreadsheet",
+          "trigger": "Cost model complete"
+        },
+        {
+          "id": "e7o4vwKgLVpe",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "order": 6,
+          "type": "process",
+          "name": "Quote sent to customer from quote tool",
+          "valueClass": "nnva",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "GhJPfIoHrtxN",
+          "waitBeforeMin": 60,
+          "cycleTimeMin": 10,
+          "system": "Quote portal",
+          "trigger": "Price approved in tool"
+        },
+        {
+          "id": "YfXKpB9ILyZq",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "order": 7,
+          "type": "decision",
+          "name": "Quote accepted?",
+          "valueClass": "nnva",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "rFww32ETDC4n",
+          "waitBeforeMin": 2880,
+          "cycleTimeMin": 10,
+          "trigger": "Quote in portal with accept button"
+        },
+        {
+          "id": "AxPZRm8B2ndo",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "order": 8,
+          "type": "process",
+          "name": "Customer accepts quote in portal (creates PO)",
+          "valueClass": "nnva",
+          "timeSource": "estimated",
+          "observations": [],
+          "laneId": "rFww32ETDC4n",
+          "waitBeforeMin": 120,
+          "cycleTimeMin": 5,
+          "system": "Quote portal",
+          "trigger": "Accept clicked"
+        },
+        {
+          "id": "5s3gU3P6Y5l4",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "order": 9,
+          "type": "end",
+          "name": "Order acknowledged automatically",
+          "valueClass": "nnva",
+          "timeSource": "system_record",
+          "observations": [],
+          "laneId": "rFww32ETDC4n",
+          "cycleTimeMin": 0
+        }
+      ],
+      "edges": [
+        {
+          "id": "ZOgEAdw8L51S",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "fromStepId": "W5EnX5OHd7K1",
+          "toStepId": "cEULcCLG8Dij",
+          "isPrimary": true
+        },
+        {
+          "id": "7GW8_Oau9fO6",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "fromStepId": "cEULcCLG8Dij",
+          "toStepId": "Izqsn6mdXGRI",
+          "isPrimary": true
+        },
+        {
+          "id": "XNNbusfBJF0s",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "fromStepId": "Izqsn6mdXGRI",
+          "toStepId": "WgMZCsQQXBpq",
+          "label": "Yes",
+          "isPrimary": true
+        },
+        {
+          "id": "AurEFem9-tHj",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "fromStepId": "WgMZCsQQXBpq",
+          "toStepId": "s2S8u47SB0Gd",
+          "isPrimary": true
+        },
+        {
+          "id": "RK_whmtGAioR",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "fromStepId": "s2S8u47SB0Gd",
+          "toStepId": "qSmpLzCJKTeJ",
+          "isPrimary": true
+        },
+        {
+          "id": "uWg1kIQ8Blxi",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "fromStepId": "qSmpLzCJKTeJ",
+          "toStepId": "e7o4vwKgLVpe",
+          "isPrimary": true
+        },
+        {
+          "id": "9rXCD5YNiZxK",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "fromStepId": "e7o4vwKgLVpe",
+          "toStepId": "YfXKpB9ILyZq",
+          "isPrimary": true
+        },
+        {
+          "id": "JtOutP0BmB1H",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "fromStepId": "YfXKpB9ILyZq",
+          "toStepId": "AxPZRm8B2ndo",
+          "label": "Accepted",
+          "isPrimary": true
+        },
+        {
+          "id": "MIKqB8SOLtGG",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "fromStepId": "AxPZRm8B2ndo",
+          "toStepId": "5s3gU3P6Y5l4",
+          "isPrimary": true
+        },
+        {
+          "id": "uNSxGLTFsWb3",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "fromStepId": "Izqsn6mdXGRI",
+          "toStepId": "s2S8u47SB0Gd",
+          "label": "No",
+          "isPrimary": false
+        },
+        {
+          "id": "Wfi7z1-3vA3z",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "fromStepId": "YfXKpB9ILyZq",
+          "toStepId": "s2S8u47SB0Gd",
+          "label": "Revise",
+          "isPrimary": false
+        }
+      ],
+      "painPoints": [
+        {
+          "id": "K2D6mZjXmVjJ",
+          "createdAt": "2026-10-23T10:00:00.000Z",
+          "updatedAt": "2026-10-23T10:00:00.000Z",
+          "stepId": "WgMZCsQQXBpq",
+          "text": "Manufacturability review does not check drawing tolerances against fixture capability. The BR-2210 oversize hole surfaced in production, not at quote.",
+          "category": "quality",
+          "severity": "high",
+          "investigationId": "HFBbSjIzaAPd"
+        }
+      ],
+      "forkedFromStepIds": {
+        "W5EnX5OHd7K1": "iKCec5HhHBD0",
+        "cEULcCLG8Dij": "nu_myf8cwR02",
+        "Izqsn6mdXGRI": "B-8SHnD4e39-",
+        "WgMZCsQQXBpq": "7oI0DEZWul89",
+        "s2S8u47SB0Gd": "6r6OobeZAnnJ",
+        "qSmpLzCJKTeJ": "ufVppucK2LcF",
+        "e7o4vwKgLVpe": "6tLGL4SMFCVS",
+        "YfXKpB9ILyZq": "XyHyE-VsQRD9",
+        "AxPZRm8B2ndo": "op4NtoEm7BSm",
+        "5s3gU3P6Y5l4": "E-ZFF7wr_ct1"
+      },
+      "rationale": {
+        "cEULcCLG8Dij": {
+          "text": "The portal captures the required fields and the drawing up front, so nothing bounces back for missing information."
+        },
+        "_G_1pel5N419": {
+          "text": "Portal submission creates the CRM record automatically. No one has to sweep an inbox."
+        },
+        "GaY_JyikRNuf": {
+          "text": "The portal validates the drawing and required fields before the customer can submit."
+        },
+        "Izqsn6mdXGRI": {
+          "text": "Estimating triages the queue twice a day and routes to Engineering directly; Sales no longer relays."
+        },
+        "WgMZCsQQXBpq": {
+          "text": "Engineering runs a 15-minute daily triage of the review queue. The two-day wait was queue time, not review time."
+        },
+        "pSfIDfRkaY8w": {
+          "text": "Engineering notes live on the RFQ record; Estimating sees them the moment the review is marked done."
+        },
+        "s2S8u47SB0Gd": {
+          "text": "Estimating is notified from the queue instead of email, so work starts the same half-day."
+        },
+        "e7o4vwKgLVpe": {
+          "text": "Sales approval is required only above $25k. Standard quotes go out from the quote tool, which removes a handoff and a one-day wait."
+        },
+        "YfXKpB9ILyZq": {
+          "text": "The quote carries a 48-hour follow-up and a one-click accept in the portal. Customer decision time is theirs, but the follow-up halves it in the pilot."
+        },
+        "AxPZRm8B2ndo": {
+          "text": "Acceptance in the portal is the PO. No separate PO email to wait for."
+        },
+        "65gXOo52rqgP": {
+          "text": "The ERP sales order is created from the accepted quote record. Nothing is re-keyed, so the typo errors cannot happen."
+        },
+        "8UqGgA_1RnjE": {
+          "text": "The portal sends the acknowledgment automatically when the ERP order exists."
+        },
+        "5s3gU3P6Y5l4": {
+          "text": "Acknowledgment is a system event the customer sees in the portal, not an Order Entry task."
+        }
+      }
+    }
+  },
+  "investigations": [
+    {
+      "id": "CDocEd5oP9m7",
+      "investigationId": "HFBbSjIzaAPd",
+      "stepId": "7oI0DEZWul89",
+      "painPointId": "NycLXvjVBGvS",
+      "openedAt": "2026-10-21T11:30:00.000Z",
+      "lastKnownStatus": "verification"
+    }
+  ],
+  "history": [
+    {
+      "id": "9T0B-MkvHDYK",
+      "at": "2026-10-18T09:00:00.000Z",
+      "type": "created"
+    },
+    {
+      "id": "049I6UWYkSA7",
+      "at": "2026-10-21T11:30:00.000Z",
+      "type": "investigation_opened",
+      "note": "Opened from step 6 (Engineering reviews manufacturability)."
+    },
+    {
+      "id": "6tJa3VPCmn9N",
+      "at": "2026-10-19T16:00:00.000Z",
+      "type": "current_mapped"
+    },
+    {
+      "id": "Ki9urgk7bE_2",
+      "at": "2026-10-23T10:00:00.000Z",
+      "type": "future_forked"
+    }
+  ],
+  "status": "improving",
+  "shopFloorMode": false,
+  "noPainPoints": false,
+  "process": "Quote to order",
+  "owner": "D. Whitfield",
+  "department": "Sales Operations",
+  "site": "Northfield plant"
+}
