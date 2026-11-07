@@ -1,0 +1,641 @@
+{
+  "id": "HFBbSjIzaAPd",
+  "createdAt": "2026-10-26T09:00:00.000Z",
+  "updatedAt": "2026-11-03T14:00:00.000Z",
+  "schemaVersion": 1,
+  "rcaNumber": "LS-001",
+  "title": "Machined bracket hole diameter out of tolerance",
+  "status": "verification",
+  "shopFloorMode": false,
+  "problem": {
+    "whatHappened": "Assembly Cell 3 produced 42 brackets (P/N BR-2210) with an oversized locating hole during second shift on October 26. Measured values ranged from 10.08–10.14 mm",
+    "whatShouldHaveHappened": "Drawing BR-2210 rev C requires 10.00 ± 0.05 mm",
+    "where": "Assembly Cell 3, Drill Station 3B",
+    "when": "October 26, second shift (approx. 15:40–21:10)",
+    "whenIso": "2026-10-26T15:40:00.000Z",
+    "frequency": "One shift; two earlier hourly samples were in tolerance",
+    "impact": "42 brackets on hold; one customer shipment delayed by two days",
+    "affected": "Order SO-88231 (Northfield Assemblies), downstream weld cell",
+    "process": "Drill and ream",
+    "department": "Machining",
+    "equipment": "Drill Station 3B, fixture FX-118",
+    "product": "Bracket BR-2210",
+    "impactFlags": {
+      "customer": true,
+      "financial": true,
+      "safety": false,
+      "quality": true,
+      "delivery": true
+    },
+    "financialImpactNote": "Scrap + rework estimated at $1,860; expedite freight $410.",
+    "generatedStatement": "Assembly Cell 3 produced 42 brackets (P/N BR-2210) with an oversized locating hole during second shift on October 26. Measured values ranged from 10.08–10.14 mm (Assembly Cell 3, Drill Station 3B, October 26, second shift (approx. 15:40–21:10)). Expected: Drawing BR-2210 rev C requires 10.00 ± 0.05 mm. Frequency: One shift; two earlier hourly samples were in tolerance; Impact: 42 brackets on hold; one customer shipment delayed by two days; Affected: Order SO-88231 (Northfield Assemblies), downstream weld cell. Impact areas: customer, financial, quality, delivery."
+  },
+  "containment": [
+    {
+      "id": "4hMkSkgQ0b7W",
+      "createdAt": "2026-10-26T21:30:00.000Z",
+      "updatedAt": "2026-10-26T21:30:00.000Z",
+      "action": "Segregate and tag all BR-2210 brackets produced on second shift Oct 26",
+      "owner": "R. Delgado",
+      "scope": "42 parts, hold bin H-3",
+      "status": "verified",
+      "startedAt": "2026-10-26T21:30:00.000Z",
+      "quantityAffected": "42",
+      "verificationNote": "Hold tags checked against CMM list; count matches."
+    },
+    {
+      "id": "bulNwqNxXOXc",
+      "createdAt": "2026-10-26T21:30:00.000Z",
+      "updatedAt": "2026-10-26T21:30:00.000Z",
+      "action": "100% CMM inspection of BR-2210 WIP from Oct 26–Oct 27 before release to weld",
+      "owner": "M. Okafor",
+      "scope": "All 3B output until fixture repaired",
+      "status": "released",
+      "startedAt": "2026-10-27T06:00:00.000Z",
+      "quantityAffected": "118 inspected, 76 released",
+      "verificationNote": "No further oversize parts after locator replacement on Oct 27."
+    }
+  ],
+  "causes": [
+    {
+      "id": "RZK0mWe_cvcl",
+      "createdAt": "2026-10-27T09:00:00.000Z",
+      "updatedAt": "2026-10-27T09:00:00.000Z",
+      "text": "Drill wandered off the nominal hole position, enlarging the hole on entry",
+      "parentId": null,
+      "origin": "why",
+      "categoryId": "aUb7FmkG448Y",
+      "evidenceState": "data_supported",
+      "classification": "symptom",
+      "challenged": false,
+      "candidate": false,
+      "collapsed": false,
+      "order": 0
+    },
+    {
+      "id": "aeV7L8agQXZL",
+      "createdAt": "2026-10-27T09:10:00.000Z",
+      "updatedAt": "2026-10-27T09:10:00.000Z",
+      "text": "The part shifted in fixture FX-118 during the drill cycle",
+      "parentId": "RZK0mWe_cvcl",
+      "origin": "why",
+      "evidenceState": "data_supported",
+      "classification": "contributing",
+      "challenged": false,
+      "candidate": true,
+      "collapsed": false,
+      "order": 0,
+      "removalTest": "yes",
+      "rootCauseRationale": ""
+    },
+    {
+      "id": "ETpXi0V7OqWJ",
+      "createdAt": "2026-10-27T09:20:00.000Z",
+      "updatedAt": "2026-10-27T09:20:00.000Z",
+      "text": "Fixture locator pin was worn 0.11 mm below its minimum diameter",
+      "parentId": "aeV7L8agQXZL",
+      "origin": "why",
+      "evidenceState": "verified",
+      "classification": "contributing",
+      "challenged": false,
+      "candidate": true,
+      "collapsed": false,
+      "order": 0,
+      "removalTest": "yes"
+    },
+    {
+      "id": "4bTvlbY6HF2J",
+      "createdAt": "2026-10-27T09:30:00.000Z",
+      "updatedAt": "2026-10-27T09:30:00.000Z",
+      "text": "Locator wear was not caught because the fixture PM interval (12 months) is longer than the locator's wear life at current volume",
+      "parentId": "ETpXi0V7OqWJ",
+      "origin": "why",
+      "evidenceState": "verified",
+      "classification": "root",
+      "rootCauseRationale": "Wear measurements on FX-118 and its sister fixture show locators leave tolerance around month 7 at current volume. The 12-month PM interval was set in 2019 at half today's volume. Removing this cause (shorter interval) prevents the shift that caused the oversize hole.",
+      "removalTest": "yes",
+      "challenged": true,
+      "candidate": true,
+      "collapsed": false,
+      "order": 0
+    },
+    {
+      "id": "txfX2ZXpJx3I",
+      "createdAt": "2026-10-27T10:00:00.000Z",
+      "updatedAt": "2026-10-27T10:00:00.000Z",
+      "text": "The oversize condition ran for roughly five hours before it was detected",
+      "parentId": null,
+      "origin": "why",
+      "categoryId": "CE0edW4eZlfn",
+      "evidenceState": "data_supported",
+      "classification": "symptom",
+      "challenged": false,
+      "candidate": false,
+      "collapsed": false,
+      "order": 1
+    },
+    {
+      "id": "RMvIha78dtw3",
+      "createdAt": "2026-10-27T10:10:00.000Z",
+      "updatedAt": "2026-10-27T10:10:00.000Z",
+      "text": "Hourly in-process check uses a go/no-go plug that passes up to 10.10 mm, and the setup check does not look at the fixture",
+      "parentId": "txfX2ZXpJx3I",
+      "origin": "why",
+      "evidenceState": "data_supported",
+      "classification": "contributing",
+      "challenged": false,
+      "candidate": true,
+      "collapsed": false,
+      "order": 0,
+      "removalTest": "yes"
+    },
+    {
+      "id": "hBwzJbWFomc5",
+      "createdAt": "2026-10-27T10:20:00.000Z",
+      "updatedAt": "2026-10-27T10:20:00.000Z",
+      "text": "Setup standard SW-0312 has no fixture locator wear check, so wear is only found at PM",
+      "parentId": "RMvIha78dtw3",
+      "origin": "why",
+      "evidenceState": "verified",
+      "classification": "root",
+      "rootCauseRationale": "The setup standard was written before the locator was changed to a hardened pin in 2022 and never updated. Adding a wear check at setup catches wear regardless of PM timing. Both branches converge on the fixture, so both roots must be addressed.",
+      "removalTest": "yes",
+      "challenged": false,
+      "candidate": true,
+      "collapsed": false,
+      "order": 0
+    },
+    {
+      "id": "Upe6oEJXq8UV",
+      "createdAt": "2026-10-28T08:00:00.000Z",
+      "updatedAt": "2026-10-28T08:00:00.000Z",
+      "text": "Second-shift operator was new to Cell 3 (third week)",
+      "parentId": null,
+      "origin": "fishbone",
+      "categoryId": "IxoMgFTy2_TP",
+      "evidenceState": "observed",
+      "classification": "unclassified",
+      "challenged": true,
+      "candidate": false,
+      "collapsed": false,
+      "order": 2,
+      "note": "Checked: operator followed SW-0312 as written. Not a cause on its own."
+    },
+    {
+      "id": "d5V9dEmwFQ5s",
+      "createdAt": "2026-10-28T08:05:00.000Z",
+      "updatedAt": "2026-10-28T08:05:00.000Z",
+      "text": "Bar stock lot 4471 hardness at upper end of spec",
+      "parentId": null,
+      "origin": "fishbone",
+      "categoryId": "UBMNC2R61_CP",
+      "evidenceState": "disproved",
+      "classification": "unclassified",
+      "challenged": false,
+      "candidate": false,
+      "collapsed": false,
+      "order": 3,
+      "note": "Lot 4471 also ran on first shift with holes in tolerance."
+    },
+    {
+      "id": "Wr-_0wBKCZCi",
+      "createdAt": "2026-10-28T08:10:00.000Z",
+      "updatedAt": "2026-10-28T08:10:00.000Z",
+      "text": "Reamer changed mid-shift without a first-piece check",
+      "parentId": null,
+      "origin": "fishbone",
+      "categoryId": "w7hzJWYiMi_I",
+      "evidenceState": "disproved",
+      "classification": "unclassified",
+      "challenged": false,
+      "candidate": false,
+      "collapsed": false,
+      "order": 4,
+      "note": "Tool log shows no reamer change on Oct 26."
+    },
+    {
+      "id": "umMOqu9_GORa",
+      "createdAt": "2026-10-28T08:15:00.000Z",
+      "updatedAt": "2026-10-28T08:15:00.000Z",
+      "text": "Coolant concentration low (5.8% vs 7–9%)",
+      "parentId": null,
+      "origin": "fishbone",
+      "categoryId": "zbTRw6d3qjlR",
+      "evidenceState": "observed",
+      "classification": "unclassified",
+      "challenged": false,
+      "candidate": false,
+      "collapsed": false,
+      "order": 5,
+      "note": "Would affect finish more than size. Logged for the maintenance team."
+    }
+  ],
+  "fishboneCategories": [
+    {
+      "id": "IxoMgFTy2_TP",
+      "createdAt": "2026-10-26T06:00:00.000Z",
+      "updatedAt": "2026-10-26T06:00:00.000Z",
+      "name": "People",
+      "order": 0,
+      "isDefault": true
+    },
+    {
+      "id": "aUb7FmkG448Y",
+      "createdAt": "2026-10-26T06:00:00.000Z",
+      "updatedAt": "2026-10-26T06:00:00.000Z",
+      "name": "Machine",
+      "order": 1,
+      "isDefault": true
+    },
+    {
+      "id": "w7hzJWYiMi_I",
+      "createdAt": "2026-10-26T06:00:00.000Z",
+      "updatedAt": "2026-10-26T06:00:00.000Z",
+      "name": "Method",
+      "order": 2,
+      "isDefault": true
+    },
+    {
+      "id": "UBMNC2R61_CP",
+      "createdAt": "2026-10-26T06:00:00.000Z",
+      "updatedAt": "2026-10-26T06:00:00.000Z",
+      "name": "Material",
+      "order": 3,
+      "isDefault": true
+    },
+    {
+      "id": "CE0edW4eZlfn",
+      "createdAt": "2026-10-26T06:00:00.000Z",
+      "updatedAt": "2026-10-26T06:00:00.000Z",
+      "name": "Measurement",
+      "order": 4,
+      "isDefault": true
+    },
+    {
+      "id": "zbTRw6d3qjlR",
+      "createdAt": "2026-10-26T06:00:00.000Z",
+      "updatedAt": "2026-10-26T06:00:00.000Z",
+      "name": "Environment",
+      "order": 5,
+      "isDefault": true
+    }
+  ],
+  "evidence": [
+    {
+      "id": "wibUGIHskazu",
+      "createdAt": "2026-10-28T10:00:00.000Z",
+      "updatedAt": "2026-10-28T10:00:00.000Z",
+      "title": "CMM report, 42 held brackets",
+      "type": "measurement",
+      "description": "All 42 held parts measured 10.08–10.14 mm; scatter pattern elongated along the fixture's Y axis.",
+      "source": "CMM-02 report #20261027-17",
+      "date": "2026-10-27T08:00:00.000Z"
+    },
+    {
+      "id": "JdMnXX3nsmWP",
+      "createdAt": "2026-10-28T10:00:00.000Z",
+      "updatedAt": "2026-10-28T10:00:00.000Z",
+      "title": "Locator pin measurement, FX-118",
+      "type": "measurement",
+      "description": "Pin measured 7.89 mm against a 8.00 +0/-0.02 mm spec; visible polish wear on one side.",
+      "source": "Tool room inspection sheet",
+      "date": "2026-10-27T11:00:00.000Z"
+    },
+    {
+      "id": "jp8Wdz2ZvaD2",
+      "createdAt": "2026-10-28T10:00:00.000Z",
+      "updatedAt": "2026-10-28T10:00:00.000Z",
+      "title": "Fixture PM record, FX-118",
+      "type": "system_record",
+      "description": "Last PM completed 2025-12-08. Interval 12 months. No wear measurements recorded at PM.",
+      "source": "CMMS work order WO-55120",
+      "date": "2026-10-27T13:00:00.000Z"
+    },
+    {
+      "id": "Ptu_JWe7yr3O",
+      "createdAt": "2026-10-28T10:00:00.000Z",
+      "updatedAt": "2026-10-28T10:00:00.000Z",
+      "title": "Sister fixture FX-119 locator measurement",
+      "type": "measurement",
+      "description": "FX-119 (same design, 7 months since PM) measured 7.95 mm — already below minimum.",
+      "source": "Tool room inspection sheet",
+      "date": "2026-10-29T09:00:00.000Z"
+    },
+    {
+      "id": "hAOMDoNmjngI",
+      "createdAt": "2026-10-28T10:00:00.000Z",
+      "updatedAt": "2026-10-28T10:00:00.000Z",
+      "title": "Setup standard SW-0312 rev B",
+      "type": "document",
+      "description": "Setup checklist covers spindle speed, reamer size, first-piece plug check. No fixture or locator check.",
+      "source": "Document control",
+      "date": "2026-10-28T09:00:00.000Z"
+    },
+    {
+      "id": "oSEiY8RvqZS_",
+      "createdAt": "2026-10-28T10:00:00.000Z",
+      "updatedAt": "2026-10-28T10:00:00.000Z",
+      "title": "Operator interview, second shift",
+      "type": "interview",
+      "description": "Operator confirmed hourly plug checks passed; noticed 'slightly more chatter' around 16:00 but no size issue on the plug.",
+      "source": "Interview notes, Oct 28",
+      "date": "2026-10-28T14:00:00.000Z"
+    },
+    {
+      "id": "P8txQ4aMjm_6",
+      "createdAt": "2026-10-28T10:00:00.000Z",
+      "updatedAt": "2026-10-28T10:00:00.000Z",
+      "title": "Plug gauge calibration record",
+      "type": "system_record",
+      "description": "Go/no-go plug set P-118: go 9.95, no-go 10.10 mm. Certified in May. Does not detect 10.06–10.10.",
+      "source": "Gauge control log",
+      "date": "2026-10-28T15:00:00.000Z"
+    },
+    {
+      "id": "-2F-UsvLehPR",
+      "createdAt": "2026-10-28T10:00:00.000Z",
+      "updatedAt": "2026-10-28T10:00:00.000Z",
+      "title": "Photo: FX-118 locator wear",
+      "type": "photo_ref",
+      "description": "Photo of locator pin wear against a new pin. File: qa-share/rca/LS-001/locator-wear.jpg",
+      "source": "QA shared drive",
+      "date": "2026-10-27T11:30:00.000Z"
+    }
+  ],
+  "evidenceLinks": [
+    {
+      "id": "yTDN8iv6hrA6",
+      "createdAt": "2026-10-28T11:00:00.000Z",
+      "updatedAt": "2026-10-28T11:00:00.000Z",
+      "evidenceId": "wibUGIHskazu",
+      "causeId": "RZK0mWe_cvcl",
+      "relation": "supports"
+    },
+    {
+      "id": "pK5arJKV6Ca6",
+      "createdAt": "2026-10-28T11:00:00.000Z",
+      "updatedAt": "2026-10-28T11:00:00.000Z",
+      "evidenceId": "wibUGIHskazu",
+      "causeId": "aeV7L8agQXZL",
+      "relation": "supports"
+    },
+    {
+      "id": "c3q7QsZBWBvU",
+      "createdAt": "2026-10-28T11:00:00.000Z",
+      "updatedAt": "2026-10-28T11:00:00.000Z",
+      "evidenceId": "JdMnXX3nsmWP",
+      "causeId": "ETpXi0V7OqWJ",
+      "relation": "supports"
+    },
+    {
+      "id": "LcWR-stmARXE",
+      "createdAt": "2026-10-28T11:00:00.000Z",
+      "updatedAt": "2026-10-28T11:00:00.000Z",
+      "evidenceId": "-2F-UsvLehPR",
+      "causeId": "ETpXi0V7OqWJ",
+      "relation": "supports"
+    },
+    {
+      "id": "BzUFB4_rHxuq",
+      "createdAt": "2026-10-28T11:00:00.000Z",
+      "updatedAt": "2026-10-28T11:00:00.000Z",
+      "evidenceId": "jp8Wdz2ZvaD2",
+      "causeId": "4bTvlbY6HF2J",
+      "relation": "supports"
+    },
+    {
+      "id": "AZcN9jvpVRDq",
+      "createdAt": "2026-10-28T11:00:00.000Z",
+      "updatedAt": "2026-10-28T11:00:00.000Z",
+      "evidenceId": "Ptu_JWe7yr3O",
+      "causeId": "4bTvlbY6HF2J",
+      "relation": "supports"
+    },
+    {
+      "id": "FQv9IgCqWP31",
+      "createdAt": "2026-10-28T11:00:00.000Z",
+      "updatedAt": "2026-10-28T11:00:00.000Z",
+      "evidenceId": "wibUGIHskazu",
+      "causeId": "txfX2ZXpJx3I",
+      "relation": "supports"
+    },
+    {
+      "id": "0-uxh_YtM_-Q",
+      "createdAt": "2026-10-28T11:00:00.000Z",
+      "updatedAt": "2026-10-28T11:00:00.000Z",
+      "evidenceId": "P8txQ4aMjm_6",
+      "causeId": "RMvIha78dtw3",
+      "relation": "supports"
+    },
+    {
+      "id": "wUYZPEfAKJWJ",
+      "createdAt": "2026-10-28T11:00:00.000Z",
+      "updatedAt": "2026-10-28T11:00:00.000Z",
+      "evidenceId": "oSEiY8RvqZS_",
+      "causeId": "RMvIha78dtw3",
+      "relation": "supports"
+    },
+    {
+      "id": "NMNaSsXRtXyX",
+      "createdAt": "2026-10-28T11:00:00.000Z",
+      "updatedAt": "2026-10-28T11:00:00.000Z",
+      "evidenceId": "hAOMDoNmjngI",
+      "causeId": "hBwzJbWFomc5",
+      "relation": "supports"
+    },
+    {
+      "id": "LW-rZ25eLudi",
+      "createdAt": "2026-10-28T11:00:00.000Z",
+      "updatedAt": "2026-10-28T11:00:00.000Z",
+      "evidenceId": "oSEiY8RvqZS_",
+      "causeId": "Upe6oEJXq8UV",
+      "relation": "contradicts"
+    },
+    {
+      "id": "_1f1SeuKfv9u",
+      "createdAt": "2026-10-28T11:00:00.000Z",
+      "updatedAt": "2026-10-28T11:00:00.000Z",
+      "evidenceId": "wibUGIHskazu",
+      "causeId": "d5V9dEmwFQ5s",
+      "relation": "contradicts"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "58Rj6Z-x5aGb",
+      "createdAt": "2026-10-26T15:00:00.000Z",
+      "updatedAt": "2026-10-26T15:00:00.000Z",
+      "at": "2026-10-26T15:00:00.000Z",
+      "text": "Second shift starts; setup check on Drill Station 3B signed off per SW-0312.",
+      "tag": "system_record"
+    },
+    {
+      "id": "VCwQIAYQSq9Y",
+      "createdAt": "2026-10-26T15:40:00.000Z",
+      "updatedAt": "2026-10-26T15:40:00.000Z",
+      "at": "2026-10-26T15:40:00.000Z",
+      "text": "Estimated first oversize part (based on CMM order of parts in the hold bin).",
+      "tag": "observed",
+      "causeId": "aeV7L8agQXZL"
+    },
+    {
+      "id": "NcvJd0EgK6f6",
+      "createdAt": "2026-10-26T16:05:00.000Z",
+      "updatedAt": "2026-10-26T16:05:00.000Z",
+      "at": "2026-10-26T16:05:00.000Z",
+      "text": "Operator notes slightly more chatter; hourly plug check passes.",
+      "tag": "reported",
+      "causeId": "RMvIha78dtw3"
+    },
+    {
+      "id": "QZW6RzBUCxBB",
+      "createdAt": "2026-10-26T21:10:00.000Z",
+      "updatedAt": "2026-10-26T21:10:00.000Z",
+      "at": "2026-10-26T21:10:00.000Z",
+      "text": "Weld cell reports brackets loose on locating pin; production stops on 3B.",
+      "tag": "reported"
+    },
+    {
+      "id": "iZR1QmWS1DYO",
+      "createdAt": "2026-10-26T21:30:00.000Z",
+      "updatedAt": "2026-10-26T21:30:00.000Z",
+      "at": "2026-10-26T21:30:00.000Z",
+      "text": "42 brackets segregated and tagged HOLD; 100% inspection ordered.",
+      "tag": "system_record"
+    },
+    {
+      "id": "6OmnmSPu5_i0",
+      "createdAt": "2026-10-27T11:00:00.000Z",
+      "updatedAt": "2026-10-27T11:00:00.000Z",
+      "at": "2026-10-27T11:00:00.000Z",
+      "text": "Tool room measures FX-118 locator pin at 7.89 mm.",
+      "tag": "observed",
+      "causeId": "ETpXi0V7OqWJ"
+    }
+  ],
+  "actions": [
+    {
+      "id": "lHepCBom79yG",
+      "createdAt": "2026-10-29T10:00:00.000Z",
+      "updatedAt": "2026-10-29T10:00:00.000Z",
+      "kind": "corrective",
+      "horizon": "immediate",
+      "title": "Replace worn fixture locator on FX-118",
+      "description": "Install new hardened locator pin; verify with first-piece CMM.",
+      "linkedCauseIds": [
+        "ETpXi0V7OqWJ"
+      ],
+      "owner": "T. Brandt",
+      "dueDate": "2026-10-28",
+      "status": "complete",
+      "priority": "critical",
+      "verificationMethod": "CMM first-piece + 30-piece capability study",
+      "expectedResult": "Hole diameter within 10.00 ± 0.05, Cpk ≥ 1.33"
+    },
+    {
+      "id": "gjHm_6QOY9yk",
+      "createdAt": "2026-10-29T10:00:00.000Z",
+      "updatedAt": "2026-10-29T10:00:00.000Z",
+      "kind": "corrective",
+      "horizon": "immediate",
+      "title": "Replace locator on sister fixture FX-119 and inspect FX-120",
+      "description": "Same design family; FX-119 already below minimum.",
+      "linkedCauseIds": [
+        "4bTvlbY6HF2J"
+      ],
+      "owner": "T. Brandt",
+      "dueDate": "2026-10-30",
+      "status": "complete",
+      "priority": "high"
+    },
+    {
+      "id": "0--Ml6gJe5OM",
+      "createdAt": "2026-10-29T10:00:00.000Z",
+      "updatedAt": "2026-10-29T10:00:00.000Z",
+      "kind": "preventive",
+      "horizon": "structural",
+      "title": "Change fixture PM interval to 6 months and add locator measurement to the PM checklist",
+      "description": "Update CMMS PM template for the FX-1xx family; record locator diameter at each PM.",
+      "linkedCauseIds": [
+        "4bTvlbY6HF2J"
+      ],
+      "owner": "L. Ferreira",
+      "dueDate": "2026-11-13",
+      "status": "in_progress",
+      "priority": "high",
+      "verificationMethod": "CMMS template review + first PM record",
+      "expectedResult": "Locators replaced before reaching minimum diameter"
+    },
+    {
+      "id": "_3XF0Kmcgdao",
+      "createdAt": "2026-10-29T10:00:00.000Z",
+      "updatedAt": "2026-10-29T10:00:00.000Z",
+      "kind": "preventive",
+      "horizon": "structural",
+      "title": "Add locator wear check to setup standard SW-0312 and replace go/no-go with a variable gauge",
+      "description": "Revise SW-0312 to rev C with a locator gauge check at setup; issue bore gauge for hourly checks.",
+      "linkedCauseIds": [
+        "hBwzJbWFomc5",
+        "RMvIha78dtw3"
+      ],
+      "owner": "M. Okafor",
+      "dueDate": "2026-11-20",
+      "status": "ready_for_verification",
+      "priority": "normal",
+      "verificationMethod": "Audit three setups against rev C",
+      "expectedResult": "Setup cannot be signed off without locator check; hourly checks record actual size"
+    }
+  ],
+  "verifications": [
+    {
+      "id": "Kg0_FKGJ_AWw",
+      "createdAt": "2026-11-02T09:00:00.000Z",
+      "updatedAt": "2026-11-02T09:00:00.000Z",
+      "actionId": "lHepCBom79yG",
+      "expected": "Hole diameter within 10.00 ± 0.05 mm on first piece and a 30-piece study",
+      "observed": "First piece 10.01 mm; 30-piece study mean 10.005, Cpk 1.61. No oversize parts over 5 shifts.",
+      "result": "effective",
+      "checkAt": "2026-11-02T09:00:00.000Z",
+      "verifier": "M. Okafor",
+      "evidenceIds": [
+        "wibUGIHskazu"
+      ]
+    },
+    {
+      "id": "9Haxak5NwXiB",
+      "createdAt": "2026-11-03T09:00:00.000Z",
+      "updatedAt": "2026-11-03T09:00:00.000Z",
+      "actionId": "gjHm_6QOY9yk",
+      "expected": "No oversize holes from FX-119/FX-120 after replacement",
+      "observed": "Two shifts run so far; all in tolerance. Continue monitoring through Nov 9.",
+      "result": "monitoring",
+      "checkAt": "2026-11-03T09:00:00.000Z",
+      "verifier": "M. Okafor",
+      "evidenceIds": []
+    }
+  ],
+  "verificationReviews": [],
+  "lessons": [
+    {
+      "id": "K-c8m7wsHD97",
+      "createdAt": "2026-11-03T14:00:00.000Z",
+      "updatedAt": "2026-11-03T14:00:00.000Z",
+      "lesson": "PM intervals set years ago do not track volume. Any fixture with a wear-limited locator needs a wear check at setup, not just at PM.",
+      "relatedProcess": "Fixture PM and setup standards, FX-1xx family",
+      "standardWorkUpdate": true,
+      "trainingUpdate": true,
+      "documentUpdate": true,
+      "similarProcessesToReview": "Cells 1, 2, and 5 use the same locator design (FX-104, FX-109, FX-131)."
+    }
+  ],
+  "history": [
+    {
+      "id": "glSQ1nuVWhrb",
+      "at": "2026-10-26T09:00:00.000Z",
+      "type": "created"
+    }
+  ],
+  "reopenedCount": 0,
+  "owner": "M. Okafor",
+  "department": "Quality"
+}
