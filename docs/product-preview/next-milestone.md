@@ -1,3 +1,5 @@
+> **Superseded by [`docs/learning-base/README.md`](../learning-base/README.md) (2026-11-07).**
+
 # Next milestone: private company workspaces and test-mode Team subscriptions
 
 **Base:** the reviewed/merged Prompt 1 changes. **Outcome:** two authorized people can collaborate on the same durable investigation; another company cannot access its records or files. A successful test-mode entitlement enables a Team workspace. Prompt 1 does not meet this release gate.
